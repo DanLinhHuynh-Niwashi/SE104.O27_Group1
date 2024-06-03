@@ -16,14 +16,8 @@ namespace BUS
         DAL_TaiKhoan dalTK = new DAL_TaiKhoan();
         public (DTO_TaiKhoan? , string) Login(DTO_TaiKhoan tk)
         {
-            if (!IsValidEmail(tk.EMAIL))
-                return (null, "Invalid_email");
-            else if (!IsValidPassword(tk.PASS))
-                return (null, "invalid_password");
-            else
-            {
-                return (dalTK.CheckLogicDTO(tk), "valid_info");
-            }
+            return (dalTK.CheckLogicDTO(tk), "valid_info");
+            
         }
 
         public (string ,DTO_TaiKhoan?) ChangePassWord(string email, string oldPass, string newPass) 
@@ -44,8 +38,6 @@ namespace BUS
         {
             if (!IsValidEmail(tk.EMAIL))
                 return "Invalid_email";
-            else if (!IsValidPassword(tk.PASS))
-                return "invalid_password";
             else
             {
                 return dalTK.TaoMoiTaiKhoan(tk);
