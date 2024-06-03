@@ -142,7 +142,7 @@
                 <RowDefinition MaxHeight="130px"></RowDefinition>
 
                 <RowDefinition Height="Auto"></RowDefinition>
-
+                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0" HorizontalAlignment="Right" MinWidth="700">
@@ -193,7 +193,7 @@
                         IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         ToolTip="Load"
-                            Content="Tìm kiếm">
+                            Content="Tìm kiếm" Click="Button_Click">
                             
                         </Button>
 
@@ -215,7 +215,7 @@
                             <Label Content="Tổng số sự kiện:" HorizontalAlignment="Left" Height="26" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
                         </Grid>
                         <Grid Grid.Column="1">
-                            <TextBlock x:Name="TotalEvents" HorizontalAlignment="Left" Height="26" VerticalAlignment="Center" FontSize="14"/>
+                            <TextBlock x:Name="TotalEvents" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="14"/>
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1">
@@ -227,7 +227,7 @@
                             <Label Content="Ngân sách:" HorizontalAlignment="Left" Height="26" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
                         </Grid>
                         <Grid Grid.Column="1">
-                            <TextBlock x:Name="TotalMoney" HorizontalAlignment="Left" Height="26" VerticalAlignment="Center" FontSize="14"/>
+                            <TextBlock x:Name="TotalMoney" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="14"/>
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="2">
@@ -239,7 +239,7 @@
                             <Label Content="Còn lại:" HorizontalAlignment="Left" Height="26" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
                         </Grid>
                         <Grid Grid.Column="1">
-                            <TextBlock x:Name="LeftMoney" HorizontalAlignment="Left" Height="26" VerticalAlignment="Center" FontSize="14"/>
+                            <TextBlock x:Name="LeftMoney" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="14"/>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -271,12 +271,13 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Loại sự kiện" Binding="{Binding MALSK}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Ngày bắt đầu" Binding="{Binding TSTART}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Ngày kết thúc" Binding="{Binding TEND}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Ngân sách" Binding="{Binding NGANSACH}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Đã dùng" Binding="{Binding DADUNG}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Tình trạng" Binding="{Binding STAT}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Ghi chú" Binding="{Binding GHICHU}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Owner" Binding="{Binding MAOWNER}" IsReadOnly="True" Width="*"/>
                             
                         </DataGrid.Columns>
                     </DataGrid>
@@ -284,7 +285,9 @@
                 </Grid>
 
             </Grid>
-
+            <Button Grid.Row="2" HorizontalAlignment="Right" Margin="20" Click="Button_Click_1">
+                Xuất báo cáo
+            </Button>
 
         </Grid>
     </Grid>

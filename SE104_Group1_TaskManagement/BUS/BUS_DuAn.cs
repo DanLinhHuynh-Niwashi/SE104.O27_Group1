@@ -131,6 +131,7 @@ namespace BUS
                 temp.TEND = dsDuAn.Rows[i]["TEnd"].ToString();
                 temp.NGANSACH = long.Parse(Convert.ToInt64(dsDuAn.Rows[i]["NGANSACH"]).ToString());
                 temp.STAT = dsDuAn.Rows[i]["TINHTRANG"].ToString();
+                temp.DADUNG = long.Parse(Convert.ToInt64(dsDuAn.Rows[i]["DADUNG"]).ToString());
                 result.Add(temp);
             }
             return result;

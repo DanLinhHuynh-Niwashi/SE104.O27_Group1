@@ -426,23 +426,23 @@ namespace DAL
             {
 
                 conn.Open();
-                string queryString = "SELECT MADA, TENDA, MALSK, NGANSACH, DADUNG, CONVERT(VARCHAR(10),TSTART,104),  CONVERT(VARCHAR(10),TEND,104), MAOWNER, TINHTRANG FROM DUAN WHERE MADA IS NOT NULL";
+                string queryString = "SELECT MADA, TENDA, MALSK, NGANSACH, DADUNG, CONVERT(VARCHAR(10),TSTART,104) as TStart,  CONVERT(VARCHAR(10),TEND,104) as TEnd, MAOWNER, TINHTRANG FROM DUAN WHERE MADA IS NOT NULL";
 
                 if (filter.MADA!="")
                 {
-                    queryString += " AND MADA LIKE " + filter.MADA;
+                    queryString += " AND MADA LIKE '%" + filter.MADA + "%'";
                 }   
                 if (filter.TENDA!="")
                 {
-                    queryString += " AND TENDA LIKE " + filter.TENDA;
+                    queryString += " AND TENDA LIKE '%" + filter.TENDA + "%'";
                 }   
                 if (filter.MALSK != "")
                 {
-                    queryString += " AND MALSK LIKE " + filter.MALSK;
+                    queryString += " AND MALSK LIKE '%" + filter.MALSK + "%'";
                 }   
                 if (filter.MAOWNER != "")
                 {
-                    queryString += " AND MAOWNER LIKE " + filter.MAOWNER;
+                    queryString += " AND MAOWNER LIKE '%" + filter.MAOWNER + "%'";
                 }   
                 if (NganSachL != -1)
                 {
@@ -454,15 +454,15 @@ namespace DAL
                 }
                 if (filter.STAT != "")
                 {
-                    queryString += " AND TINHTRANG LIKE " + filter.STAT;
+                    queryString += " AND TINHTRANG = '" + filter.STAT +"'";
                 }   
                 if (filter.TSTART != "")
                 {
-                    queryString += " AND TSTART <= CONVERT(smalldatetime," + filter.TSTART +", 104)";
+                    queryString += " AND TSTART >= CONVERT(smalldatetime,'" + filter.TSTART +"', 104)";
                 }    
                 if (filter.TEND != "")
                 {
-                    queryString += " AND TEND >= CONVERT(smalldatetime," + filter.TEND + ", 104)";
+                    queryString += " AND TEND <= CONVERT(smalldatetime,'" + filter.TEND + "', 104)";
                 }    
                 var command = new SqlCommand(
                     queryString,
