@@ -13,10 +13,35 @@ namespace BUS
         //--Duoc goi khi event handling cua button dang nhap duoc goi
         //--Kiem tra tai khoan co ton tai hay khong, neu ton tai thi tra ve mot doi tuong cua lop DTO_NhanVien
         //
-        DAL_TaiKhoan dalTK = new DAL_TaiKhoan();
-        public (DTO_TaiKhoan? , string) Login(DTO_TaiKhoan tk)
+        static BUS_TaiKhoan _instance = new BUS_TaiKhoan();
+        public static BUS_TaiKhoan Instance
         {
-            return (dalTK.CheckLogicDTO(tk), "valid_info");
+            get
+            {
+                if (_instance == null)
+                    _instance = new BUS_TaiKhoan();
+                return _instance;
+            }
+        }
+
+        DAL_TaiKhoan dalTK = new DAL_TaiKhoan();
+        DAL_QuyenHan dalQH = new DAL_QuyenHan();
+        DAL_NhanVien dalNV = new DAL_NhanVien();
+        public (DTO_TaiKhoan? , string) Login(DTO_TaiKhoan tk)
+        { 
+            DTO_TaiKhoan temp = dalTK.CheckLogicDTO(tk);
+            if (temp != null )
+            {
+                if (dalNV.GetByID(temp.MANV).MANV == "")
+                {
+                    return (null, "Bạn không có quyền truy cập vào tài khoản này");
+                }    
+            }
+            else if (temp == null)
+            {
+                return (temp, "Thông tin đăng nhập không chính xác.");
+            }
+            return (temp, "Đăng nhập thành công");
             
         }
 
@@ -42,6 +67,10 @@ namespace BUS
             {
                 return dalTK.TaoMoiTaiKhoan(tk);
             }
+        }
+
+        public bool checkQH(DTO_TaiKhoan tk, string QH) {
+            return dalQH.CheckPermission(tk, QH);
         }
         /*
         public string SendCode(string email)

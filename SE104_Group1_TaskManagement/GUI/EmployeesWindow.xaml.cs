@@ -42,6 +42,14 @@ namespace GUI
             this.WindowState = WindowState.Maximized;
 
             setUser();
+            if (tkManager.checkQH(LoginWindow.crnUser, "ThemNV") == false)
+            {
+                Add_Btn.Visibility = Visibility.Collapsed;
+            }
+            if (tkManager.checkQH(LoginWindow.crnUser, "XoaNV") == false)
+            {
+                Del_Btn.Visibility = Visibility.Collapsed;
+            }
             var converter = new BrushConverter();
 
 
@@ -352,14 +360,21 @@ namespace GUI
         private void DelButton_Loaded(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
+            
             if (button != null)
             {
+                if (tkManager.checkQH(LoginWindow.crnUser, "XoaNV") == false)
+                {
+                    button.Visibility = Visibility.Collapsed;
+                    return;
+                }
                 // Find the DataGridRow that contains the clicked button
                 DataGridRow row = FindVisualParent<DataGridRow>(button);
                 if (row != null)
                 {
                     // Access the data item behind the row
                     DTO_NhanVien? item = row.Item as DTO_NhanVien;
+                    
                     if (item != null && item.MANV == LoginWindow.crnUser.MANV)
                     {
                         button.Visibility = Visibility.Collapsed; 
@@ -368,6 +383,20 @@ namespace GUI
 
                 // Do something with the item...
             }
+        }
+
+        private void EditButton_Loaded(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            if (button != null)
+            {
+                if (tkManager.checkQH(LoginWindow.crnUser, "SuaNV") == false)
+                {
+                    button.Visibility = Visibility.Collapsed;
+                    return;
+                }
+            }
+            
         }
 
         private void tk_Btn_Click(object sender, RoutedEventArgs e)

@@ -172,6 +172,7 @@
 
                 <Grid Grid.Column="0" Margin="5">
                     <Button
+                     x:Name ="Add_Btn"
                      Click="Add_Button_Click"
                      Width="50" Height="50"
                      IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
@@ -257,7 +258,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Style="{StaticResource gridEditButton}" Click="EditButton_Click">
+                                            <Button Style="{StaticResource gridEditButton}" Click="EditButton_Click" Loaded="EditButton_Loaded">
                                                 <materialDesign:PackIcon Kind="PencilOutline" Style="{StaticResource gridButtonIcon}"/>
                                             </Button>
                                             <Button Margin="5 0 0 0" Style="{StaticResource gridRemoveButton}" Click="DeleteButton_Click" Loaded="DelButton_Loaded">

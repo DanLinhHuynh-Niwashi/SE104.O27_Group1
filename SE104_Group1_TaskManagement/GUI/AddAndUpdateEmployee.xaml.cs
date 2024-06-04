@@ -45,6 +45,10 @@ namespace GUI
                 emailText.Text = initializeNV.EMAIL;
                 phoneText.Text = initializeNV.PHONE;
                 noteText.Text = initializeNV.GHICHU;
+                qhText.SelectedValue = nvManager.GetQuyenHan(initializeNV).MAQH;
+
+                if (initializeNV.MANV == LoginWindow.crnUser.MANV)
+                    qhText.IsEnabled = false;
                 
             }    
         }
@@ -105,8 +109,8 @@ namespace GUI
             nv.PHONE = phoneText.Text;
             nv.GHICHU = noteText.Text;
             (bool, string) res = nvManager.SuaNhanVien(nv);
-
-            if (res.Item1 == true)
+            string result = nvManager.DoiQuyenHan(LoginWindow.crnUser, nv, qhText.SelectedValue.ToString());
+            if (res.Item1 == true && result == "")
             {
                 MessageBox.Show("Sửa nhân viên thành công!");
                 this.DialogResult = true;
@@ -114,7 +118,7 @@ namespace GUI
             }
             else
             {
-                MessageBox.Show(res.Item2);
+                MessageBox.Show(res.Item2 + "\n" + result);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using DAL;
 using DTO;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +16,19 @@ namespace BUS
 {
     public class BUS_NhanVien
     {
+        static BUS_NhanVien _instance = new BUS_NhanVien();
+        public static BUS_NhanVien Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new BUS_NhanVien();
+                return _instance;
+            }
+        }
+
         DAL_NhanVien dalNV = new DAL_NhanVien();
+        DAL_TaiKhoan dalTK = new DAL_TaiKhoan();
         public BindingList<DTO_NhanVien> GetAllData()
         {
             BindingList<DTO_NhanVien> result = new BindingList<DTO_NhanVien>();
@@ -59,8 +72,8 @@ namespace BUS
         }
 
 
-//Tra ve 0 neu them, xoa, sua nhan vien = 0, tra ve -1 neu them, xoa, sua nhan vien that bai
-public (bool, string) AddData(DTO_NhanVien nhanVienMoi)
+        //Tra ve 0 neu them, xoa, sua nhan vien = 0, tra ve -1 neu them, xoa, sua nhan vien that bai
+        public (bool, string) AddData(DTO_NhanVien nhanVienMoi)
         {
             (bool result, string message) = IsValidStaffInfo(nhanVienMoi);
             if (result == false)
@@ -172,6 +185,22 @@ public (bool, string) AddData(DTO_NhanVien nhanVienMoi)
                 return false;
             else
                 return true;
+        }
+
+        //Lấy và đổi quyền hạn
+        
+        public string DoiQuyenHan(DTO_TaiKhoan crnUser, DTO_NhanVien nv, string QH)
+        {
+            if (BUS_TaiKhoan.Instance.checkQH(crnUser, "SuaNV"))
+            {
+                return dalTK.ChangeQH(nv.MANV, QH);
+            }
+            else return "Không có quyền hạn này";
+        }
+
+        public DTO_QuyenHan GetQuyenHan(DTO_NhanVien nv)
+        {
+            return dalTK.GetQH(nv.MANV);
         }
     }
 }

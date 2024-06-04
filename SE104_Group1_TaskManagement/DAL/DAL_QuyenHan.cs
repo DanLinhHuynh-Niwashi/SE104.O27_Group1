@@ -37,18 +37,18 @@ namespace DAL
                 return dt;
             }
         }
-        public bool CheckPermission(string maNV, string action)
+        public bool CheckPermission(DTO_TaiKhoan tk, string action)
         {
             try
             {
                 conn.Open();
                 string queryString = @"SELECT COUNT(*) 
-                                       FROM NHANVIEN nv
+                                       FROM TAIKHOAN nv
                                        JOIN QUYENHAN qh ON nv.MaQH = qh.MaQH
                                        JOIN CT_QUYENHAN cth ON qh.MaQH = cth.MaQH
                                        WHERE nv.MANV = @maNV AND cth.Action = @action";
                 var command = new SqlCommand(queryString, conn);
-                command.Parameters.AddWithValue("@maNV", maNV);
+                command.Parameters.AddWithValue("@maNV", tk.MANV);
                 command.Parameters.AddWithValue("@action", action);
                 int count = Convert.ToInt32(command.ExecuteScalar());
                 conn.Close();
@@ -61,28 +61,6 @@ namespace DAL
                 return false;
             }
         }
-        public bool UpdatePermission(string maQH, string action, bool hasPermission)
-        {
-            try
-            {
-                conn.Open();
-                string queryString = @"UPDATE CT_QUYENHAN 
-                                       SET HasPermission = @hasPermission
-                                       WHERE MaQH = @maQH AND Action = @action";
-                var command = new SqlCommand(queryString, conn);
-                command.Parameters.AddWithValue("@maQH", maQH);
-                command.Parameters.AddWithValue("@action", action);
-                command.Parameters.AddWithValue("@hasPermission", hasPermission);
-                int rowsAffected = command.ExecuteNonQuery();
-                conn.Close();
-                return rowsAffected > 0;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                conn.Close();
-                return false;
-            }
-        }
+       
     }
 }

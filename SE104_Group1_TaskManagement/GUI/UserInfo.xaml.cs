@@ -1,4 +1,5 @@
-﻿using DTO;
+﻿using BUS;
+using DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace GUI
     public partial class UserInfo : Window
     {
         public DTO_NhanVien crnUser = new DTO_NhanVien();
+        
         public UserInfo()
         {
             InitializeComponent();
@@ -33,6 +35,7 @@ namespace GUI
             emailText.Text = crnUser.EMAIL;
             phoneText.Text = crnUser.PHONE;
             noteText.Text = crnUser.GHICHU;
+            qhText.Text = BUS_NhanVien.Instance.GetQuyenHan(crnUser).TENQH;
         }
 
         private void back_Btn_Click(object sender, RoutedEventArgs e)

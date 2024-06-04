@@ -130,7 +130,58 @@ namespace DAL
             }
         }
 
-       
+        public string ChangeQH(string manv, string newMAQH)
+        {
+            try
+            {
+                conn.Open();
+                string query = "UPDATE TAIKHOAN SET MAQH = @newMAQH WHERE MANV = @manv";
+                SqlCommand command = new SqlCommand(query, conn);
+                command.Parameters.AddWithValue("@newMAQH", newMAQH);
+                command.Parameters.AddWithValue("@manv", manv);
+                command.ExecuteNonQuery();
+                conn.Close();
+                return "";
+            }
+            catch (SqlException ex)
+            {
+                conn.Close();
+                return (ex.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public DTO_QuyenHan GetQH(string manv)
+        {
+            DTO_QuyenHan res = new DTO_QuyenHan();
+            try
+            {
+                conn.Open();
+                string query = "SELECT * FROM QUYENHAN JOIN TAIKHOAN ON QUYENHAN.MAQH = TAIKHOAN.MAQH WHERE TAIKHOAN.MANV = @manv";
+                SqlCommand command = new SqlCommand(query, conn);
+                command.Parameters.AddWithValue("@manv", manv);
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Read();
+                res.MAQH = reader.GetString(0);
+                res.TENQH = reader.GetString(1);
+                reader.Close();
+                conn.Close();
+                return res;
+            }
+            catch (SqlException ex)
+            {
+                conn.Close();
+                return res;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
         //}
         //--Thinh code
         //public static DTO_NhanVien CheckLogicDTO(DTO_TaiKhoan taikhoan)

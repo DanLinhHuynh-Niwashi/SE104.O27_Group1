@@ -36,12 +36,13 @@ namespace GUI
             if (crnUser != null)
             {
                 EmployeesWindow mainWindow = new EmployeesWindow();
+                MessageBox.Show(str);
                 this.Visibility = Visibility.Collapsed;
                 mainWindow.Show();
             }
             else
             {
-                MessageBox.Show("Mat khau hoac email sai, moi nhap lai");           
+                MessageBox.Show(str);           
             }
 
         }
