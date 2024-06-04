@@ -14,39 +14,50 @@ namespace DAL
     public class DAL_TaiKhoan : BaseClass
     {
 
-        public DTO_TaiKhoan CheckLogicDTO(DTO_TaiKhoan taikhoan)
+        public (DTO_TaiKhoan, string) CheckLogicDTO(DTO_TaiKhoan taikhoan)
         {
             DTO_TaiKhoan user = new DTO_TaiKhoan();
             // Hàm connect tới CSDL 
             //SqlConnection conn = BaseClass;
-            conn.Open();
-            SqlCommand command = new SqlCommand("proc_logic", conn);
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@user", taikhoan.EMAIL);
-            command.Parameters.AddWithValue("@pass", taikhoan.PASS);
-            // Kiểm tra quyền các bạn thêm 1 cái parameter...
-            command.Connection = conn;
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.HasRows)
+            try
             {
-                while(reader.Read())
+                conn.Open();
+                SqlCommand command = new SqlCommand("proc_logic", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@user", taikhoan.EMAIL);
+                command.Parameters.AddWithValue("@pass", taikhoan.PASS);
+                // Kiểm tra quyền các bạn thêm 1 cái parameter...
+                command.Connection = conn;
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
                 {
-                    user.MAQH = reader.GetString(0);
-                    user.EMAIL = reader.GetString(1);
-                    user.PASS = reader.GetString(2);
-                    user.MANV = reader.GetString(3);
-                }
-                reader.Close();
-                conn.Close();
-                
-            }
-            else
-            {
-                reader.Close();
-                conn.Close();
-            }
+                    while (reader.Read())
+                    {
+                        user.MAQH = reader.GetString(0);
+                        user.EMAIL = reader.GetString(1);
+                        user.PASS = reader.GetString(2);
+                        user.MANV = reader.GetString(3);
+                    }
+                    reader.Close();
+                    conn.Close();
 
-            return user;
+                }
+                else
+                {
+                    reader.Close();
+                    conn.Close();
+                }
+
+                return (user, "");
+            }
+            catch(Exception ex)
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }    
+                return (null, ex.Message);
+            }
         }
 
         public string TaoMoiTaiKhoan(DTO_TaiKhoan taiKhoan)
@@ -115,7 +126,7 @@ namespace DAL
                 command.Parameters.AddWithValue("@NewPassword", newPassword);
                 command.ExecuteNonQuery();
                 conn.Close();
-                res = CheckLogicDTO(new DTO_TaiKhoan("", email, newPassword, ""));
+                (res, string a) = CheckLogicDTO(new DTO_TaiKhoan("", email, newPassword, ""));
                 
                 return ("Đổi mật khẩu thành công!", res);
             }

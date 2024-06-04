@@ -29,7 +29,7 @@ namespace BUS
         DAL_NhanVien dalNV = new DAL_NhanVien();
         public (DTO_TaiKhoan? , string) Login(DTO_TaiKhoan tk)
         { 
-            DTO_TaiKhoan temp = dalTK.CheckLogicDTO(tk);
+            (DTO_TaiKhoan temp, string mess) = dalTK.CheckLogicDTO(tk);
             if (temp != null )
             {
                 if (dalNV.GetByID(temp.MANV).MANV == "")
@@ -39,6 +39,8 @@ namespace BUS
             }
             else if (temp == null)
             {
+                if (mess != "")
+                    return (temp, mess);
                 return (temp, "Thông tin đăng nhập không chính xác.");
             }
             return (temp, "Đăng nhập thành công");
