@@ -38,16 +38,24 @@
                     </materialDesign:PopupBox>
                 </StackPanel>
             </Grid>
-
-        <Grid x:Name="WorkSpace" Margin="0 65 0 0">
+            
+            
+        <Grid x:Name="WorkSpace" Margin="0,60,0,0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="60"></RowDefinition>
                 <RowDefinition Height="60"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0">
+            <Grid Grid.Row="0" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="MaDaTextBlock" Margin="10 0 0 0" Text="Du An" FontSize="22" FontWeight="ExtraBold" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="MaDa" Margin="10 0 0 0" Text="No. 01" FontSize="22" FontWeight="ExtraBold" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition MaxWidth="60"/>
                     <ColumnDefinition MaxWidth="60"/>
                     <ColumnDefinition MaxWidth="60"/>
                     <ColumnDefinition/>
@@ -67,7 +75,7 @@
 
                 <Grid Grid.Column="1" Margin="5">
                     <Button
-         Click="ButtonDelete_Click"
+         Click="ButtonDelete_All_Click"
          Width="50" Height="50"
          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
          Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
@@ -78,9 +86,6 @@
                 </Grid>
 
                 <Grid Grid.Column="2">
-
-                </Grid>
-                <Grid Grid.Column="3">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button
              Width="50" Height="50"
@@ -96,7 +101,7 @@
              x:Name="searchText"
              Margin="8,0,8,0"
              VerticalAlignment="Center"
-             materialDesign:HintAssist.Hint="Họ tên/ Mã nhân viên"
+             materialDesign:HintAssist.Hint="Tên / Mã công việc"
              materialDesign:TextFieldAssist.DecorationVisibility="Visible"
              materialDesign:TextFieldAssist.HasClearButton="True">
                         </TextBox>
@@ -104,7 +109,7 @@
                 </Grid>
             </Grid>
 
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition MaxWidth="150"/>
@@ -121,9 +126,7 @@
                                     </DataTemplate>
                                 </DataGridCheckBoxColumn.HeaderTemplate>
                             </DataGridCheckBoxColumn>
-                            <DataGridTextColumn Header="Mã đề án" Binding="{Binding MADA}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Mã cong viec" Binding="{Binding MACV}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Mã chuyen mon" Binding="{Binding MACM}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Mã công việc" Binding="{Binding MACV}" IsReadOnly="True" Width="*"/>
 
                             <DataGridTemplateColumn Header="Ten công việc"  IsReadOnly="True" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -132,13 +135,14 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Ngan sach" Binding="{Binding NGANSACH}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Da dung" Binding="{Binding DADUNG}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Tien do" Binding="{Binding TIENDO}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Bat dau" Binding="{Binding TSTART}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Ket thuc" Binding="{Binding TEND}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Yeu cau" Binding="{Binding YCDINHKEM}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Tep" Binding="{Binding TEPDINHKEM}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Mã chuyên môn" Binding="{Binding MACM}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Ngân sách" Binding="{Binding NGANSACH}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Đã dùng" Binding="{Binding DADUNG}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Tiến độ" Binding="{Binding TIENDO}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Bắt đầu" Binding="{Binding TSTART}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Kết thúc" Binding="{Binding TEND}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Yêu cầu" Binding="{Binding YCDINHKEM}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Tệp đính kèm" Binding="{Binding TEPDINHKEM}" IsReadOnly="True" Width="*"/>
                             <DataGridTemplateColumn Header="Operations" IsReadOnly="True" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -146,7 +150,7 @@
                                             <Button Style="{StaticResource gridEditButton}" Click="ButtonEdit_Click">
                                                 <materialDesign:PackIcon Kind="PencilOutline" Style="{StaticResource gridButtonIcon}"/>
                                             </Button>
-                                            <Button Margin="5 0 0 0" Style="{StaticResource gridRemoveButton}" Click="ButtonDelete_Click" Loaded="DelButton_Loaded">
+                                            <Button Margin="5 0 0 0" Style="{StaticResource gridRemoveButton}" Click="ButtonDelete_Click" Loaded="ButtonDelete_Loaded">
                                                 <materialDesign:PackIcon Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}"/>
                                             </Button>
                                         </StackPanel>
@@ -165,53 +169,82 @@
                         </StackPanel>
 
                         <ListView>
+
+                            <StackPanel   Orientation="Vertical" Margin="0 10 0 0">
+
+                                <StackPanel   Orientation="Vertical" Margin="10 0 0 10">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox x:Name="cmCheck" Width="30"/>
+                                        <TextBlock Text="Chuyên môn"/>
+                                    </StackPanel>
+                                    <ComboBox
+                                        x:Name="cmText"
+                                        Margin="10 0 0 10"
+                                        VerticalAlignment="Center"
+                                        materialDesign:HintAssist.Hint="Chuyên môn"
+                                        FontSize="12"
+                                        materialDesign:TextFieldAssist.HasClearButton="True"
+                                        SelectionChanged="MacmText_SelectionChanged"
+                                        Style="{StaticResource MaterialDesignComboBox}" />
+                                </StackPanel>
+
+                                
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox x:Name="nvCheck" Width="30"/>
+                                    <TextBlock Text="Phan cong"/>
+                                </StackPanel>
+                                <ComboBox
+                                 x:Name="nvText"
+                                 Margin="10 0 0 10"
+                                 VerticalAlignment="Center"
+                                 materialDesign:HintAssist.Hint="Nhan vien"
+                                 FontSize="12"
+                                 materialDesign:TextFieldAssist.HasClearButton="True"
+                                 Style="{StaticResource MaterialDesignComboBox}"/>
+                            </StackPanel>
+
+                            
                             <StackPanel Height="20" Orientation="Horizontal">
-                                <CheckBox Width="30"/>
+                                <CheckBox Width="30" x:Name="TStartCheck"/>
                                 <TextBlock Text="Bat dau" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
-                                <DatePicker Width="100" SelectedDateFormat="Short"
-                            materialDesign:HintAssist.Hint="Pick Date"/>
+                                <DatePicker Width="100" x:Name="TStartPicker" SelectedDateFormat="Short"
+                                            materialDesign:HintAssist.Hint="Pick Date" />
                             </StackPanel>
 
                             <StackPanel Height="20" Orientation="Horizontal">
-                                <CheckBox Width="30"/>
+                                <CheckBox Width="30" x:Name="TEndCheck"/>
                                 <TextBlock Text="Kết thúc"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
-                                <DatePicker
-                    Width="100"
-                    materialDesign:HintAssist.Hint="Pick Date"/>
+                                <DatePicker Width="100" x:Name="TEndPicker" SelectedDateFormat="Short"
+                                            materialDesign:HintAssist.Hint="Pick Date"  />
                             </StackPanel>
 
                             <StackPanel Height="20" Orientation="Horizontal">
+                                <CheckBox x:Name="ngansachCheck" Width="30"/>
                                 <TextBlock Text="Ngân sách"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-                                    <CheckBox Width="20" Margin="0 10 0 0"/>
-                                    <TextBox VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="NganSachL" Width="100" materialDesign:HintAssist.Hint="Smaller than..."/>
+                                    <TextBox VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="NganSachLTextBox" Width="100" materialDesign:HintAssist.Hint="Greater than..."/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-                                    <CheckBox Width="20" Margin="0 10 0 0"/>
-                                    <TextBox VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="NganSachH" Width="100" materialDesign:HintAssist.Hint="Greater than..."/>
+                                    <TextBox VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="NganSachHTextBox" Width="100" materialDesign:HintAssist.Hint="Smaller than..."/>
                                 </StackPanel>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox Width="20" Margin="0 10 0 0"/>
+                                <CheckBox Width="20" Margin="0 10 0 0" x:Name="progressCheck"/>
                                 <TextBlock Text="Tien do" Margin="0 10 0 0"/>
                                 <TextBox x:Name="ProgressTextBox" Margin="5 0 0 0" Width="60"/>
                             </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-
-                            </StackPanel>
-                        </ListView>
+                         </ListView>
                     </StackPanel>
                 </Grid>
             </Grid>

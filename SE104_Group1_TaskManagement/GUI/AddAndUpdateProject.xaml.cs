@@ -27,6 +27,7 @@ namespace GUI
         public AddAndUpdateProject(DTO_DuAn initializeDA = null)
         {
             InitializeComponent();
+            BindingDropDown();
             if (initializeDA != null)
             {
                 wTitle.Text = "SỬA DU AN";
@@ -35,27 +36,44 @@ namespace GUI
                 madaText.Text = initializeDA.MADA;
                 tendaText.Text = initializeDA.TENDA;
                 statText.SelectedValue = initializeDA.STAT;
-                TStartText.Text = initializeDA.TSTART;
-                TEndText.Text = initializeDA.TEND;
+                TStartPicker.Text = initializeDA.TSTART;
+                TEndPicker.Text = initializeDA.TEND;
                 ngansachText.Text = initializeDA.NGANSACH.ToString();
-                malskText.Text = initializeDA.MALSK;
-                manqlText.Text = initializeDA.MAOWNER;
-
+                lskText.Text = initializeDA.MALSK;
+                ownerText.Text = initializeDA.MAOWNER;
             }
+        }
+
+        void BindingDropDown()
+        {
+            Dictionary<string, DTO_NhanVien> nv = BUS_StaticTables.Instance.GetAllDataNV();
+
+            ownerText.ItemsSource = nv;
+            ownerText.DisplayMemberPath = "Value.MANV";
+            ownerText.SelectedValuePath = "Value.MANV";
+
+            Dictionary<string, DTO_LoaiSK> lsk = BUS_StaticTables.Instance.GetAllDataLSK();
+
+            lskText.ItemsSource = lsk;
+            lskText.DisplayMemberPath = "Value.TENLSK";
+            lskText.SelectedValuePath = "Value.MALSK";
         }
 
         private void ButtonAddNew_Click(object sender, RoutedEventArgs e)
         {
             DTO_DuAn newDA = new DTO_DuAn();
             newDA.TENDA = tendaText.Text;
-            newDA.STAT = statText.SelectedValue != null ? statText.SelectedValue.ToString() : "";
+            newDA.STAT = statText.Text != null ? statText.Text.ToString() : "";
             newDA.MADA = madaText.Text;
-            newDA.TSTART = TStartText.Text;
-            newDA.TEND = TEndText.Text;
+            newDA.TSTART = TStartPicker.Text;
+            newDA.TEND = TEndPicker.Text;
             newDA.NGANSACH = long.TryParse(ngansachText.Text, out long tempResult) ? tempResult : -1;
-            newDA.MALSK = malskText.Text;
-            newDA.MAOWNER = manqlText.Text;
+            newDA.MALSK = lskText.SelectedValue != null ? lskText.SelectedValue.ToString() : "";
+            newDA.MAOWNER = ownerText.Text;
+            newDA.MAOWNER = ownerText.SelectedValue != null ? ownerText.SelectedValue.ToString() : "";
             (bool, string) res = projectManager.AddData(newDA);
+
+            
 
             if (res.Item1 == true)
             {
@@ -73,13 +91,14 @@ namespace GUI
         {
             DTO_DuAn da = new DTO_DuAn();
             da.MADA = madaText.Text;
-            da.MALSK = malskText.Text;
-            da.MAOWNER = manqlText.Text;
+            da.MALSK = lskText.SelectedValue.ToString();
+            //da.MAOWNER = ownerText.Text;
+            da.MAOWNER = ownerText.SelectedValue.ToString();
             da.TENDA = tendaText.Text;
-            da.STAT = statText.SelectedValue.ToString();
+            da.STAT = statText.Text.ToString();
             da.NGANSACH = long.TryParse(ngansachText.Text, out long tempResult) ? tempResult : -1;
-            da.TSTART = TStartText.Text;
-            da.TEND = TEndText.Text;
+            da.TSTART = TStartPicker.Text;
+            da.TEND = TEndPicker.Text;
             (bool, string) res = projectManager.EditProject(da);
 
             if (res.Item1 == true)

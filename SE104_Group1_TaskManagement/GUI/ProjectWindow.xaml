@@ -43,27 +43,6 @@
                     </Button>
                 </Grid>
 
-                <Grid Grid.Column="1" Margin="5">
-                    <Button Click="ButtonDelete_Click"
-                     Width="50" Height="50"
-                     IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                     Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
-                     ToolTip="Xóa">
-                        <materialDesign:PackIcon
-                         Kind="Delete" />
-                    </Button>
-                </Grid>
-
-                <Grid Grid.Column="2">
-                    <Button Click="ButtonPrint_Click"
-                     Width="50" Height="50"
-                     IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                     Style="{StaticResource MaterialDesignFloatingActionDarkButton}"  
-                     ToolTip="In">
-                        <materialDesign:PackIcon
-                         Kind="Printer" />
-                    </Button>
-                </Grid>
                 <Grid Grid.Column="3">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button
@@ -80,7 +59,7 @@
                             x:Name="searchText"
                             Margin="8,0,8,0"
                             VerticalAlignment="Center"
-                            materialDesign:HintAssist.Hint="Họ tên/ Mã nhân viên"
+                            materialDesign:HintAssist.Hint="Ma / Ten du an"
                             materialDesign:TextFieldAssist.DecorationVisibility="Visible"
                             materialDesign:TextFieldAssist.HasClearButton="True">   
                         </TextBox>
@@ -98,17 +77,7 @@
                     <!--Members Data Grid-->
                     <DataGrid Margin="10 0 20 0" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" x:Name="membersDataGrid" Style="{DynamicResource DataGridStyle1}">
                         <DataGrid.Columns>
-                            <DataGridCheckBoxColumn Header="C" CanUserResize="False" Width="auto" ElementStyle="{StaticResource CheckBoxStyle1}">
-                                <DataGridCheckBoxColumn.HeaderTemplate>
-                                    <DataTemplate>
-                                        <CheckBox Style="{StaticResource CheckBoxStyle1}" Click="Sel_CheckBox_DataContextChanged"/>
-                                    </DataTemplate>
-                                </DataGridCheckBoxColumn.HeaderTemplate>
-                            </DataGridCheckBoxColumn>
                             <DataGridTextColumn Header="Mã dự án" Binding="{Binding MADA}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Mã loai su kien" Binding="{Binding MALSK}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Mã nguoi quan ly" Binding="{Binding MAOWNER}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Ngân sách" Binding="{Binding NGANSACH}" IsReadOnly="True" Width="*"/>
                             <DataGridTemplateColumn Header="Tên dự án" IsReadOnly="True" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -119,6 +88,9 @@
                             <DataGridTextColumn Header="Bắt đầu" Binding="{Binding TSTART}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Kết thúc" Binding="{Binding TEND}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Tình trạng" Binding="{Binding STAT}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Mã LSK" Binding="{Binding MALSK}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Mã NQL" Binding="{Binding MAOWNER}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Ngân sách" Binding="{Binding NGANSACH}" IsReadOnly="True" Width="*"/>
                             <DataGridTemplateColumn Header="Operations" IsReadOnly="True" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -126,11 +98,8 @@
                                             <Button Style="{StaticResource gridEditButton}" Click="ButtonView_Click">
                                                 <materialDesign:PackIcon Kind="Eye" Style="{StaticResource gridButtonIcon}"/>
                                             </Button>
-                                            <Button Margin="5 0 0 0" Style="{StaticResource gridEditButton}" Click="EditBtn_Click">
+                                            <Button Margin="5 0 0 0" Style="{StaticResource gridEditButton}" Click="ButtonEdit_Click">
                                                 <materialDesign:PackIcon Kind="PencilOutline" Style="{StaticResource gridButtonIcon}"/>
-                                            </Button>
-                                            <Button Margin="5 0 0 0" Style="{StaticResource gridRemoveButton}" Click="DeleteBtn_Click">
-                                                <materialDesign:PackIcon Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}"/>
                                             </Button>
                                         </StackPanel>
                                     </DataTemplate>
@@ -148,14 +117,45 @@
                             <TextBlock Text="Lọc theo ..." FontSize="15" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </StackPanel>
 
-                        <ListView>
+                        <ListView ScrollViewer.VerticalScrollBarVisibility="Visible">
+
+                            <WrapPanel   Orientation="Vertical" Margin="0 10 0 0">
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox x:Name="malskCheck" IsChecked="False" Width="30"/>
+                                    <TextBlock Text="Ma LSK"/>
+                                </StackPanel>
+                                <ComboBox
+                                    x:Name="lskText"
+                                    Margin="0 0 0 10"
+                                    Width="100"
+                                    VerticalAlignment="Center"
+                                    materialDesign:HintAssist.Hint="Ma LSK"
+                                    FontSize="12">      
+                                </ComboBox>
+                            </WrapPanel>
+
+                            <WrapPanel   Orientation="Vertical" Margin="0 10 0 0">
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox x:Name="maownerCheck" IsChecked="False" Width="30"/>
+                                    <TextBlock Text="Ma Owner"/>
+                                </StackPanel>
+                                <ComboBox
+                                     x:Name="ownerText"
+                                     Margin="0 0 0 10"
+                                     Width="100"
+                                     VerticalAlignment="Center"
+                                     materialDesign:HintAssist.Hint="Ma Nhan vien"
+                                     FontSize="12"> 
+                                </ComboBox>
+                            </WrapPanel>
+
                             <StackPanel Height="20" Orientation="Horizontal">
                                 <CheckBox x:Name="TStartCheck" Width="30"/>
                                 <TextBlock Text="Bat dau" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
-                                <TextBox x:Name="TStartText" Width="100"
+                                <DatePicker x:Name="TStartPicker" Width="100"
                                          materialDesign:TextFieldAssist.HasClearButton="True"
                                          materialDesign:HintAssist.Hint="Add Date"/>
                             </StackPanel>
@@ -166,8 +166,8 @@
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
-                                <TextBox
-                                    x:Name="TEndText"
+                                <DatePicker
+                                    x:Name="TEndPicker"
                                     Width="100"
                                     materialDesign:HintAssist.Hint="Add Date"
                                     materialDesign:TextFieldAssist.HasClearButton="True"/>
@@ -179,11 +179,10 @@
                             </StackPanel>
 
                             <StackPanel Orientation="Vertical">
-                                <TextBox VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="NganSachLTextBox" Width="100" materialDesign:HintAssist.Hint="Smaller than..."                     
+                                <TextBox VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="NganSachLTextBox" Width="100" materialDesign:HintAssist.Hint="Greater than..."                     
                                          materialDesign:TextFieldAssist.HasClearButton="True"/>
-                                    <TextBox VerticalAlignment="Center" Margin="0 10 0 0" HorizontalAlignment="Left" x:Name="NganSachHTextBox" Width="100" materialDesign:HintAssist.Hint="Greater than..."
-                                                                 materialDesign:TextFieldAssist.HasClearButton="True"
-/>
+                                    <TextBox VerticalAlignment="Center" Margin="0 10 0 0" HorizontalAlignment="Left" x:Name="NganSachHTextBox" Width="100" materialDesign:HintAssist.Hint="Smaller than..."
+                                                                 materialDesign:TextFieldAssist.HasClearButton="True"/>
                             </StackPanel>
 
                             <WrapPanel   Orientation="Vertical" Margin="0 10 0 0">
@@ -201,7 +200,7 @@
                                     <ComboBoxItem Content="Completed"/>
                                     <ComboBoxItem Content="Delayed"/>
                                     <ComboBoxItem Content="Canceled"/>
-                                    <ComboBoxItem Content="Pending"/>
+                                    <ComboBoxItem Content="On-going"/>
                                 </ComboBox>
                             </WrapPanel>
                         </ListView>

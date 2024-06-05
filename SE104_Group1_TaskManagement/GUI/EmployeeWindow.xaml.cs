@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,20 +37,23 @@ namespace GUI
         {
 
             InitializeComponent();
+            CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
+            ci.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
+            Thread.CurrentThread.CurrentCulture = ci;
+            //setUser();
             membersDataGrid.LoadingRow += MembersDataGrid_LoadingRow;
             cmText.ItemsSource = cm;
             cmText.DisplayMemberPath = "Value.TENCM";
             cmText.SelectedValuePath = "Value.MACM";
             var converter = new BrushConverter();
-            setUser();
             members = nvManager.GetAllData();
             showMember();
         }
 
-        void setUser()
-        {
-            crnUser = nvManager.GetByID(LoginWindow.crnUser.MANV);
-        }
+        //void setUser()
+        //{
+        //    crnUser = nvManager.GetByID(LoginWindow.crnUser.MANV);
+        //}
 
         private void MembersDataGrid_LoadingRow(object? sender, DataGridRowEventArgs e)
         {
@@ -148,10 +152,10 @@ namespace GUI
                             members = nvManager.GetAllData();
                             showMember();
                         }
-                        if (item.MANV == crnUser.MANV)
-                        {
-                            setUser();
-                        }
+                        //if (item.MANV == crnUser.MANV)
+                        //{
+                        //    setUser();
+                        //}
                     }
 
                     // Do something with the item...
@@ -226,7 +230,7 @@ namespace GUI
             }
         }
 
-        private void Button_Delete_All_Click(object sender, RoutedEventArgs e)
+        private void ButtonDelete_All_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult res = MessageBox.Show("Bạn đang xóa tất cả nhân viên đã chọn, thao tác này không thể quay lại.", "Warning", MessageBoxButton.OKCancel);
             if (res == MessageBoxResult.OK)
@@ -280,7 +284,7 @@ namespace GUI
             }
         }
 
-        private void Button_Delete_Loaded(object sender, RoutedEventArgs e)
+        private void ButtonDelete_Loaded(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
             if (button != null)

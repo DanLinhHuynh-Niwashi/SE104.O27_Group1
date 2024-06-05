@@ -67,7 +67,7 @@ namespace DAL
                     queryString,
                     conn);
                 command.Parameters.Clear();
-                command.Parameters.AddWithValue("@manv", da_new.MADA);
+                command.Parameters.AddWithValue("@mada", da_new.MADA);
                 command.Parameters.AddWithValue("@malsk", da_new.MALSK);
                 command.Parameters.AddWithValue("@tenda", da_new.TENDA);
                 command.Parameters.AddWithValue("@ngansach", da_new.NGANSACH);
@@ -134,7 +134,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "SELECT TINHTRANG FROM DU AN WHERE MADA='" + MADA + "'";
+                string queryString = "SELECT TINHTRANG FROM DUAN WHERE MADA='" + MADA + "'";
                 var command = new SqlCommand(
                    queryString,
                    conn);
@@ -256,7 +256,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "SELECT MADA, TENDA, MALSK, NGANSACH, CONVERT(VARCHAR(10),TSTART,104) AS TStart,  CONVERT(VARCHAR(10),TEND,104) AS TEnd, MAOWNER, TINHTRANG FROM DUAN" +
+                string queryString = "SELECT MADA, TENDA, MALSK, NGANSACH, CONVERT(VARCHAR(10),TSTART,104) AS TStart, CONVERT(VARCHAR(10),TEND,104) AS TEnd, MAOWNER, TINHTRANG FROM DUAN" +
                     " WHERE TEnd >= CONVERT(smalldatetime,@tend, 104)";
 
                 var command = new SqlCommand(
@@ -285,7 +285,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "SELECT MADA, TENDA, MALSK, NGANSACH,  CONVERT(VARCHAR(10),TSTART,104) AS TStart,  CONVERT(VARCHAR(10),TEND,104) AS TEnd, MAOWNER, TINHTRANG FROM DUAN" +
+                string queryString = "SELECT MADA, TENDA, MALSK, NGANSACH,  CONVERT(VARCHAR(10),TSTART,104) AS TStart, CONVERT(VARCHAR(10),TEND,104) AS TEnd, MAOWNER, TINHTRANG FROM DUAN" +
                     " WHERE NGANSACH => @ngansachl AND NGANSACH <= @ngansachh";
 
                 var command = new SqlCommand(
@@ -314,7 +314,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "SELECT MADA, TENDA, MALSK, NGANSACH,  CONVERT(VARCHAR(10),TSTART,104) AS TStart,  CONVERT(VARCHAR(10),TEND,104) AS TEnd, MAOWNER, TINHTRANG FROM DUAN WHERE MALSK = @malsk";
+                string queryString = "SELECT MADA, TENDA, MALSK, NGANSACH, CONVERT(VARCHAR(10),TSTART,104) AS TStart, CONVERT(VARCHAR(10),TEND,104) AS TEnd, MAOWNER, TINHTRANG FROM DUAN WHERE MALSK = @malsk";
 
                 var command = new SqlCommand(
                     queryString,
@@ -428,21 +428,17 @@ namespace DAL
                 conn.Open();
                 string queryString = "SELECT MADA, TENDA, MALSK, NGANSACH,  CONVERT(VARCHAR(10),TSTART,104) AS TStart, CONVERT(VARCHAR(10),TEND,104) AS TEnd, MAOWNER, TINHTRANG FROM DUAN WHERE MADA IS NOT NULL";
 
-                if (filter.MADA!="")
+                if (filter.MADA != "" || filter.TENDA != "")
                 {
-                    queryString += " AND MADA LIKE " + filter.MADA;
-                }   
-                if (filter.TENDA!="")
-                {
-                    queryString += " AND TENDA LIKE " + filter.TENDA;
+                    queryString += " AND MADA LIKE '%" + filter.MADA + "%' OR TENDA LIKE '%" + filter.TENDA + "%'";
                 }   
                 if (filter.MALSK != "")
                 {
-                    queryString += " AND MALSK LIKE " + filter.MALSK;
+                    queryString += " AND MALSK = " + filter.MALSK;
                 }   
                 if (filter.MAOWNER != "")
                 {
-                    queryString += " AND MAOWNER LIKE " + filter.MAOWNER;
+                    queryString += " AND MAOWNER LIKE '%" + filter.MAOWNER + "%'";
                 }   
                 if (NganSachL != -1)
                 {
@@ -454,15 +450,15 @@ namespace DAL
                 }
                 if (filter.STAT != "")
                 {
-                    queryString += " AND TINHTRANG LIKE " + filter.STAT;
+                    queryString += " AND TINHTRANG = '" + filter.STAT +"'";
                 }   
                 if (filter.TSTART != "")
                 {
-                    queryString += " AND TStart <= CONVERT(smalldatetime," + filter.TSTART +", 104)";
+                    queryString += " AND TStart <= CONVERT(smalldatetime, '" + filter.TSTART + "',104)";
                 }    
                 if (filter.TEND != "")
                 {
-                    queryString += " AND TEnd >= CONVERT(smalldatetime," + filter.TEND + ", 104)";
+                    queryString += " AND TEnd >= CONVERT(smalldatetime,'" + filter.TEND + "',104)";
                 }    
                 var command = new SqlCommand(
                     queryString,
@@ -486,23 +482,52 @@ namespace DAL
             try
             {
                 conn.Open();
-                string idString = "SELECT TOP 1 MADA FROM DUAN ORDER BY MADA DESC";
+                string idString = "Select count(MADA) from DUAN";
                 var command = new SqlCommand(idString, conn);
-                string id = (string)command.ExecuteScalar();
-                int number = 0;
-                if (id != null)
-                {
-                    number = int.Parse(id.Substring(id.Length - 3)) + 1;
-                }
-
+                int id = (int)command.ExecuteScalar();
+                id = id + 1;
                 conn.Close();
-                return "E" + number.ToString("000");
+                return id.ToString();
+
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
                 conn.Close();
                 return "";
+            }
+        }
+
+        public (bool, string) DeleteByID(string MADA)
+        {
+            try
+            {
+                conn.Open();
+                string queryString = "UPDATE DUAN SET IsDeleted = 1 WHERE MADA='" + MADA + "'";
+
+
+                var command = new SqlCommand(
+                    queryString,
+                    conn);
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    conn.Close();
+                    return (true, "Xóa project thành công.");
+                }
+                conn.Close();
+                return (false, "Xóa project không thành công.");
+            }
+            catch (SqlException e)
+            {
+                Debug.Write(e.ToString());
+                conn.Close();
+                return (false, e.Message);
+            }
+            catch (Exception ex)
+            {
+                Debug.Write(ex.ToString());
+                conn.Close();
+                return (false, ex.Message);
             }
         }
     }

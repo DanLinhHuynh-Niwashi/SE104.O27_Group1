@@ -19,6 +19,7 @@ using System.ComponentModel;
 using MailKit.Search;
 using System.Xml;
 using System.Windows.Controls.Primitives;
+using System.Globalization;
 
 namespace GUI
 {
@@ -31,51 +32,38 @@ namespace GUI
         BUS_DuAn projectManager = new BUS_DuAn();
         BindingList<DTO_DuAn> members = new BindingList<DTO_DuAn>();
 
-        //Dictionary<string, DTO_DuAn> stat = BUS_DuAn.Instance.GetAllDataStat();
-        
+        Dictionary<string, DTO_NhanVien> nv = BUS_StaticTables.Instance.GetAllDataNV();
+        Dictionary<string, DTO_LoaiSK> lsk = BUS_StaticTables.Instance.GetAllDataLSK();
+
+
+
+
         public ProjectWindow()
         {
             InitializeComponent();
+            CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
+            ci.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
+            Thread.CurrentThread.CurrentCulture = ci;
             membersDataGrid.LoadingRow += MembersDataGrid_LoadingRow;
-            statText.SelectedValuePath = "Value.STAT";
+            ownerText.ItemsSource = nv;
+            ownerText.DisplayMemberPath = "Value.MANV";
+            ownerText.SelectedValuePath = "Value.MANV";
+            lskText.ItemsSource = lsk;
+            lskText.DisplayMemberPath = "Value.TENLSK";
+            lskText.SelectedValuePath = "Value.MALSK";
             var converter = new BrushConverter();
             members = projectManager.GetAllData();
             showMember();
         }
-        private void ButtonSearch_Click(object sender, RoutedEventArgs e)
-        {
-            DTO_DuAn filter = new DTO_DuAn();
-            filter.MADA = searchText.Text != null ? searchText.Text.ToString() : "";
-            filter.TENDA = searchText.Text != null ? searchText.Text.ToString() : "";
-            filter.MALSK = searchText.Text != null ? searchText.Text.ToString() : "";
-            filter.MAOWNER = searchText.Text != null ? searchText.Text.ToString() : "";
-            long ngsl = -1;
-            long ngsh = -1;
-            if (statCheck.IsChecked == true)
-            {
-                filter.STAT = statText.SelectedValue != null ? statText.SelectedValue.ToString() : "";
-            }
-            if (ngansachCheck.IsChecked == true)
-            {
-                ngsl = long.TryParse(NganSachLTextBox.Text, out long tempLResult) ? tempLResult : -1L;
-                ngsh = long.TryParse(NganSachHTextBox.Text, out long tempHResult) ? tempHResult : -1L;
-            }
-            if (TStartCheck.IsChecked == true)
-            {
-                filter.TSTART = TStartText.Text != null ? TStartText.Text.ToString() : "";
-            }
-            if (TEndCheck.IsChecked == true)
-            {
-                filter.TEND = TEndText.Text != null ? TEndText.Text.ToString() : "";
-            }
-            members = projectManager.FindDA(filter, ngsl, ngsh);
-            showMember();
-        }
+        
 
         private void MembersDataGrid_LoadingRow(object? sender, DataGridRowEventArgs e)
         {
             var firstCol = membersDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "C");
-            var statCol = membersDataGrid.Columns.First(c => c.Header.ToString() == "Tình trạng");
+            var lskCol = membersDataGrid.Columns.First(c => c.Header.ToString() == "Mã LSK");
+            var ownerCol = membersDataGrid.Columns.First(c => c.Header.ToString() == "Mã NQL");
+
+
             e.Row.Loaded += (s, args) =>
             {
                 var row = (DataGridRow)s;
@@ -93,17 +81,25 @@ namespace GUI
                         }
                     }
                 }
+                //if (lskCol != null)
+                //{
+                //    var chBx = lskCol.GetCellContent(row) as TextBlock;
+                //    DTO_LoaiSK temp = new DTO_LoaiSK();
+                //    lsk.TryGetValue(da.MALSK, out temp);
+                //    chBx.Text = temp.TENLSK;
 
-                if (statCol != null)
-                {
-                    var chBx = statCol.GetCellContent(row) as TextBlock;
-                }
-                    //    DTO_TinhTrang temp = new DTO_TinhTrang();
-                    //    stat.TryGetValue(da.STAT, out temp);
-                    //    chBx.Text = temp.STATNAME;
+                //}
 
-                    //}
-                };
+                //if (ownerCol != null)
+                //{
+                //    var chBx = ownerCol.GetCellContent(row) as TextBlock;
+                //    DTO_NhanVien temp = new DTO_NhanVien();
+                //    nv.TryGetValue(da.MAOWNER, out temp);
+                //    string manv = temp.MANV;
+                //    chBx.Text = manv;
+
+                //}
+            };
         }
 
 
@@ -112,48 +108,7 @@ namespace GUI
             membersDataGrid.ItemsSource = members;
         }
 
-        private void membersDataGrid_Loaded(object sender, RoutedEventArgs e)
-        {
-            var firstCol = membersDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "C");
-            var operationCol = membersDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "Operations");
-            foreach (var item in membersDataGrid.Items)
-            {
-                DTO_DuAn? da = item as DTO_DuAn;
-                if (da != null)
-                {
-                    var chBx = firstCol.GetCellContent(item) as CheckBox;
-                    if (chBx == null)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        chBx.IsEnabled = false;
-                    }
-                }
-            }
-        }
-
-        private void Button_Delete_Loaded(object sender, RoutedEventArgs e)
-        {
-            Button button = sender as Button;
-            if (button != null)
-            {
-                // Find the DataGridRow that contains the clicked button
-                DataGridRow row = FindVisualParent<DataGridRow>(button);
-                if (row != null)
-                {
-                    // Access the data item behind the row
-                    DTO_DuAn? item = row.Item as DTO_DuAn;
-                    if (item != null)
-                    {
-                        button.Visibility = Visibility.Collapsed;
-                    }
-                }
-
-                // Do something with the item...
-            }
-        }
+        
 
         private T FindVisualParent<T>(DependencyObject child) where T : DependencyObject
         {
@@ -167,44 +122,31 @@ namespace GUI
                 return FindVisualParent<T>(parentObject);
         }
 
-        private void Sel_CheckBox_DataContextChanged(object sender, RoutedEventArgs e)
+        private void ButtonEdit_Click(Object sender, RoutedEventArgs e)
         {
-            var chkSelectAll = sender as CheckBox;
-            var firstCol = membersDataGrid.Columns.OfType<DataGridCheckBoxColumn>().FirstOrDefault(c => c.DisplayIndex == 0);
-            if (chkSelectAll == null || firstCol == null || membersDataGrid?.Items == null)
+            System.Windows.Controls.Button button = sender as System.Windows.Controls.Button;
+            if (button != null)
             {
-                return;
-            }
-            foreach (var item in membersDataGrid.Items)
-            {
-                var chBx = firstCol.GetCellContent(item) as CheckBox;
-                if (chBx == null || chBx.Visibility != Visibility.Visible)
+                // Find the DataGridRow that contains the clicked button
+                DataGridRow row = FindVisualParent<DataGridRow>(button);
+                if (row != null)
                 {
-                    continue;
+                    // Access the data item behind the row
+                    DTO_DuAn? item = row.Item as DTO_DuAn;
+                    if (item != null)
+                    {
+                        AddAndUpdateProject updateDialog = new AddAndUpdateProject(item);
+                        bool? res = updateDialog.ShowDialog();
+                        if (res != null && res == true)
+                        {
+                            members = projectManager.GetAllData();
+                            showMember();
+                        }
+                    }
+
+                    // Do something with the item...
                 }
-                chBx.IsChecked = chkSelectAll.IsChecked;
             }
-        }
-
-        private void DeleteBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void EditBtn_Click(Object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
-        {
-            this.Visibility = Visibility.Collapsed;
-            
-        }
-
-        private void ButtonDelete_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
@@ -220,7 +162,51 @@ namespace GUI
 
         private void ButtonView_Click(object sender, RoutedEventArgs e)
         {
+            if (membersDataGrid.SelectedItem is DTO_DuAn selectedDA)
+            {
+                TaskWindow tskwd = new TaskWindow(selectedDA.MADA);
+                tskwd.ShowDialog();
+            }
+        }
 
+        private void ButtonSearch_Click(object sender, RoutedEventArgs e)
+        {
+            long ngsl = -1;
+            long ngsh = -1;
+            DTO_DuAn filter = new DTO_DuAn();
+            filter.MADA = searchText.Text != null ? searchText.Text.ToString() : "";
+            filter.TENDA = searchText.Text != null ? searchText.Text.ToString() : "";
+
+            if (malskCheck.IsChecked == true)
+            {
+                filter.MALSK = lskText.SelectedValue != null ? lskText.SelectedValue.ToString() : "";
+            }
+
+            if (maownerCheck.IsChecked == true)
+            {
+                filter.MAOWNER = ownerText.SelectedValue != null ? ownerText.SelectedValue.ToString() : "";
+            }
+
+            if (statCheck.IsChecked == true)
+            {
+                ComboBoxItem sel = statText.SelectedItem as ComboBoxItem;
+                filter.STAT = sel != null ? sel.Content.ToString() : "";
+            }
+            if (ngansachCheck.IsChecked == true)
+            {
+                ngsl = long.TryParse(NganSachLTextBox.Text, out long tempLResult) ? tempLResult : -1L;
+                ngsh = long.TryParse(NganSachHTextBox.Text, out long tempHResult) ? tempHResult : -1L;
+            }
+            if (TStartCheck.IsChecked == true)
+            {
+                filter.TSTART = TStartPicker.Text != null ? TStartPicker.Text.ToString() : "";
+            }
+            if (TEndCheck.IsChecked == true)
+            {
+                filter.TEND = TEndPicker.Text != null ? TEndPicker.Text.ToString() : "";
+            }
+            members = projectManager.FindDA(filter, ngsl, ngsh);
+            showMember();
         }
     }
 }

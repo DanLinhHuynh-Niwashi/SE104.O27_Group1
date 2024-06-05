@@ -56,8 +56,7 @@ namespace BUS
         // DELETE
         public (bool, string) DeleteByID(DTO_DuAn DuAnCanXoa)
         {
-            return (false, null);
-            //dalDA.DeleteByID(DuAnCanXoa);
+            return dalDA.DeleteByID(DuAnCanXoa.MADA);
         }
 
         //EDIT
@@ -121,7 +120,7 @@ namespace BUS
         }       
         
         //FindDA
-        public BindingList<DTO_DuAn> FindDA(DTO_DuAn filter, long NganSachL = -1, long NganSachH = -1)
+        public BindingList<DTO_DuAn> FindDA(DTO_DuAn filter, long NganSachL, long NganSachH)
         {
             BindingList<DTO_DuAn> result = new BindingList<DTO_DuAn>();
             DataTable dsDuAn = dalDA.GetDataByFilter(filter, NganSachL, NganSachH);

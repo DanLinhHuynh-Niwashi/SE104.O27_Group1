@@ -24,5 +24,33 @@ namespace GUI
         {
             InitializeComponent();
         }
+
+        private void NavigateBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                string ViewName = button.Tag as string;
+                NavigateTo(ViewName);
+            }
+
+        }
+
+        public void NavigateTo(string ViewName)
+        {
+            UserControl view = ViewName switch
+            {
+                "Home" => new HomeWindow(),
+                //"Report" => new ReportWindow(),
+                "Employee" => new EmployeeWindow(),
+                "Project" => new ProjectWindow(),
+                _ => null
+            };
+
+            if (view != null)
+            {
+                HomeContent.Visibility = Visibility.Collapsed;
+                MainContent.Content = view;
+            }
+        }
     }
 }

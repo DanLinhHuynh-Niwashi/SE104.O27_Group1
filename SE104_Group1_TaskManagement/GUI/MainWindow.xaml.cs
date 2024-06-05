@@ -19,13 +19,17 @@ namespace GUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static DTO_NhanVien crnUser = new DTO_NhanVien();
+        public static DTO_TaiKhoan crnUser = new DTO_TaiKhoan();
+        public static DTO_NhanVien nhanVien = new DTO_NhanVien();
         BUS_NhanVien nvManager = new BUS_NhanVien();
-        public MainWindow()
+
+        string manv;
+
+        public MainWindow(/*string manv*/)
         {
             InitializeComponent();
-            crnUser = EmployeeWindow.crnUser;
-            if (crnUser.MANV != "") username.Text = crnUser.TENNV;
+            //nhanVien.MANV = manv;
+            //if (nhanVien.MANV != "") username.Text = nhanVien.TENNV;
             NavigateTo("Home");
         }
 
@@ -58,12 +62,14 @@ namespace GUI
             if (ButtonCloseMenu.IsEnabled == true && ButtonOpenMenu.IsEnabled == false)
             {
                 tt_home.Visibility = Visibility.Collapsed;
+                tt_report.Visibility = Visibility.Collapsed;
                 tt_employee.Visibility = Visibility.Collapsed;
                 tt_project.Visibility = Visibility.Collapsed;
             }
             else if (ButtonCloseMenu.IsEnabled == false && ButtonOpenMenu.IsEnabled == true)
             {
                 tt_home.Visibility = Visibility.Visible;
+                tt_report.Visibility = Visibility.Visible;
                 tt_employee.Visibility = Visibility.Visible;
                 tt_project.Visibility = Visibility.Visible;
             }
@@ -118,6 +124,7 @@ namespace GUI
             UserControl view = ViewName switch
             {
                 "Home" => new HomeWindow(),
+                //"Report" => new ReportWindow(),
                 "Employee" => new EmployeeWindow(),
                 "Project" => new ProjectWindow(),
                 _ => null

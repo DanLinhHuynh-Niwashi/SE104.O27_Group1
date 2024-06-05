@@ -64,6 +64,9 @@
                 </materialDesign:PopupBox>
             </StackPanel>
         </Grid>
+
+        
+        
         <Grid x:Name="GridMenu" Width="70" HorizontalAlignment="Left" Background="#FF31577E" Panel.ZIndex="1">
             <Grid.Effect>
                 <DropShadowEffect BlurRadius="2" ShadowDepth="1" Color="#FFAEAEAE"/>
@@ -90,22 +93,26 @@
 
                 <StackPanel x:Name="StackPanelMenu" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="0">
                     <Button x:Name="HomeBtn" 
-                            Height="60" 
-                            HorizontalAlignment="Left" 
-                            Background="Transparent" 
-                            BorderBrush="Transparent"
-                            Click="NavigateBtn_Click"
-                            MouseEnter="ListViewItem_MouseEnter"
-                            Tag="Home">
+                                                            Click ="NavigateBtn_Click"
+
+              Height="60" 
+              HorizontalAlignment="Left" 
+              Background="Transparent" 
+              BorderBrush="Transparent"
+              MouseEnter="ListViewItem_MouseEnter"
+                                                          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+
+              Tag="Home">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Home" Height="25" Width="25" Margin="10"/>
-                            <TextBlock Text="Home" VerticalAlignment="Center" Margin="20 10" Width="60" />
+                            <TextBlock Text="Home" VerticalAlignment="Center" Margin="20 10"/>
                         </StackPanel>
-                        <Button.ToolTip>
-                            <ToolTip x:Name="tt_home"
-                                      Content="Home"
-                                      Style="{StaticResource tt_style}"/>
 
+                        <Button.ToolTip>
+
+                            <ToolTip x:Name="tt_home"
+Content ="Home"
+Style="{StaticResource tt_style}"/>
                         </Button.ToolTip>
                     </Button>
                     <Button x:Name="EmployeeBtn" 
@@ -113,8 +120,11 @@
                             HorizontalAlignment="Left" 
                             Background="Transparent" 
                             BorderBrush="Transparent"
-                            Click="NavigateBtn_Click"
                             MouseEnter="ListViewItem_MouseEnter"
+                                                            Click ="NavigateBtn_Click"
+
+                                                          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+
                             Tag="Employee">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Worker" Height="25" Width="25" Margin="10"/>
@@ -133,8 +143,10 @@
                             HorizontalAlignment="Left" 
                             Background="Transparent" 
                             BorderBrush="Transparent"
-                            Click="NavigateBtn_Click"
                             MouseEnter="ListViewItem_MouseEnter"
+                                                            Click ="NavigateBtn_Click"
+
+                              IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                             Tag="Project">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch">
                             <materialDesign:PackIcon Kind="NotebookCheck" Height="25" Width="25" Margin="10"/>
@@ -148,11 +160,33 @@
                         </Button.ToolTip>
                     </Button>
 
+                    <Button x:Name="ReportBtn" 
+              Height="60" 
+              HorizontalAlignment="Left" 
+              Background="Transparent" 
+              BorderBrush="Transparent"
+              Click="NavigateBtn_Click"
+              MouseEnter="ListViewItem_MouseEnter"
+                                                          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+
+              Tag="Report">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileReport" Height="25" Width="25" Margin="10"/>
+                            <TextBlock Text="Báo cáo" VerticalAlignment="Center" Margin="20 10"/>
+                        </StackPanel>
+
+                        <Button.ToolTip>
+
+                            <ToolTip x:Name="tt_report"
+Content="Report"
+Style="{StaticResource tt_style}"/>
+                        </Button.ToolTip>
+                    </Button>
+
                 </StackPanel>
             </StackPanel>
         </Grid>
 
         <ContentControl x:Name="MainContent"/>
-
     </Grid>
 </Window>

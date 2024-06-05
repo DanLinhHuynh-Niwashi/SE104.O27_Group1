@@ -33,19 +33,18 @@ namespace GUI
             DTO_TaiKhoan user = new DTO_TaiKhoan("", LgName.Text, Password.Password);
             string str = "";
             (crnUser, str) = taikhoanManager.Login(user);
-            if (crnUser.MANV != "")
+            if (crnUser == null)
             {
-                MainWindow mainWindow = new MainWindow();
+                MessageBox.Show("Mat khau hoac email sai, moi nhap lai");
+                MainWindow mainWindow = new MainWindow(/*crnUser.MANV*/);
                 this.Visibility = Visibility.Collapsed;
                 mainWindow.Show();
-                mainWindow.NavigateTo("Employee");
             }
             else
             {
-                MessageBox.Show("Mat khau hoac email sai, moi nhap lai");
-                MainWindow mainWindow = new MainWindow();
+                MainWindow mainWindow = new MainWindow(/*crnUser.MANV*/);
                 this.Visibility = Visibility.Collapsed;
-                mainWindow.NavigateTo("Employee");
+                mainWindow.Show();
             }
 
         }
