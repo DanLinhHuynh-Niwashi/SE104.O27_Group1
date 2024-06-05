@@ -1,4 +1,4 @@
-﻿<Window x:Class="GUI.TaskWindow"
+﻿<UserControl x:Class="GUI.TaskWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,41 +6,34 @@
         xmlns:local="clr-namespace:GUI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Height="720" Width="1080">
+        d:DesignHeight="720" d:DesignWidth="1080">
 
-        <Grid Background="#FFDEDEDE">
-
-            <Grid Height="60" VerticalAlignment="Top" Background="#FF5C99D6">
-                <Grid.Effect>
-                    <DropShadowEffect BlurRadius="1" ShadowDepth="1" Color="#FFACACAC"/>
-                </Grid.Effect>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <Button BorderThickness="0" Background="Transparent" Foreground="Black" Click="ButtonReturn_Click">
-                    <materialDesign:PackIcon Kind="ArrowLeft" Width="auto" Height="auto"/>
+    <Grid>
+        
+    <Grid x:Name="TaskContent">
+            <Grid Height="60" VerticalAlignment="Top">
+            <StackPanel Orientation="Horizontal" Margin="84,0,0,0">
+                <Button Background="Transparent" BorderThickness="0"
+                        Click="ButtonReturn_Click">
+                    <materialDesign:PackIcon Kind="ArrowBack"
+                                         HorizontalAlignment="Left"
+                                         VerticalAlignment="Center"
+                                         Width="60"
+                                         Height="22" />
                 </Button>
-                    <TextBlock HorizontalAlignment="Left" 
-                               VerticalAlignment="Center" 
-                               Text="MÀN HÌNH CONG VIEC"
-                               FontWeight="Bold"
-                               FontSize="22" 
-                               Margin="84,0,0,0">
-                    </TextBlock>
+
+                <TextBlock HorizontalAlignment="Left" 
+                           VerticalAlignment="Center" 
+                           Text="MÀN HÌNH CONG VIEC"
+                           FontWeight="Bold"
+                           FontSize="22" >
+                </TextBlock>
             </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <!--<Image Source="app_img.jpg"/>-->
-                    <TextBlock x:Name="username" Text="User Name" VerticalAlignment="Center" FontSize="16"/>
-                    <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" StaysOpen="False" Margin="10">
-                        <StackPanel Width="100">
-                            <Button Content="Tài khoản"/>
-                            <Separator/>
-                            <Button Content="Đăng xuất" Click="ButtonLogOut_Click"/>
-                        </StackPanel>
-                    </materialDesign:PopupBox>
-                </StackPanel>
+                
+    
             </Grid>
-            
-            
-        <Grid x:Name="WorkSpace" Margin="0,60,0,0">
+    
+        <Grid x:Name="WorkSpace" Margin="75,65,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"></RowDefinition>
                 <RowDefinition Height="60"></RowDefinition>
@@ -188,7 +181,7 @@
                                         Style="{StaticResource MaterialDesignComboBox}" />
                                 </StackPanel>
 
-                                
+
                                 <StackPanel Orientation="Horizontal">
                                     <CheckBox x:Name="nvCheck" Width="30"/>
                                     <TextBlock Text="Phan cong"/>
@@ -203,7 +196,7 @@
                                  Style="{StaticResource MaterialDesignComboBox}"/>
                             </StackPanel>
 
-                            
+
                             <StackPanel Height="20" Orientation="Horizontal">
                                 <CheckBox Width="30" x:Name="TStartCheck"/>
                                 <TextBlock Text="Bat dau" />
@@ -244,10 +237,12 @@
                                 <TextBlock Text="Tien do" Margin="0 10 0 0"/>
                                 <TextBox x:Name="ProgressTextBox" Margin="5 0 0 0" Width="60"/>
                             </StackPanel>
-                         </ListView>
+                        </ListView>
                     </StackPanel>
                 </Grid>
             </Grid>
         </Grid>
     </Grid>
-</Window>
+        <ContentControl x:Name="MainContent"/>
+    </Grid>
+</UserControl>

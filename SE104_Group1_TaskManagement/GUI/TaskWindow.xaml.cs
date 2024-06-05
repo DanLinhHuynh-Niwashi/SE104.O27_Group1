@@ -1,4 +1,10 @@
-﻿using BUS;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using BUS;
 using DTO;
 using DAL;
 using System;
@@ -16,13 +22,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MimeKit;
 
 namespace GUI
 {
     /// <summary>
     /// Interaction logic for TaskWindow.xaml
     /// </summary>
-    public partial class TaskWindow : Window
+    public partial class TaskWindow : UserControl
     {
         public static DTO_CongViec task = new DTO_CongViec();
         BUS_CongViec taskManager = new BUS_CongViec();
@@ -55,7 +62,7 @@ namespace GUI
         {
             var firstCol = membersDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "C");
             var cmCol = membersDataGrid.Columns.First(c => c.Header.ToString() == "Mã chuyên môn");
-            
+
             e.Row.Loaded += (s, args) =>
             {
                 var row = (DataGridRow)s;
@@ -110,8 +117,6 @@ namespace GUI
             }
         }
 
-
-
         private T FindVisualParent<T>(DependencyObject child) where T : DependencyObject
         {
             DependencyObject parentObject = VisualTreeHelper.GetParent(child);
@@ -143,14 +148,15 @@ namespace GUI
             }
         }
 
-        private void ButtonLogOut_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
         private void ButtonReturn_Click(object sender, RoutedEventArgs e)
         {
-            this.Visibility = Visibility.Collapsed;
+            UserControl view = new ProjectWindow();
+
+            if (view != null)
+            {
+                TaskContent.Visibility = Visibility.Collapsed;
+                MainContent.Content = view;
+            }
         }
 
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)
@@ -197,7 +203,7 @@ namespace GUI
                 if (row != null)
                 {
                     // Access the data item behind the row
-                    DTO_CongViec? item = row.Item as DTO_CongViec;  
+                    DTO_CongViec? item = row.Item as DTO_CongViec;
                     if (item != null)
                     {
                         AddAndUpdateTask updateDialog = new AddAndUpdateTask(MaDa.Text.ToString(), item);
@@ -268,7 +274,7 @@ namespace GUI
 
         private void ButtonDelete_Loaded(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void ButtonDelete_All_Click(object sender, RoutedEventArgs e)
@@ -312,9 +318,8 @@ namespace GUI
                 nvText.ItemsSource = filteredNV;
             }
         }
-
-
-
-
     }
 }
+
+
+

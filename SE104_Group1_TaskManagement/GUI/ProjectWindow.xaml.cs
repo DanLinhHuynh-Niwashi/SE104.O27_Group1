@@ -20,6 +20,7 @@ using MailKit.Search;
 using System.Xml;
 using System.Windows.Controls.Primitives;
 using System.Globalization;
+using MimeKit;
 
 namespace GUI
 {
@@ -164,8 +165,13 @@ namespace GUI
         {
             if (membersDataGrid.SelectedItem is DTO_DuAn selectedDA)
             {
-                TaskWindow tskwd = new TaskWindow(selectedDA.MADA);
-                tskwd.ShowDialog();
+                UserControl view = new TaskWindow(selectedDA.MADA);
+
+                if (view != null)
+                {
+                    ProjectContent.Visibility = Visibility.Collapsed;
+                    MainContent.Content = view;
+                }
             }
         }
 
@@ -208,5 +214,6 @@ namespace GUI
             members = projectManager.FindDA(filter, ngsl, ngsh);
             showMember();
         }
+
     }
 }
