@@ -96,7 +96,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "INSERT INTO CHUYENMON VALUES (@tencm, @inshort)";
+                string queryString = "INSERT INTO CHUYENMON VALUES (@tencm, @inshort, 0)";
                 var command = new SqlCommand(
                     queryString,
                     conn);
@@ -133,7 +133,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "DELETE FROM CHUYENMON WHERE MACM='" + MACM + "'";
+                string queryString = "UPDATE CHUYENMON SET isDeleted = 1 WHERE MACM=" + MACM;
 
 
                 var command = new SqlCommand(
@@ -162,6 +162,32 @@ namespace DAL
         }
         
         public DataTable GetAllData()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                conn.Open();
+                string queryString = "SELECT * FROM CHUYENMON Where isDeleted <> 1";
+                var command = new SqlCommand(
+                    queryString,
+                    conn);
+                SqlDataAdapter da = new SqlDataAdapter(command);
+                da.Fill(dt);
+                conn.Close();
+                da.Dispose();
+
+                return dt;
+            }
+
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                conn.Close();
+                return dt;
+            }
+        }
+
+        public DataTable GetAllRawData()
         {
             DataTable dt = new DataTable();
             try

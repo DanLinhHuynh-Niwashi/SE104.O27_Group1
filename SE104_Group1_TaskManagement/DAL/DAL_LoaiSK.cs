@@ -100,7 +100,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "INSERT INTO LOAISK VALUES (@tenlsk, @min, @max, @inshort)";
+                string queryString = "INSERT INTO LOAISK VALUES (@tenlsk, @min, @max, @inshort, 0)";
                 var command = new SqlCommand(
                     queryString,
                     conn);
@@ -138,7 +138,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "DELETE FROM LOAISK WHERE MALSK=" + MALSK;
+                string queryString = "UPDATE LOAISK set isDeleted = 1 WHERE MALSK=" + MALSK;
 
 
                 var command = new SqlCommand(
@@ -197,7 +197,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "SELECT * FROM LOAISK";
+                string queryString = "SELECT * FROM LOAISK Where isDeleted <> 1";
                 var command = new SqlCommand(
                     queryString,
                     conn);
@@ -217,5 +217,30 @@ namespace DAL
             }
         }
 
+        public DataTable GetAllRawData()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                conn.Open();
+                string queryString = "SELECT * FROM LOAISK";
+                var command = new SqlCommand(
+                    queryString,
+                    conn);
+                SqlDataAdapter da = new SqlDataAdapter(command);
+                da.Fill(dt);
+                conn.Close();
+                da.Dispose();
+
+                return dt;
+            }
+
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                conn.Close();
+                return dt;
+            }
+        }
     }
 }

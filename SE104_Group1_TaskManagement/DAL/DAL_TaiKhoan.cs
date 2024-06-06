@@ -67,7 +67,7 @@ namespace DAL
                 conn.Open();
 
 
-                // Truy vấn để lấy mã nhân viên mới
+                /* // Truy vấn để lấy mã nhân viên mới
                 string query = "SELECT MAX(CAST(SUBSTRING(MANV, 3, LEN(MANV) - 2) AS INT)) FROM NHANVIEN";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 object result = cmd.ExecuteScalar();
@@ -82,7 +82,7 @@ namespace DAL
                 string newManvString = "NV" + newManv.ToString("0000");
 
                 // Thêm mã nhân viên vào đối tượng tài khoản
-                taiKhoan.MANV = newManvString;
+                taiKhoan.MANV = newManvString;*/
 
                 // Tạo tài khoản
 
