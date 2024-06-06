@@ -13,6 +13,7 @@ namespace DTO
         long _min;
         long _max;
         string _inshort;
+        bool _isDeleted;
 
         public DTO_LoaiSK(string malsk="", string tenlsk="", long min=-1, long max=-1, string inshort = "")
         {
@@ -21,6 +22,7 @@ namespace DTO
             _min = min;
             _max = max;
             _inshort = inshort;
+            _isDeleted = false;
         }
 
         public string MALSK
@@ -33,5 +35,8 @@ namespace DTO
         { get { return _max; } set { _max = value; } }
         public string INSHORT
         { get { return _inshort; } set { _inshort = value; } }
+
+        public bool ISDELETED
+        { get { return _isDeleted; } set { _isDeleted = value; } }
     }
 }

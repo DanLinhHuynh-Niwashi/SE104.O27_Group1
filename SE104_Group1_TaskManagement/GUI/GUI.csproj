@@ -19,4 +19,13 @@
     <ProjectReference Include="..\DTO\DTO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="UpdatePercentRule.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="LoaiSKRule.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

@@ -73,6 +73,7 @@ namespace GUI
                 tt_report.Visibility = Visibility.Collapsed;
                 tt_employee.Visibility = Visibility.Collapsed;
                 tt_project.Visibility = Visibility.Collapsed;
+                tt_rule.Visibility = Visibility.Collapsed;
             }
             else if (ButtonCloseMenu.IsEnabled == false && ButtonOpenMenu.IsEnabled == true)
             {
@@ -80,6 +81,7 @@ namespace GUI
                 tt_report.Visibility = Visibility.Visible;
                 tt_employee.Visibility = Visibility.Visible;
                 tt_project.Visibility = Visibility.Visible;
+                tt_rule.Visibility = Visibility.Visible;
             }
         }
 
@@ -140,6 +142,7 @@ namespace GUI
                 "Report" => new ReportWindow(),
                 "Employee" => new EmployeeWindow(),
                 "Project" => new ProjectWindow(),
+                "Rule" => new RulesWindow(),
                 _ => null
             };
 

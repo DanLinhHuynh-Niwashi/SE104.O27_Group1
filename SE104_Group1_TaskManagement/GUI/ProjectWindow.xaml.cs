@@ -29,8 +29,6 @@ namespace GUI
     /// </summary>
     public partial class ProjectWindow : UserControl
     {
-        public static DTO_DuAn project = new DTO_DuAn();
-        BUS_DuAn projectManager = new BUS_DuAn();
         BindingList<DTO_DuAn> members = new BindingList<DTO_DuAn>();
 
         Dictionary<string, DTO_NhanVien> nv = BUS_StaticTables.Instance.GetAllRawDataNV();
@@ -53,7 +51,7 @@ namespace GUI
             lskText.DisplayMemberPath = "Value.TENLSK";
             lskText.SelectedValuePath = "Value.MALSK";
             var converter = new BrushConverter();
-            members = projectManager.GetAllData();
+            members = BUS_DuAn.Instance.GetAllData();
 
             if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "ThemDA") == false)
             {
@@ -181,7 +179,7 @@ namespace GUI
                         bool? res = updateDialog.ShowDialog();
                         if (res != null && res == true)
                         {
-                            members = projectManager.GetAllData();
+                            members = BUS_DuAn.Instance.GetAllData();
                             showMember();
                         }
                     }
@@ -197,7 +195,7 @@ namespace GUI
             bool? res = addDialog.ShowDialog();
             if (res != null && res == true)
             {
-                members = projectManager.GetAllData();
+                members = BUS_DuAn.Instance.GetAllData();
                 membersDataGrid.ItemsSource = members;
             }
         }
@@ -252,7 +250,7 @@ namespace GUI
             {
                 filter.TEND = TEndPicker.Text != null ? TEndPicker.Text.ToString() : "";
             }
-            members = projectManager.FindDA(filter, ngsl, ngsh);
+            members = BUS_DuAn.Instance.FindDA(filter, ngsl, ngsh);
             showMember();
         }
 

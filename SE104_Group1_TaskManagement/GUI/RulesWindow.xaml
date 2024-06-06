@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="GUI.RulesWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+	xmlns:local="clr-namespace:GUI"
+        mc:Ignorable="d"
+        d:DesignHeight="720" d:DesignWidth="1080">
+    <Grid>
+        <Grid Height="60" VerticalAlignment="Top">
+            <TextBlock HorizontalAlignment="Left" 
+           VerticalAlignment="Center" 
+           Text="THAY ĐỔI QUY ĐỊNH"
+           FontWeight="Bold"
+           FontSize="22" 
+           Margin="84,0,0,0"></TextBlock>
+        </Grid>
+        <Grid x:Name="WorkSpace" Margin="75,65,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <TabControl TabStripPlacement="Left">
+                    <TabItem Header="Chuyên môn" Background="Blue">
+                        <local:ChuyenMonRule></local:ChuyenMonRule>
+                    </TabItem>
+                    <TabItem Header="Loại sự kiện" Background="Blue">
+                        <local:LoaiSKRule></local:LoaiSKRule>
+                    </TabItem>
+                    <TabItem Header="% Update" Background="Blue">
+                        <local:UpdatePercentRule></local:UpdatePercentRule>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Grid>
+        <ContentControl x:Name="MainContent"/>
+    </Grid>
+</UserControl>
