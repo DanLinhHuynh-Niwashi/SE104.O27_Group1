@@ -88,6 +88,14 @@ namespace BUS
 
         public (bool, string) DeleteByID(DTO_NhanVien nhanVienCanXoa)
         {
+            BindingList<DTO_DuAn> list = BUS_DuAn.Instance.FindDA(new DTO_DuAn("", "", nhanVienCanXoa.MANV), -1, -1);
+            foreach (var da in list)
+            {
+                da.MAOWNER = "";
+                if(da.STAT=="On-going" || da.STAT=="Delayed") BUS_DuAn.Instance.EditProject(da);
+            }
+
+            BUS_CongViec.Instance.DeletePCByNV(nhanVienCanXoa);
             return dalNV.DeleteByID(nhanVienCanXoa.MANV);
         }
 

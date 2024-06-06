@@ -17,6 +17,17 @@ namespace BUS
 {
     public class BUS_DuAn
     {
+        static BUS_DuAn _instance = new BUS_DuAn();
+        public static BUS_DuAn Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new BUS_DuAn();
+                return _instance;
+            }
+        }
+
         DAL_DuAn dalDA = new DAL_DuAn();
         public BindingList<DTO_DuAn> GetAllData()
         {

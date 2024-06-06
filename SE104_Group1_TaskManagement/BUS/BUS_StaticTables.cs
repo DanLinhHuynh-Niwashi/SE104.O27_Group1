@@ -119,5 +119,63 @@ namespace BUS
             }
             return result;
         }
+
+        public Dictionary<string, DTO_ChuyenMon> GetAllRawDataCM()
+        {
+            Dictionary<string, DTO_ChuyenMon> result = new Dictionary<string, DTO_ChuyenMon>();
+            DataTable ds = dalCM.GetAllRawData();
+
+            for (int i = 0; i < ds.Rows.Count; i++)
+            {
+                DTO_ChuyenMon temp = new DTO_ChuyenMon();
+                if (temp != null && ds.Rows[i]["MACM"] != null && ds.Rows[i]["INSHORT"] != null && ds.Rows[i]["TENCM"] != null)
+                {
+                    temp.MACM = ds.Rows[i]["MACM"].ToString();
+                    temp.INSHORT = ds.Rows[i]["INSHORT"].ToString();
+                    temp.TENCM = ds.Rows[i]["TENCM"].ToString();
+                    result.Add(temp.MACM, temp);
+                }
+            }
+            return result;
+        }
+
+        public Dictionary<string, DTO_LoaiSK> GetAllRawDataLSK()
+        {
+            Dictionary<string, DTO_LoaiSK> result = new Dictionary<string, DTO_LoaiSK>();
+            DataTable ds = dalLoaiSK.GetAllRawData();
+
+            for (int i = 0; i < ds.Rows.Count; i++)
+            {
+                DTO_LoaiSK temp = new DTO_LoaiSK();
+                temp.MALSK = ds.Rows[i]["MALSK"].ToString();
+                temp.INSHORT = ds.Rows[i]["INSHORT"].ToString();
+                temp.TENLSK = ds.Rows[i]["TENLSK"].ToString();
+                temp.MAX = long.Parse(Convert.ToInt64(ds.Rows[i]["MoneyMax"]).ToString());
+                temp.MIN = long.Parse(Convert.ToInt64(ds.Rows[i]["MoneyMin"]).ToString());
+                result.Add(temp.MALSK, temp);
+            }
+            return result;
+        }
+
+        public Dictionary<string, DTO_NhanVien> GetAllRawDataNV()
+        {
+            Dictionary<string, DTO_NhanVien> result = new Dictionary<string, DTO_NhanVien>();
+            DataTable dsNhanVien = dalNhanVien.GetAllRawData();
+
+            for (int i = 0; i < dsNhanVien.Rows.Count; i++)
+            {
+                DTO_NhanVien temp = new DTO_NhanVien();
+                temp.MANV = dsNhanVien.Rows[i]["MANV"].ToString();
+                temp.TENNV = dsNhanVien.Rows[i]["HoTen"].ToString();
+                temp.EMAIL = dsNhanVien.Rows[i]["EMAIL"].ToString();
+                temp.PHONE = dsNhanVien.Rows[i]["SoDT"].ToString();
+                temp.LEVEL = int.Parse(dsNhanVien.Rows[i]["LVL"].ToString());
+                temp.NGAYSINH = dsNhanVien.Rows[i]["NGSINH"].ToString();
+                temp.MACM = dsNhanVien.Rows[i]["MACM"].ToString();
+                temp.GHICHU = dsNhanVien.Rows[i]["GHICHU"].ToString();
+                result.Add(temp.MANV, temp);
+            }
+            return result;
+        }
     }
 }

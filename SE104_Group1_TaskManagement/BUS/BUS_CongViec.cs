@@ -19,6 +19,17 @@ namespace BUS
 {
     public class BUS_CongViec
     {
+        static BUS_CongViec _instance = new BUS_CongViec();
+        public static BUS_CongViec Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new BUS_CongViec();
+                return _instance;
+            }
+        }
+
         DAL_CongViec dalCV = new DAL_CongViec();
         DAL_DuAn dalDA = new DAL_DuAn();
         DAL_PhanCong dalPC = new DAL_PhanCong();
@@ -32,6 +43,11 @@ namespace BUS
         {
             if (cv == null) return;
             (bool, string) res1 = dalPC.DeleteByMACV(cv.MACV);
+        }
+        public void DeletePCByNV(DTO_NhanVien nv)
+        {
+            if (nv == null) return;
+            (bool, string) res1 = dalPC.DeleteByMANV(nv.MANV);
         }
         public BindingList<DTO_PhanCong> GetPhanCong(DTO_CongViec cv)
         {
