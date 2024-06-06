@@ -92,7 +92,7 @@ namespace BUS
             foreach (var da in list)
             {
                 da.MAOWNER = "";
-                if(da.STAT=="On-going" || da.STAT=="Delayed") BUS_DuAn.Instance.EditProject(da);
+                if(da.STAT== "On-going" || da.STAT == "Delayed") BUS_DuAn.Instance.EditProject(da);
             }
 
             BUS_CongViec.Instance.DeletePCByNV(nhanVienCanXoa);

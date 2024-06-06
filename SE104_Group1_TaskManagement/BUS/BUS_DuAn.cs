@@ -39,7 +39,7 @@ namespace BUS
                 DTO_DuAn temp = new DTO_DuAn();
                 temp.MADA = dsDuAn.Rows[i]["MaDA"].ToString();
                 temp.MALSK = dsDuAn.Rows[i]["MaLSK"].ToString();
-                temp.MAOWNER = dsDuAn.Rows[i]["MaOwner"].ToString();
+                temp.MAOWNER = dsDuAn.Rows[i]["MaOwner"] != null ? dsDuAn.Rows[i]["MaOwner"].ToString():"";
                 temp.TENDA = dsDuAn.Rows[i]["TenDA"].ToString();
                 temp.NGANSACH = long.Parse(Convert.ToInt64(dsDuAn.Rows[i]["NGANSACH"]).ToString());
                 temp.TSTART = dsDuAn.Rows[i]["TStart"].ToString();
@@ -142,7 +142,7 @@ namespace BUS
                 DTO_DuAn temp = new DTO_DuAn();
                 temp.MADA = dsDuAn.Rows[i]["MaDA"].ToString();
                 temp.MALSK = dsDuAn.Rows[i]["MaLSK"].ToString();
-                temp.MAOWNER = dsDuAn.Rows[i]["MaOwner"].ToString();
+                temp.MAOWNER = dsDuAn.Rows[i]["MaOwner"] != null ? dsDuAn.Rows[i]["MaOwner"].ToString() : "";
                 temp.TENDA = dsDuAn.Rows[i]["TenDA"].ToString();
                 temp.TSTART = dsDuAn.Rows[i]["TStart"].ToString();
                 temp.TEND = dsDuAn.Rows[i]["TEnd"].ToString();
@@ -172,16 +172,17 @@ namespace BUS
         }
 
         //check staff info 
-        public static (bool, string) IsValidProjectInfo(DTO_DuAn DA)
+        public static (bool, string) IsValidProjectInfo(DTO_DuAn DA, bool isEditing = false)
         {
             if (DA == null)
                 return (false, "Du an khong ton tai");
             if (!IsValidNameProject(DA.TENDA))
                 return (false, "Ten du an khong hop le");
-            if (!IsValidTSTART(DateTime.Now))
-                return (false, "Ngay bat dau khong hop le");
-            if (!IsValidTEND(DateTime.Now))
-                return (false, "Ngay ket thuc khong hop le");
+            if (!isEditing)
+                if (!IsValidTSTART(DA.TSTART).Item1)
+                    return (IsValidTSTART(DA.TSTART));
+            if (!IsValidTEND(DA.TEND, DA.TSTART).Item1)
+                return (IsValidTEND(DA.TEND, DA.TSTART));
             return (true, "Thong tin hop le");
         }
 
@@ -204,23 +205,30 @@ namespace BUS
         }
 
 
-        //check start date
-        public static bool IsValidTSTART(DateTime NgayBatDau)
+        public static (bool, string) IsValidTSTART(string NgayBatDau)
         {
-            if (NgayBatDau == null)
-                return false;
-            else
-                return true;
+            if (NgayBatDau == "")
+                return (false, "Start date must not null");
+            DateTime timeBD;
+            bool A = DateTime.TryParseExact(NgayBatDau, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out timeBD);
+            if (A == false) return (false, "Sai dinh dang ngay bat dau");
+            if (timeBD.Date < DateTime.Now.Date) return (false, "Ngay bat dau phai bang/ sau hom nay");
+            return (true, "");
         }
 
         //check end date 
-        public static bool IsValidTEND(DateTime NgayKetThuc)
+        public static (bool, string) IsValidTEND(string NgayKetThuc, string NgayBatDau)
         {
-            DateTime NgayBatDau;
-            if (NgayKetThuc == null)
-                return false;
-            else
-                return true;
+            if (NgayBatDau == "" || NgayKetThuc == "")
+                return (false, "Start date and End date must not null");
+            DateTime time;
+            bool A = DateTime.TryParseExact(NgayKetThuc, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out time);
+            if (A == false) return (false, "Sai dinh dang ngay ket thuc");
+            DateTime timeBD;
+            A = DateTime.TryParseExact(NgayBatDau, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out timeBD);
+            if (A == false) return (false, "Sai dinh dang ngay bat dau");
+            if (time < timeBD) return (false, "Ngay ket thuc phai bang/ sau ngay bat dau");
+            return (true, "");
         }
 
         //TONG NGAN SACH

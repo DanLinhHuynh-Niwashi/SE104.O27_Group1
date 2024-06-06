@@ -32,7 +32,14 @@ namespace DAL
                 command.Parameters.AddWithValue("@ngansach", duAn.NGANSACH);
                 command.Parameters.AddWithValue("@tstart", duAn.TSTART);
                 command.Parameters.AddWithValue("@tend", duAn.TEND);
-                command.Parameters.AddWithValue("@maowner", duAn.MAOWNER);
+                if (duAn.MAOWNER == "")
+                {
+                    command.Parameters.AddWithValue("@maowner", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@maowner", duAn.MAOWNER);
+                }
                 command.Parameters.AddWithValue("@stat", duAn.STAT);
                 command.Parameters.AddWithValue("@dadung", 0);
                 if (command.ExecuteNonQuery() > 0)
@@ -73,7 +80,15 @@ namespace DAL
                 command.Parameters.AddWithValue("@ngansach", da_new.NGANSACH);
                 command.Parameters.AddWithValue("@tstart", da_new.TSTART);
                 command.Parameters.AddWithValue("@tend", da_new.TEND);
-                command.Parameters.AddWithValue("@maowner", da_new.MAOWNER);
+                if (da_new.MAOWNER =="")
+                {
+                    command.Parameters.AddWithValue("@maowner", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@maowner", da_new.MAOWNER);
+                }
+                
                 command.Parameters.AddWithValue("@stat", da_new.STAT);
                 if (command.ExecuteNonQuery() > 0)
                 {
@@ -163,8 +178,7 @@ namespace DAL
             {
                 DTO_DuAn res = new DTO_DuAn();
                 conn.Open();
-                string queryString = "SELECT MADA, TENDA, MALSK, NGANSACH,  CONVERT(VARCHAR(10),TSTART,104) AS TStart,  CONVERT(VARCHAR(10),TEND,104) AS TEnd, MAOWNER, TINHTRANG FROM DUAN" +
-                    " WHERE MADA=@mada";
+                string queryString = "SELECT MADA, TENDA, MALSK, NGANSACH, DADUNG, CONVERT(VARCHAR(10),TSTART,104) as TSTART,  CONVERT(VARCHAR(10),TEND,104) as TEND, MAOWNER, TINHTRANG FROM DUAN WHERE MADA=@mada\r\n";
 
                 var command = new SqlCommand(
                     queryString,
@@ -175,12 +189,14 @@ namespace DAL
                 reader.Read();
                 res.MADA = reader.GetString(0);
                 res.TENDA = reader.GetString(1);
-                res.MALSK = reader.GetString(2);
-                res.NGANSACH = reader.GetInt64(3);
-                res.TSTART = reader.GetString(4);
-                res.TEND = reader.GetString(5);
-                res.MAOWNER = reader.GetString(6);
-                res.STAT = reader.GetString(7);
+                res.MALSK = reader.GetInt32(2).ToString();
+                res.NGANSACH = (long)reader.GetDecimal(3);
+                res.DADUNG = (long)reader.GetDecimal(4);
+                res.TSTART = reader.GetString(5);
+                res.TEND = reader.GetString(6);
+                res.MAOWNER = reader.IsDBNull(7) ? "":reader.GetString(7);
+                res.STAT = reader.GetString(8);
+                
                 reader.Close();
                 conn.Close();
                 return res;
