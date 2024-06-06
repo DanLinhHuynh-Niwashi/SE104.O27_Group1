@@ -26,12 +26,12 @@
                        FontWeight="ExtraBold"/>
         </StackPanel>
         <materialDesign:Card Margin="10" Width="400" Height="400" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-           
+
             <Grid>
                 <Grid.Resources>
                     <Style TargetType="Grid">
                         <Setter Property="Margin" Value="20"></Setter>
-                    </Style> 
+                    </Style>
                 </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
@@ -75,13 +75,13 @@
                             Style="{StaticResource MaterialDesignRaisedDarkButton}"
                              />
                     <Button Grid.Column="1"
-                            Margin="5"
+                            Margin="5,0,5,9"
                             Content="THOÁT"
                             FontSize="20"
-                            VerticalAlignment="Center"
+                            VerticalAlignment="Bottom"
                             HorizontalContentAlignment="Center"
                             IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                            Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                            Style="{StaticResource MaterialDesignRaisedDarkButton}" Click="Button_Click_1"
                             />
                 </Grid>
                 <Grid Grid.Row="3">

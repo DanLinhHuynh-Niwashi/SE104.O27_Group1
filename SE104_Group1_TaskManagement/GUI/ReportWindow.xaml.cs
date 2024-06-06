@@ -40,14 +40,12 @@ namespace GUI
     /// </summary>
 
 
-    public partial class ReportWindow : Window
+    public partial class ReportWindow : UserControl
     {
         public static DTO_NhanVien crnUser = new DTO_NhanVien();
-        BUS_NhanVien nvManager = new BUS_NhanVien();
-        BUS_TaiKhoan tkManager = new BUS_TaiKhoan();
         BUS_DuAn daManager = new BUS_DuAn();
         BindingList<DTO_DuAn> projects = new BindingList<DTO_DuAn>();
-        Dictionary<string, DTO_ChuyenMon> cm = BUS_StaticTables.Instance.GetAllDataCM();
+
         public ReportWindow()
         {
             InitializeComponent();
@@ -55,19 +53,11 @@ namespace GUI
             ci.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
             Thread.CurrentThread.CurrentCulture = ci;
             projectsDataGrid.LoadingRow += ProjectsDataGrid_LoadingRow;
-            this.WindowState = WindowState.Maximized;
-
-            setUser();
             projects = daManager.GetAllData();
 
             showProjects();
         }
 
-        void setUser()
-        {
-            crnUser = nvManager.GetByID(LoginWindow.crnUser.MANV);
-            if (crnUser.MANV != "") username.Text = crnUser.TENNV;
-        }
 
         private void ProjectsDataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
         {
@@ -98,64 +88,6 @@ namespace GUI
             TotalEvents.Text = projects.Count.ToString();
             TotalMoney.Text = daManager.CalTongNganSach(projects).ToString() + " VND";
             LeftMoney.Text = (daManager.CalTongNganSach(projects) - daManager.CalTongDaDung(projects)).ToString() + " VND";
-        }
-        private void Add_Button_Click(object sender, RoutedEventArgs e)
-        {
-            AddAndUpdateProject addDialog = new AddAndUpdateProject();
-            bool? res = addDialog.ShowDialog();
-            if (res != null && res == true)
-            {
-                projects = daManager.GetAllData();
-                projectsDataGrid.ItemsSource = projects;
-            }
-        }
-
-        private bool IsMaximize = false;
-        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2)
-            {
-                if (IsMaximize)
-                {
-                    this.WindowState = WindowState.Normal;
-                    this.Width = 1080;
-                    this.Height = 720;
-
-                    IsMaximize = false;
-                }
-                else
-                {
-                    this.WindowState = WindowState.Maximized;
-
-                    IsMaximize = true;
-                }
-            }
-        }
-
-        private void ListViewItem_MouseEnter(object sender, MouseEventArgs e)
-        {
-            // Set tooltip visibility
-            if (ButtonCloseMenu.IsEnabled == true && ButtonOpenMenu.IsEnabled == false)
-            {
-                tt_home.Visibility = Visibility.Collapsed;
-                tt_project.Visibility = Visibility.Collapsed;
-                tt_task.Visibility = Visibility.Collapsed;
-            }
-            else if (ButtonCloseMenu.IsEnabled == false && ButtonOpenMenu.IsEnabled == true)
-            {
-                tt_home.Visibility = Visibility.Visible;
-                tt_project.Visibility = Visibility.Visible;
-                tt_task.Visibility = Visibility.Visible;
-            }
-        }
-
-        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                this.DragMove();
-            }
-
         }
 
         private T FindVisualParent<T>(DependencyObject child) where T : DependencyObject
@@ -223,17 +155,17 @@ namespace GUI
             DrawInfo(e.Graphics, sender as PrintDocument, ref rowPosition);
             
             // run function to draw headers
-            DrawHeader(new System.Drawing.Font("Times New Roman", 12, System.Drawing.FontStyle.Bold), e.Graphics, ref columnPosition, ref rowPosition, projectsDataGrid); // runs the DrawHeader function
+            DrawHeader(new System.Drawing.Font("Times New Roman", 12, System.Drawing.FontStyle.Bold), e.Graphics, sender as PrintDocument, ref columnPosition, ref rowPosition, projectsDataGrid); // runs the DrawHeader function
 
             rowPosition += 35; // sets the distance below the header text and the next black line (ruler)
 
             // run function to draw each row
-            DrawGridBody(e.Graphics, ref columnPosition, ref rowPosition, projectsDataGrid);
+            DrawGridBody(e.Graphics, sender as PrintDocument, ref columnPosition, ref rowPosition, projectsDataGrid);
 
             // run function to draw each row
             DrawSign(e.Graphics, sender as PrintDocument, ref rowPosition);
         }
-        int[] width = { 90, 300, 100, 120, 120, 100, 100, 100, 100, 100, 100, 100 };
+        float[] width = { 0.07f, 0.26f, 0.09f, 0.1f, 0.1f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f };
 
         private void DrawSign(Graphics g, PrintDocument p, ref int rowPosition)
         {
@@ -274,7 +206,7 @@ namespace GUI
             rowPosition += 50;
         }
         // DrawHeader will draw the column title, move over, draw the next column title, move over, and continue.
-        private int DrawHeader(System.Drawing.Font boldFont, Graphics g, ref int columnPosition, ref int rowPosition, DataGrid dataGridView)
+        private int DrawHeader(System.Drawing.Font boldFont, Graphics g, PrintDocument p, ref int columnPosition, ref int rowPosition, DataGrid dataGridView)
         {
             int i = 0;
             foreach (DataGridColumn dc in dataGridView.Columns)
@@ -283,7 +215,7 @@ namespace GUI
                 //MessageBox.Show("dc = " + dc);
 
                 g.DrawString(dc.Header.ToString(), boldFont, System.Drawing.Brushes.Black, (float)columnPosition, (float)rowPosition);
-                columnPosition += width[i++]; ; // adds to colPos. value the width value of the column + 5. 
+                columnPosition += (int)(p.DefaultPageSettings.PaperSize.Height * width[i++]); ; // adds to colPos. value the width value of the column + 5. 
             }
 
             return columnPosition;
@@ -294,22 +226,24 @@ namespace GUI
          * moves over, draws the data from the next column, and continus this pattern. When the entire row is drawn it starts over and draws
          * a solid line then the row data, then the next solid line and then row data, etc.
         */
-        
-        private void DrawGridBody(Graphics g, ref int columnPosition, ref int rowPosition, DataGrid dataGridView)
-            {
-            // loop through each row and draw the data to the graphics surface.\
-            DataTable dt = ToDataTable(projectsDataGrid);
 
-            
-            foreach (DataRow dr in (dt.Rows))
+        private void DrawGridBody(Graphics g, PrintDocument p, ref int columnPosition, ref int rowPosition, DataGrid dataGridView)
+        {
+            try
+            {
+                // loop through each row and draw the data to the graphics surface.\
+                DataTable dt = ToDataTable(projectsDataGrid);
+
+
+                foreach (DataRow dr in (dt.Rows))
                 {
                     columnPosition = 20;
 
                     // draw a line to separate the rows 
-                    g.DrawLine(Pens.Black, new System.Drawing.Point(0, rowPosition), new System.Drawing.Point((int)this.Width, rowPosition));
-                int i = 0;
-                // loop through each column in the row, and draw the individual data item
-                foreach (DataGridColumn dc in dataGridView.Columns)
+                    g.DrawLine(Pens.Black, new System.Drawing.Point(0, rowPosition), new System.Drawing.Point((int)p.DefaultPageSettings.PaperSize.Height, rowPosition));
+                    int i = 0;
+                    // loop through each column in the row, and draw the individual data item
+                    foreach (DataGridColumn dc in dataGridView.Columns)
                     {
 
                         // draw string in the column
@@ -317,13 +251,18 @@ namespace GUI
                         g.DrawString(text, new System.Drawing.Font("Times New Roman", 12), System.Drawing.Brushes.Black, (float)columnPosition, (float)rowPosition + 10f); // the last number (10f) sets the space between the black line (ruler) and the text below it.
 
                         // go to the next column position
-                        columnPosition += width[i++];
+                        columnPosition += (int)(p.DefaultPageSettings.PaperSize.Height * width[i++]);
                     }
 
                     // go to the next row position
                     rowPosition = rowPosition + 30; // this sets the space between the row text and the black line below it (ruler).
                 }
             }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
 
 
 
@@ -348,13 +287,13 @@ namespace GUI
                    (this.printDocument_PrintPage);
 
                 System.Windows.Forms.PrintDialog printDlg = new System.Windows.Forms.PrintDialog();
-
+                printDlg.PrinterSettings.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("PaperA4", 827, 1169);
+                printDlg.PrinterSettings.DefaultPageSettings.Landscape = true;
+                printDlg.PrinterSettings.DefaultPageSettings.PaperSize.RawKind = 9;
 
                 if (printDlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     prDoc.PrinterSettings = printDlg.PrinterSettings;
-                    prDoc.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("PaperA4", 826, 1169);
-                    prDoc.DefaultPageSettings.Landscape = true;
                     printPreviewDialog1.ShowDialog();
                 }
 

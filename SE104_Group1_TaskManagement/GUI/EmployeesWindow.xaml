@@ -59,9 +59,9 @@
                 <TextBlock x:Name="username" Text="User Name" VerticalAlignment="Center" FontSize="16"/>
                 <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" StaysOpen="False" Margin="10">
                     <StackPanel Width="100">
-                        <Button x:Name="tk_Btn" Content="Tài khoản" Click="tk_Btn_Click"/>
+                        <Button x:Name="tk_Btn" Content="Tài khoản"/>
                         <Separator/>
-                        <Button x:Name="logout_Btn" Content="Đăng xuất" Click="logout_Btn_Click"/>
+                        <Button x:Name="logout_Btn" Content="Đăng xuất" />
                     </StackPanel>
                 </materialDesign:PopupBox>
             </StackPanel>
@@ -87,10 +87,10 @@
                             <TranslateTransform/>
                         </TransformGroup>
                     </Grid.RenderTransform>
-                    <Button x:Name="ButtonOpenMenu" Height="60" Width="60" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" Click="ButtonOpenMenu_Click">
+                    <Button x:Name="ButtonOpenMenu" Height="60" Width="60" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" >
                         <materialDesign:PackIcon Kind="Menu" Width="25" Height="25"/>
                     </Button>
-                    <Button x:Name="ButtonCloseMenu" Visibility="Collapsed" Height="60" Width="60" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" Click="ButtonCloseMenu_Click">
+                    <Button x:Name="ButtonCloseMenu" Visibility="Collapsed" Height="60" Width="60" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" >
                         <materialDesign:PackIcon Kind="ArrowLeft" Width="25" Height="25"/>
                     </Button>
 
@@ -98,7 +98,7 @@
                 </Grid>
 
                 <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListViewItem x:Name="ItemHome" Height="60" MouseEnter="ListViewItem_MouseEnter">
+                    <ListViewItem x:Name="ItemHome" Height="60">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Home" Height="25" Width="25" Margin="10"/>
                             <TextBlock Text="Home" VerticalAlignment="Center" Margin="20 10"/>
@@ -111,7 +111,7 @@
 
                         </ListViewItem.ToolTip>
                     </ListViewItem>
-                    <ListViewItem x:Name="ItemEmployee" Height="60" MouseEnter="ListViewItem_MouseEnter">
+                    <ListViewItem x:Name="ItemEmployee" Height="60">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Worker" Height="25" Width="25" Margin="10"/>
                             <TextBlock Text="Nhân viên" VerticalAlignment="Center" Margin="20 10"/>
@@ -125,7 +125,7 @@
 
                         </ListViewItem.ToolTip>
                     </ListViewItem>
-                    <ListViewItem Height="60" MouseEnter="ListViewItem_MouseEnter">
+                    <ListViewItem Height="60">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="NotebookCheck" Height="25" Width="25" Margin="10"/>
                             <TextBlock Text="Dự án" VerticalAlignment="Center"  Margin="20 10"/>
@@ -139,7 +139,7 @@
 
                         </ListViewItem.ToolTip>
                     </ListViewItem>
-                    <ListViewItem Height="60" MouseEnter="ListViewItem_MouseEnter">
+                    <ListViewItem Height="60">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Briefcase" Height="25" Width="25" Margin="10"/>
                             <TextBlock Text="Công việc" VerticalAlignment="Center"  Margin="20 10"/>
@@ -173,7 +173,7 @@
                 <Grid Grid.Column="0" Margin="5">
                     <Button
                      x:Name ="Add_Btn"
-                     Click="Add_Button_Click"
+             
                      Width="50" Height="50"
                      IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                      Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
@@ -186,7 +186,7 @@
                 <Grid Grid.Column="1" Margin="5">
                     <Button
                      x:Name="Del_Btn"
-                     Click="Del_Button_Click"
+                
                      Width="50" Height="50"
                      IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                      Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
@@ -205,7 +205,7 @@
                          Width="50" Height="50"
                          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                          Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
-                         Click="ButtonSearch_Click"
+                       
                          ToolTip="Search">
                             <materialDesign:PackIcon
                              Kind="Search" />
@@ -236,7 +236,7 @@
                             <DataGridCheckBoxColumn Header="C" CanUserResize="False" Width="auto" ElementStyle="{StaticResource CheckBoxStyle1}">
                                 <DataGridCheckBoxColumn.HeaderTemplate>
                                     <DataTemplate>
-                                        <CheckBox Style="{StaticResource CheckBoxStyle1}" Click="Sel_CheckBox_DataContextChanged"/>
+                                        <CheckBox Style="{StaticResource CheckBoxStyle1}" />
                                     </DataTemplate>
                                 </DataGridCheckBoxColumn.HeaderTemplate>
                             </DataGridCheckBoxColumn>
@@ -258,10 +258,10 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Style="{StaticResource gridEditButton}" Click="EditButton_Click" Loaded="EditButton_Loaded">
+                                            <Button Style="{StaticResource gridEditButton}" >
                                                 <materialDesign:PackIcon Kind="PencilOutline" Style="{StaticResource gridButtonIcon}"/>
                                             </Button>
-                                            <Button Margin="5 0 0 0" Style="{StaticResource gridRemoveButton}" Click="DeleteButton_Click" Loaded="DelButton_Loaded">
+                                            <Button Margin="5 0 0 0" Style="{StaticResource gridRemoveButton}">
                                                 <materialDesign:PackIcon Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}"/>
                                             </Button>
                                         </StackPanel>

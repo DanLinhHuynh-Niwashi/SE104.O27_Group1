@@ -23,7 +23,7 @@ namespace BUS
         DAL_DuAn dalDA = new DAL_DuAn();
         DAL_PhanCong dalPC = new DAL_PhanCong();
 
-        public (bool, string) PhanCong (string MACV, string MANV)
+        public (bool, string) PhanCong(string MACV, string MANV)
         {
             DTO_PhanCong dTO_PhanCong = new DTO_PhanCong(MANV, MACV);
             return (dalPC.AddData(dTO_PhanCong));
@@ -171,10 +171,6 @@ namespace BUS
             }
             return result;
         }
-        public DataTable FindDA(DTO_CongViec filter)
-        {
-            return dalDA.GetDataByFilter(filter);
-        }
 
         public DataTable GetByNganSachMoreLess(long NganSachH, long NganSachL)
         {
@@ -205,7 +201,7 @@ namespace BUS
                 return (false, "Ten cong viec khong hop le");
             if (!IsValidTSTART(CV.TSTART).Item1)
                 return (IsValidTSTART(CV.TSTART));
-            if (!IsValidTEND(CV.TEND,CV.TSTART).Item1)
+            if (!IsValidTEND(CV.TEND, CV.TSTART).Item1)
                 return (IsValidTEND(CV.TEND, CV.TSTART));
             return (true, "Thong tin hop le");
         }
@@ -259,9 +255,8 @@ namespace BUS
         public (bool, string) DeleteByID(DTO_CongViec CongViecCanXoa)
         {
             (bool, string) res1 = dalPC.DeleteByMACV(CongViecCanXoa.MACV);
-            if (res1.Item1 == false && res1.Item2!="") return res1;
+            if (res1.Item1 == false && res1.Item2 != "") return res1;
             return dalCV.DeleteByID(CongViecCanXoa.MACV);
         }
-
     }
 }

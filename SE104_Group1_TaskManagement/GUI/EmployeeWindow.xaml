@@ -35,6 +35,7 @@
 
                 <Grid Grid.Column="0" Margin="5">
                     <Button
+                        x:Name="Add_Btn"
                  Click="ButtonAdd_Click"
                  Width="50" Height="50"
                  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
@@ -47,6 +48,7 @@
 
                 <Grid Grid.Column="1" Margin="5">
                     <Button
+                        x:Name="Del_Btn"
                  Click="ButtonDelete_All_Click"
                  Width="50" Height="50"
                  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"

@@ -36,18 +36,20 @@ namespace GUI
             if (crnUser == null)
             {
                 MessageBox.Show("Mat khau hoac email sai, moi nhap lai");
-                MainWindow mainWindow = new MainWindow(/*crnUser.MANV*/);
-                this.Visibility = Visibility.Collapsed;
-                mainWindow.Show();
             }
             else
             {
                 MainWindow mainWindow = new MainWindow(/*crnUser.MANV*/);
                 this.Visibility = Visibility.Collapsed;
                 mainWindow.Show();
-                mainWindow.Show();
+                this.Close();
             }
 
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -19,18 +19,21 @@ namespace GUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static DTO_TaiKhoan crnUser = new DTO_TaiKhoan();
-        public static DTO_NhanVien nhanVien = new DTO_NhanVien();
+        public static DTO_NhanVien crnNhanVien = new DTO_NhanVien();
         BUS_NhanVien nvManager = new BUS_NhanVien();
-
-        string manv;
 
         public MainWindow(/*string manv*/)
         {
             InitializeComponent();
-            //nhanVien.MANV = manv;
-            //if (nhanVien.MANV != "") username.Text = nhanVien.TENNV;
+            this.WindowState = WindowState.Maximized;
+            setUser();
+            if (crnNhanVien.MANV != "") username.Text = crnNhanVien.TENNV;
             NavigateTo("Home");
+        }
+
+        void setUser()
+        {
+            crnNhanVien = nvManager.GetByID(LoginWindow.crnUser.MANV);
         }
 
         private void TkBtn_Click(object sender, RoutedEventArgs e)
@@ -107,6 +110,11 @@ namespace GUI
 
         private void ButtonLogOut_Click(object sender, RoutedEventArgs e)
         {
+            this.Visibility = Visibility.Collapsed;
+            LoginWindow.crnUser = new DTO_TaiKhoan();
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.Show();
+            MessageBox.Show("Đã đăng xuất khỏi hệ thống");
             Close();
         }
 
@@ -124,7 +132,7 @@ namespace GUI
             UserControl view = ViewName switch
             {
                 "Home" => new HomeWindow(),
-                //"Report" => new ReportWindow(),
+                "Report" => new ReportWindow(),
                 "Employee" => new EmployeeWindow(),
                 "Project" => new ProjectWindow(),
                 _ => null

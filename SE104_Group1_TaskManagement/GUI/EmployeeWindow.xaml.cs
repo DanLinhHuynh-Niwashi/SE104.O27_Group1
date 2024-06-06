@@ -28,7 +28,7 @@ namespace GUI
     /// </summary>
     public partial class EmployeeWindow : UserControl
     {
-        public static DTO_NhanVien crnUser = new DTO_NhanVien();
+        
         BUS_NhanVien nvManager = new BUS_NhanVien();
         BUS_TaiKhoan tkManager = new BUS_TaiKhoan();
         BindingList<DTO_NhanVien> members = new BindingList<DTO_NhanVien>();
@@ -45,9 +45,8 @@ namespace GUI
             cmText.ItemsSource = cm;
             cmText.DisplayMemberPath = "Value.TENCM";
             cmText.SelectedValuePath = "Value.MACM";
-            this.WindowState = WindowState.Maximized;
 
-            setUser();
+            //setUser();
             if (tkManager.checkQH(LoginWindow.crnUser, "ThemNV") == false)
             {
                 Add_Btn.Visibility = Visibility.Collapsed;
@@ -349,7 +348,6 @@ namespace GUI
             LoginWindow loginWindow = new LoginWindow();
             loginWindow.Show();
             MessageBox.Show("Đã đăng xuất khỏi hệ thống");
-            this.Close();
             
         }
     }
