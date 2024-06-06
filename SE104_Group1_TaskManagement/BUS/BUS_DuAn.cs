@@ -74,10 +74,10 @@ namespace BUS
         //EDIT
         public (bool, string) EditProject(DTO_DuAn DuAnCanSua)
         {
-            (bool result, string message) = IsValidProjectInfo(DuAnCanSua);
+            (bool result, string message) = IsValidProjectInfo(DuAnCanSua, true);
             if (result == false)
             {
-                return IsValidProjectInfo(DuAnCanSua);
+                return (result, message);
             }
             else
             {
@@ -110,26 +110,6 @@ namespace BUS
             else
                 return (null, dalDA.GetByName(name));
         }
-        public (string, DataTable) GetByTStartLimit(DateTime TStartLimit)
-        {
-            bool result = (IsValidTSTART(TStartLimit));
-            if (result == false)
-            {
-                return ("Ten du an khong hop le", null);
-            }
-            else
-                return (null, dalDA.GetByTStartLimit(TStartLimit));
-        }
-        public (string, DataTable) GetByTENDLimit(DateTime TEndLimit)
-        {
-            bool result = (IsValidTEND(TEndLimit));
-            if (result == false)
-            {
-                return ("Ten du an khong hop le", null);
-            }
-            else
-                return (null, dalDA.GetByTEndLimit(TEndLimit));
-        }
 
         //FindDA
         public BindingList<DTO_DuAn> FindDA(DTO_DuAn filter, long NganSachL, long NganSachH)
@@ -154,22 +134,6 @@ namespace BUS
             return result;
         }
 
-        public DataTable GetByNganSachMoreLess(long NganSachH, long NganSachL)
-        {
-            return dalDA.GetByNganSachMoreLess(NganSachH, NganSachL);
-        }
-        public DataTable GetByLoaiSK(string MALSK)
-        {
-            return dalDA.GetByLoaiSK(MALSK);
-        }
-        public DataTable GetByOwner(string MAOWNER)
-        {
-            return dalDA.GetByOwner(MAOWNER);
-        }
-        public DataTable GetByStat(string STAT)
-        {
-            return dalDA.GetByStat(STAT);
-        }
 
         //check staff info 
         public static (bool, string) IsValidProjectInfo(DTO_DuAn DA, bool isEditing = false)

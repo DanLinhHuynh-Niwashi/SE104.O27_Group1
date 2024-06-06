@@ -28,9 +28,6 @@ namespace GUI
     /// </summary>
     public partial class EmployeeWindow : UserControl
     {
-        
-        BUS_NhanVien nvManager = new BUS_NhanVien();
-        BUS_TaiKhoan tkManager = new BUS_TaiKhoan();
         BindingList<DTO_NhanVien> members = new BindingList<DTO_NhanVien>();
         Dictionary<string, DTO_ChuyenMon> cm = BUS_StaticTables.Instance.GetAllDataCM();
         public EmployeeWindow()
@@ -47,22 +44,22 @@ namespace GUI
             cmText.SelectedValuePath = "Value.MACM";
 
             //setUser();
-            if (tkManager.checkQH(LoginWindow.crnUser, "ThemNV") == false)
+            if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "ThemNV") == false)
             {
                 Add_Btn.Visibility = Visibility.Collapsed;
             }
-            if (tkManager.checkQH(LoginWindow.crnUser, "XoaNV") == false)
+            if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "XoaNV") == false)
             {
                 Del_Btn.Visibility = Visibility.Collapsed;
             }
             var converter = new BrushConverter();
-            members = nvManager.GetAllData();
+            members = BUS_NhanVien.Instance.GetAllData();
             showMember();
         }
 
         //void setUser()
         //{
-        //    crnUser = nvManager.GetByID(LoginWindow.crnUser.MANV);
+        //    crnUser = BUS_NhanVien.Instance.GetByID(LoginWindow.crnUser.MANV);
         //}
 
         private void MembersDataGrid_LoadingRow(object? sender, DataGridRowEventArgs e)
@@ -110,7 +107,7 @@ namespace GUI
             bool? res = addDialog.ShowDialog();
             if (res != null && res == true)
             {
-                members = nvManager.GetAllData();
+                members = BUS_NhanVien.Instance.GetAllData();
                 membersDataGrid.ItemsSource = members;
             }
         }
@@ -138,7 +135,7 @@ namespace GUI
                 filter.LEVEL = int.TryParse(lvlText.Text, out lvl) ? lvl : -1;
             }
 
-            members = nvManager.FindNV(filter);
+            members = BUS_NhanVien.Instance.FindNV(filter);
             showMember();
         }
 
@@ -159,7 +156,7 @@ namespace GUI
                         bool? res = updateDialog.ShowDialog();
                         if (res != null && res == true)
                         {
-                            members = nvManager.GetAllData();
+                            members = BUS_NhanVien.Instance.GetAllData();
                             showMember();
                         }
                         //if (item.MANV == crnUser.MANV)
@@ -189,11 +186,11 @@ namespace GUI
                         MessageBoxResult resu = MessageBox.Show("Bạn đang xóa nhân viên " + item.MANV + ", thao tác này không thể quay lại.", "Warning", MessageBoxButton.OKCancel);
                         if (resu == MessageBoxResult.OK)
                         {
-                            (bool, string) res = nvManager.DeleteByID(item);
+                            (bool, string) res = BUS_NhanVien.Instance.DeleteByID(item);
                             if (res.Item1 == true)
                             {
                                 MessageBox.Show(res.Item2);
-                                members = nvManager.GetAllData();
+                                members = BUS_NhanVien.Instance.GetAllData();
                                 showMember();
                             }
                             else
@@ -262,8 +259,8 @@ namespace GUI
                         DTO_NhanVien? nv = item as DTO_NhanVien;
                         if (nv != null)
                         {
-                            nvManager.DeleteByID(nv);
-                            members = nvManager.GetAllData();
+                            BUS_NhanVien.Instance.DeleteByID(nv);
+                            members = BUS_NhanVien.Instance.GetAllData();
                             showMember();
                         }
                     }
@@ -300,7 +297,7 @@ namespace GUI
             
             if (button != null)
             {
-                if (tkManager.checkQH(LoginWindow.crnUser, "XoaNV") == false)
+                if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "XoaNV") == false)
                 {
                     button.Visibility = Visibility.Collapsed;
                     return;
@@ -327,7 +324,7 @@ namespace GUI
             Button button = sender as Button;
             if (button != null)
             {
-                if (tkManager.checkQH(LoginWindow.crnUser, "SuaNV") == false)
+                if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "SuaNV") == false)
                 {
                     button.Visibility = Visibility.Collapsed;
                     return;

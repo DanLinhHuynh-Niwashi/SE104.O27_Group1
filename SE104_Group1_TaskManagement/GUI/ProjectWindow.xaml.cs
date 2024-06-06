@@ -54,6 +54,12 @@ namespace GUI
             lskText.SelectedValuePath = "Value.MALSK";
             var converter = new BrushConverter();
             members = projectManager.GetAllData();
+
+            if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "ThemDA") == false)
+            {
+                Add_Btn.Visibility = Visibility.Collapsed;
+            }
+
             showMember();
         }
         
@@ -113,7 +119,38 @@ namespace GUI
             membersDataGrid.ItemsSource = members;
         }
 
-        
+        private void EditButton_Loaded(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            if (button != null)
+            {
+                if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "SuaTBDA") == false)
+                {
+                    if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "SuaDA") == false)
+                    {
+                        button.Visibility = Visibility.Collapsed;
+                        return;
+                    }
+                    else
+                    {
+                        DataGridRow row = FindVisualParent<DataGridRow>(button);
+                        if (row != null)
+                        {
+                            // Access the data item behind the row
+                            DTO_DuAn? item = row.Item as DTO_DuAn;
+
+                            if (item != null && item.MAOWNER != LoginWindow.crnUser.MANV)
+                            {
+                                button.Visibility = Visibility.Collapsed;
+                                return;
+                            }
+                        }
+                        
+                    }    
+                }
+            }
+
+        }
 
         private T FindVisualParent<T>(DependencyObject child) where T : DependencyObject
         {

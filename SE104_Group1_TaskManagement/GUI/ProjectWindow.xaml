@@ -38,7 +38,8 @@
                      Width="50" Height="50"
                      IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                      Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
-                     ToolTip="Thêm mới">
+                     ToolTip="Thêm mới"
+                                x:Name="Add_Btn">
                             <materialDesign:PackIcon
                          Kind="Add" />
                         </Button>
@@ -99,7 +100,7 @@
                                                 <Button Style="{StaticResource gridEditButton}" Click="ButtonView_Click">
                                                     <materialDesign:PackIcon Kind="Eye" Style="{StaticResource gridButtonIcon}"/>
                                                 </Button>
-                                                <Button Margin="5 0 0 0" Style="{StaticResource gridEditButton}" Click="ButtonEdit_Click">
+                                                <Button Margin="5 0 0 0" Style="{StaticResource gridEditButton}" Click="ButtonEdit_Click" Loaded="EditButton_Loaded">
                                                     <materialDesign:PackIcon Kind="PencilOutline" Style="{StaticResource gridButtonIcon}"/>
                                                 </Button>
                                             </StackPanel>

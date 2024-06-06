@@ -29,6 +29,7 @@ namespace GUI
         {
             InitializeComponent();
             BindingDropDown();
+            statText.Text = "On-going";
             if (inputDA != null)
             {
                 wTitle.Text = "SỬA DU AN";
@@ -44,7 +45,15 @@ namespace GUI
                     ngansachText.IsEnabled = false;
                     lskText.IsEnabled = false;
                     ownerText.IsEnabled = false;
-                }    
+                }
+
+                if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "SuaTBDA") == false)
+                {
+                    if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "SuaDA"))
+                    {
+                        ownerText.IsEnabled = false;
+                    }
+                }
                 madaText.Text = initializeDA.MADA;
                 tendaText.Text = initializeDA.TENDA;
                 statText.Text = initializeDA.STAT;

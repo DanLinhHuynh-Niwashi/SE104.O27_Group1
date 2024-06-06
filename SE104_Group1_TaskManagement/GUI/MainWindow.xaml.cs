@@ -29,6 +29,11 @@ namespace GUI
             setUser();
             if (crnNhanVien.MANV != "") username.Text = crnNhanVien.TENNV;
             NavigateTo("Home");
+
+            if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "XemBC") == false)
+            {
+                ReportBtn.Visibility = Visibility.Collapsed;
+            }
         }
 
         void setUser()

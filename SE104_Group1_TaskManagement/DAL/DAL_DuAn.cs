@@ -20,7 +20,7 @@ namespace DAL
                 string mada = getCrnID();
 
                 conn.Open();
-                string queryString = "INSERT INTO DU AN VALUES (@mada, @malsk, @tenda, @ngansach, CONVERT(smalldatetime,@tstart, 104),  CONVERT(smalldatetime,@tend, 104), @maowner, @stat, @dadung)";
+                string queryString = "INSERT INTO DUAN VALUES (@mada, @malsk, @tenda, @ngansach, CONVERT(smalldatetime,@tstart, 104),  CONVERT(smalldatetime,@tend, 104), @maowner, @stat, @dadung)";
                 var command = new SqlCommand(
                     queryString,
                     conn);

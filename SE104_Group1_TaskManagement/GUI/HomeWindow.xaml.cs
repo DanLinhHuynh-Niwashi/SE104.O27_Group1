@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BUS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,10 @@ namespace GUI
         public HomeWindow()
         {
             InitializeComponent();
+            if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "XemBC") == false)
+            {
+                ReportBtn.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void NavigateBtn_Click(object sender, RoutedEventArgs e)

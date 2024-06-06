@@ -74,7 +74,7 @@
                         </StackPanel>
                     </Grid>
 
-                    <Grid Grid.Column="2">
+                    <Grid Grid.Column="2" x:Name="ReportBtn">
                         <StackPanel Orientation="Vertical" Margin="20">
                             <Button 
                                 Tag="Report"

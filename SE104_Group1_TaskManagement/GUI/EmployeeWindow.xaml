@@ -121,7 +121,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Style="{StaticResource gridEditButton}" Click="ButtonEdit_Click">
+                                            <Button Style="{StaticResource gridEditButton}" Click="ButtonEdit_Click" Loaded="EditButton_Loaded">
                                                 <materialDesign:PackIcon Kind="PencilOutline" Style="{StaticResource gridButtonIcon}"/>
                                             </Button>
                                             <Button Margin="5 0 0 0" Style="{StaticResource gridRemoveButton}" Click="ButtonDelete_Click" Loaded="ButtonDelete_Loaded">

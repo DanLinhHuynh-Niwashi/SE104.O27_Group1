@@ -44,7 +44,7 @@ namespace GUI
             if (mode == 1)
             {
                 (string, DTO_TaiKhoan) newTk = tkManager.ChangePassWord(LoginWindow.crnUser.EMAIL, recoverText.Text, newPassText.Password);
-                if (newTk.Item2.MANV!="")
+                if (newTk.Item2 != null && newTk.Item2.MANV!="")
                 {
                     LoginWindow.crnUser = newTk.Item2;
                     MessageBox.Show(newTk.Item1);

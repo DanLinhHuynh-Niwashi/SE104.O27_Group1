@@ -49,13 +49,13 @@ namespace BUS
 
         public (string ,DTO_TaiKhoan?) ChangePassWord(string email, string oldPass, string newPass) 
         {
-            if(IsValidEmail(email))
+            if(!IsValidEmail(email))
             {
                 return ("Invalid_email", null);
             }
-            else if(IsValidPassword(oldPass) || IsValidPassword(newPass)) 
+            else if(!IsValidPassword(newPass)) 
             {
-                return ("Invalid_password", null);
+                return ("The password must contain minimum of eight characters, at least one uppercase English letter, one lowercase English letter, one number and one special character", null);
             }
             return dalTK.ChangePassword(email, oldPass, newPass);
             //Tra ve instance moi cua DTO_NhanVien
@@ -146,8 +146,8 @@ namespace BUS
             }
             else
             {
-                string pattern = @"^[A-Za-z0-9]{6,}$";
-                return Regex.IsMatch(password, pattern);
+                string pattern = @"^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$";
+                return !Regex.IsMatch(password, pattern);
             }
         }
 
