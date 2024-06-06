@@ -40,7 +40,7 @@ namespace GUI
             UserControl view = ViewName switch
             {
                 "Home" => new HomeWindow(),
-                //"Report" => new ReportWindow(),
+                "Report" => new ReportWindow(),
                 "Employee" => new EmployeeWindow(),
                 "Project" => new ProjectWindow(),
                 _ => null
