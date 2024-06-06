@@ -33,8 +33,8 @@ namespace GUI
         BUS_DuAn projectManager = new BUS_DuAn();
         BindingList<DTO_DuAn> members = new BindingList<DTO_DuAn>();
 
-        Dictionary<string, DTO_NhanVien> nv = BUS_StaticTables.Instance.GetAllDataNV();
-        Dictionary<string, DTO_LoaiSK> lsk = BUS_StaticTables.Instance.GetAllDataLSK();
+        Dictionary<string, DTO_NhanVien> nv = BUS_StaticTables.Instance.GetAllRawDataNV();
+        Dictionary<string, DTO_LoaiSK> lsk = BUS_StaticTables.Instance.GetAllRawDataLSK();
 
 
 
@@ -82,24 +82,28 @@ namespace GUI
                         }
                     }
                 }
-                //if (lskCol != null)
-                //{
-                //    var chBx = lskCol.GetCellContent(row) as TextBlock;
-                //    DTO_LoaiSK temp = new DTO_LoaiSK();
-                //    lsk.TryGetValue(da.MALSK, out temp);
-                //    chBx.Text = temp.TENLSK;
+                if (lskCol != null)
+                {
+                    var chBx = lskCol.GetCellContent(row) as TextBlock;
+                    DTO_LoaiSK temp = new DTO_LoaiSK();
+                    if(temp != null)
+                    {
+                        lsk.TryGetValue(da.MALSK, out temp);
+                        chBx.Text = temp.TENLSK;
+                    }    
+                }
 
-                //}
-
-                //if (ownerCol != null)
-                //{
-                //    var chBx = ownerCol.GetCellContent(row) as TextBlock;
-                //    DTO_NhanVien temp = new DTO_NhanVien();
-                //    nv.TryGetValue(da.MAOWNER, out temp);
-                //    string manv = temp.MANV;
-                //    chBx.Text = manv;
-
-                //}
+                if (ownerCol != null)
+                {
+                    var chBx = ownerCol.GetCellContent(row) as TextBlock;
+                    DTO_NhanVien temp = new DTO_NhanVien();
+                    nv.TryGetValue(da.MAOWNER, out temp);
+                    if (temp != null)
+                    {
+                        string tenNV = temp.TENNV;
+                        chBx.Text = tenNV;
+                    }
+                }
             };
         }
 

@@ -39,8 +39,8 @@ namespace GUI
                 TStartPicker.Text = initializeDA.TSTART;
                 TEndPicker.Text = initializeDA.TEND;
                 ngansachText.Text = initializeDA.NGANSACH.ToString();
-                lskText.Text = initializeDA.MALSK;
-                ownerText.Text = initializeDA.MAOWNER;
+                lskText.SelectedValue = initializeDA.MALSK;
+                ownerText.SelectedValue = initializeDA.MAOWNER;
             }
         }
 
@@ -93,7 +93,7 @@ namespace GUI
             da.MADA = madaText.Text;
             da.MALSK = lskText.SelectedValue.ToString();
             //da.MAOWNER = ownerText.Text;
-            da.MAOWNER = ownerText.SelectedValue.ToString();
+            da.MAOWNER = ownerText.SelectedValue!=null ? ownerText.SelectedValue.ToString():"";
             da.TENDA = tendaText.Text;
             da.STAT = statText.Text.ToString();
             da.NGANSACH = long.TryParse(ngansachText.Text, out long tempResult) ? tempResult : -1;
