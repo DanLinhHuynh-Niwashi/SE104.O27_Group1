@@ -41,12 +41,8 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <TextBox
-                        x:Name="Name"
+                        x:Name="LgName"
                         VerticalAlignment="Center"
-
-                        
-                       
-
                         materialDesign:HintAssist.Hint="Tên đăng nhập"
                         FontSize="20"
                         materialDesign:TextFieldAssist.HasClearButton="True"
@@ -55,7 +51,7 @@
                 </Grid>
                 <Grid Grid.Row="1">
                     <PasswordBox
-                        x:Name="FloatingPasswordBox"
+                        x:Name="Password"
                         materialDesign:HintAssist.Foreground="Green"
                         materialDesign:HintAssist.Hint="Mật khẩu"
                         FontSize="20"
@@ -68,11 +64,6 @@
                         <ColumnDefinition></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-
-                    
-                     
-             
-                            
 
                     <Button Grid.Column="0" Margin="5"
                             VerticalAlignment="Center"

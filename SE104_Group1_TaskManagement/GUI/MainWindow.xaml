@@ -6,19 +6,18 @@
         xmlns:local="clr-namespace:GUI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
-        ResizeMode="NoResize">
+        Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
                 <EasingDoubleKeyFrame KeyTime="0" Value="70"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="200"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="170"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="CloseMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
-                <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="70"/>
+                <EasingDoubleKeyFrame KeyTime="0" Value="170"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="70"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
 
@@ -57,21 +56,17 @@
                 <!--<Image Source="app_img.jpg"/>-->
                 <TextBlock x:Name="username" Text="User Name" VerticalAlignment="Center" FontSize="16"/>
                 <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" StaysOpen="False" Margin="10">
-                    <StackPanel Width="80">
-                        <Button Content="Tài khoản"/>
+                    <StackPanel Width="100">
+                        <Button Content="Tài khoản" Click="TkBtn_Click"/>
                         <Separator/>
                         <Button Content="Đăng xuất" Click="ButtonLogOut_Click"/>
                     </StackPanel>
                 </materialDesign:PopupBox>
             </StackPanel>
-            <TextBlock HorizontalAlignment="Left" 
-                       VerticalAlignment="Center" 
-                       Text="MÀN HÌNH CHÍNH"
-                       FontWeight="Bold"
-                       FontSize="22" 
-                       Margin="84,0,0,0">
-            </TextBlock>
         </Grid>
+
+        
+        
         <Grid x:Name="GridMenu" Width="70" HorizontalAlignment="Left" Background="#FF31577E" Panel.ZIndex="1">
             <Grid.Effect>
                 <DropShadowEffect BlurRadius="2" ShadowDepth="1" Color="#FFAEAEAE"/>
@@ -96,145 +91,102 @@
                     <Image Height="80" VerticalAlignment="Bottom"/>
                 </Grid>
 
-                <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListViewItem x:Name="ItemHome" Height="60" MouseEnter="ListViewItem_MouseEnter">
+                <StackPanel x:Name="StackPanelMenu" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="0">
+                    <Button x:Name="HomeBtn" 
+                                                            Click ="NavigateBtn_Click"
+
+              Height="60" 
+              HorizontalAlignment="Left" 
+              Background="Transparent" 
+              BorderBrush="Transparent"
+              MouseEnter="ListViewItem_MouseEnter"
+                                                          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+
+              Tag="Home">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Home" Height="25" Width="25" Margin="10"/>
                             <TextBlock Text="Home" VerticalAlignment="Center" Margin="20 10"/>
                         </StackPanel>
-                        <ListViewItem.ToolTip>
+
+                        <Button.ToolTip>
 
                             <ToolTip x:Name="tt_home"
-                                      Content="Home"
-                                      Style="{StaticResource tt_style}"/>
+Content ="Home"
+Style="{StaticResource tt_style}"/>
+                        </Button.ToolTip>
+                    </Button>
+                    <Button x:Name="EmployeeBtn" 
+                            Height="60" 
+                            HorizontalAlignment="Left" 
+                            Background="Transparent" 
+                            BorderBrush="Transparent"
+                            MouseEnter="ListViewItem_MouseEnter"
+                                                            Click ="NavigateBtn_Click"
 
-                        </ListViewItem.ToolTip>
-                    </ListViewItem>
-                    <ListViewItem x:Name="ItemEmployee" Height="60" MouseEnter="ListViewItem_MouseEnter">
+                                                          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+
+                            Tag="Employee">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Worker" Height="25" Width="25" Margin="10"/>
                             <TextBlock Text="Nhân viên" VerticalAlignment="Center" Margin="20 10"/>
                         </StackPanel>
 
-                        <ListViewItem.ToolTip>
+                        <Button.ToolTip>
 
                             <ToolTip x:Name="tt_employee"
               Content="Nhân viên"
               Style="{StaticResource tt_style}"/>
+                        </Button.ToolTip>
+                    </Button>
+                    <Button x:Name="ProjectBtn" 
+                            Height="60" 
+                            HorizontalAlignment="Left" 
+                            Background="Transparent" 
+                            BorderBrush="Transparent"
+                            MouseEnter="ListViewItem_MouseEnter"
+                                                            Click ="NavigateBtn_Click"
 
-                        </ListViewItem.ToolTip>
-                    </ListViewItem>
-                    <ListViewItem Height="60" MouseEnter="ListViewItem_MouseEnter">
-                        <StackPanel Orientation="Horizontal">
+                              IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            Tag="Project">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch">
                             <materialDesign:PackIcon Kind="NotebookCheck" Height="25" Width="25" Margin="10"/>
-                            <TextBlock Text="Dự án" VerticalAlignment="Center"  Margin="20 10"/>
+                            <TextBlock Text="Dự án" Margin="20 10" Width="60"/>
                         </StackPanel>
 
-                        <ListViewItem.ToolTip>
-
+                        <Button.ToolTip>
                             <ToolTip x:Name="tt_project"
               Content="Dự án"
               Style="{StaticResource tt_style}"/>
+                        </Button.ToolTip>
+                    </Button>
 
-                        </ListViewItem.ToolTip>
-                    </ListViewItem>
-                    <ListViewItem Height="60" MouseEnter="ListViewItem_MouseEnter">
+                    <Button x:Name="ReportBtn" 
+              Height="60" 
+              HorizontalAlignment="Left" 
+              Background="Transparent" 
+              BorderBrush="Transparent"
+              Click="NavigateBtn_Click"
+              MouseEnter="ListViewItem_MouseEnter"
+                                                          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+
+              Tag="Report">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Briefcase" Height="25" Width="25" Margin="10"/>
-                            <TextBlock Text="Công việc" VerticalAlignment="Center"  Margin="20 10"/>
+                            <materialDesign:PackIcon Kind="FileReport" Height="25" Width="25" Margin="10"/>
+                            <TextBlock Text="Báo cáo" VerticalAlignment="Center" Margin="20 10"/>
                         </StackPanel>
 
-                        <ListViewItem.ToolTip>
+                        <Button.ToolTip>
 
-                            <ToolTip x:Name="tt_task"
-              Content="Công việc"
-              Style="{StaticResource tt_style}"/>
+                            <ToolTip x:Name="tt_report"
+Content="Report"
+Style="{StaticResource tt_style}"/>
+                        </Button.ToolTip>
+                    </Button>
 
-                        </ListViewItem.ToolTip>
-                    </ListViewItem>
-                </ListView>
+                </StackPanel>
             </StackPanel>
         </Grid>
 
-        <Grid x:Name="Main" Margin="75,65,0,0">
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="6*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
-            <Grid Grid.Row="0" Margin="0,0,0,57">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-
-                <Grid Grid.Column="0">
-                    <StackPanel Orientation="Vertical" Margin="20">
-                        <Button
-                            Width="150"
-                            Height="150"
-                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                            Style="{StaticResource MaterialDesignFloatingActionLightButton}"
-                            ToolTip="Tài khoản">
-                            <materialDesign:PackIcon
-                                Width="100"
-                                Height="100"
-                                Kind="Account"/>
-                        </Button>
-                        <TextBlock Text="Tài khoản" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold"/>
-                    </StackPanel>
-                </Grid>
-
-                <Grid Grid.Column="1">
-                    <StackPanel Orientation="Vertical" Margin="20">
-                        <Button
-                            Width="150"
-                            Height="150"
-                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                            Style="{StaticResource MaterialDesignFloatingActionLightButton}"
-                            ToolTip="Dự án">
-                            <materialDesign:PackIcon
-                                Width="100"
-                                Height="100"
-                                Kind="Notebook"/>
-                        </Button>
-                        <TextBlock Text="Dự án" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold"/>
-                    </StackPanel>
-                </Grid>
-
-                <Grid Grid.Column="2">
-                    <StackPanel Orientation="Vertical" Margin="20">
-                        <Button
-                            Width="150"
-                            Height="150"
-                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                            Style="{StaticResource MaterialDesignFloatingActionLightButton}"
-                            ToolTip="Công việc">
-                            <materialDesign:PackIcon
-                                Width="100"
-                                Height="100"
-                                Kind="Briefcase" />
-                        </Button>
-                        <TextBlock Text="Công việc" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold"/>
-                    </StackPanel>
-                </Grid>
-            </Grid>
-
-            <Grid Margin="0,264,0,0" Grid.RowSpan="2">
-                <StackPanel Margin="0,0,40,0" HorizontalAlignment="Right" Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="Logout" VerticalAlignment="Center" Width="30" Height="30"/>
-                    <Button
-                        Width="120"
-                        HorizontalAlignment="Right"
-                        Content="ĐĂNG XUẤT"
-                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
-                        ToolTip="Đăng xuất" Click="ButtonLogOut_Click" />
-                </StackPanel>
-                
-            </Grid>
-        </Grid>
+        <ContentControl x:Name="MainContent"/>
     </Grid>
 </Window>

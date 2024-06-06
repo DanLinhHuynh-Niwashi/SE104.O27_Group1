@@ -8,6 +8,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using BUS;
+using DTO;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace GUI
 {
@@ -16,9 +19,24 @@ namespace GUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public static DTO_TaiKhoan crnUser = new DTO_TaiKhoan();
+        public static DTO_NhanVien nhanVien = new DTO_NhanVien();
+        BUS_NhanVien nvManager = new BUS_NhanVien();
+
+        string manv;
+
+        public MainWindow(/*string manv*/)
         {
             InitializeComponent();
+            //nhanVien.MANV = manv;
+            //if (nhanVien.MANV != "") username.Text = nhanVien.TENNV;
+            NavigateTo("Home");
+        }
+
+        private void TkBtn_Click(object sender, RoutedEventArgs e)
+        {
+            UserInfo userinfWindow = new UserInfo();
+            userinfWindow.ShowDialog();
         }
 
         private void ButtonOpenMenu_Click(object sender, RoutedEventArgs e)
@@ -44,16 +62,46 @@ namespace GUI
             if (ButtonCloseMenu.IsEnabled == true && ButtonOpenMenu.IsEnabled == false)
             {
                 tt_home.Visibility = Visibility.Collapsed;
+                tt_report.Visibility = Visibility.Collapsed;
                 tt_employee.Visibility = Visibility.Collapsed;
                 tt_project.Visibility = Visibility.Collapsed;
-                tt_task.Visibility = Visibility.Collapsed;
             }
             else if (ButtonCloseMenu.IsEnabled == false && ButtonOpenMenu.IsEnabled == true)
             {
                 tt_home.Visibility = Visibility.Visible;
+                tt_report.Visibility = Visibility.Visible;
                 tt_employee.Visibility = Visibility.Visible;
                 tt_project.Visibility = Visibility.Visible;
-                tt_task.Visibility = Visibility.Visible;
+            }
+        }
+
+        private bool IsMaximize = false;
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                if (IsMaximize)
+                {
+                    this.WindowState = WindowState.Normal;
+                    this.Width = 1080;
+                    this.Height = 720;
+
+                    IsMaximize = false;
+                }
+                else
+                {
+                    this.WindowState = WindowState.Maximized;
+
+                    IsMaximize = true;
+                }
+            }
+        }
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                this.DragMove();
             }
         }
 
@@ -61,7 +109,31 @@ namespace GUI
         {
             Close();
         }
-    }
-    
 
+        private void NavigateBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                string ViewName = button.Tag as string;
+                NavigateTo(ViewName);
+            }
+        }
+
+        public void NavigateTo(string ViewName)
+        {
+            UserControl view = ViewName switch
+            {
+                "Home" => new HomeWindow(),
+                //"Report" => new ReportWindow(),
+                "Employee" => new EmployeeWindow(),
+                "Project" => new ProjectWindow(),
+                _ => null
+            };
+
+            if (view != null)
+            {
+                MainContent.Content = view;
+            }
+        }
+    }
 }

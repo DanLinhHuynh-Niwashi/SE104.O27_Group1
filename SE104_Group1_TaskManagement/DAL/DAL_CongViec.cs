@@ -17,12 +17,13 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "UPDATE CONGVIEC SET IsDeleted = 1 WHERE MACV='" + MACV + "'";
+                string queryString = "UPDATE CONGVIEC SET IsDeleted = 1 WHERE MACV=@macv";
 
 
                 var command = new SqlCommand(
                     queryString,
                     conn);
+                command.Parameters.AddWithValue("@macv", MACV);
                 if (command.ExecuteNonQuery() > 0)
                 {
                     conn.Close();
@@ -50,7 +51,7 @@ namespace DAL
             {
                 string macv = getCrnID();
                 if (macv == "") return (false, "Thêm không thành công!");
-                macv = congViec.MADA.Substring(congViec.MADA.Length - 2) + macv;
+                macv = congViec.MADA.Trim() + macv;
                 conn.Open();
                 string queryString = "INSERT INTO CONGVIEC VALUES (@macv, @mada, @macm, @tencv, CONVERT(smalldatetime,@tstart, 104),  CONVERT(smalldatetime,@tend, 104), @ngansach, @dadung, @tiendo, @ycdk, @dk, @isdel)";
                 var command = new SqlCommand(
@@ -73,7 +74,7 @@ namespace DAL
                 if (command.ExecuteNonQuery() > 0)
                 {
                     conn.Close();
-                    return (true, "Thêm thành công!");
+                    return (true, macv);
                 }
 
                 conn.Close();
@@ -97,7 +98,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "UPDATE CONGVIEC SET MADA=@mada, MACM@macm, TENCV=@tencv, TSTART=CONVERT(smalldatetime,@tstart, 104),  TEND=CONVERT(smalldatetime,@tend, 104), NGANSACH=@ngansach, DADUNG=@dadung, TIENDO=@tiendo, YCDINHKEM=@ycdk, TEPDINHKEM=@dk WHERE MACV=@macv";
+                string queryString = "UPDATE CONGVIEC SET MADA=@mada, MACM=@macm, TENCV=@tencv, TSTART=CONVERT(smalldatetime,@tstart, 104),  TEND=CONVERT(smalldatetime,@tend, 104), NGANSACH=@ngansach, DADUNG=@dadung, TIENDO=@tiendo, YCDINHKEM=@ycdk, TEPDINHKEM=@dk WHERE MACV=@macv";
                 var command = new SqlCommand(
                     queryString,
                     conn);
@@ -137,12 +138,11 @@ namespace DAL
         }
         public DTO_CongViec GetByID(string MACV)
         {
-
             try
             {
                 DTO_CongViec res = new DTO_CongViec();
                 conn.Open();
-                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104),  CONVERT(smalldatetime,TEND, 104), NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
+                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
                     " WHERE MACV=@macv AND ISDELETED <>1";
 
                 var command = new SqlCommand(
@@ -181,7 +181,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104),  CONVERT(smalldatetime,TEND, 104), NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
+                string queryString = "SELECT MACV, MADA, MACM, TENCV, CCONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
                     " WHERE TENCV LIKE @tencv AND ISDELETED <>1";
 
                 var command = new SqlCommand(
@@ -210,7 +210,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104),  CONVERT(smalldatetime,TEND, 104), NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
+                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
                     " WHERE TIENDO >= @tiendo AND ISDELETED <>1";
 
                 var command = new SqlCommand(
@@ -238,7 +238,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104),  CONVERT(smalldatetime,TEND, 104), NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
+                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
                     " WHERE MADA=@mada AND ISDELETED <>1";
 
                 var command = new SqlCommand(
@@ -267,7 +267,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104),  CONVERT(smalldatetime,TEND, 104), NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
+                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
                     " WHERE TSTART <= CONVERT(smalldatetime,@tstart, 104) AND ISDELETED <>1";
 
                 var command = new SqlCommand(
@@ -296,8 +296,8 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104),  CONVERT(smalldatetime,TEND, 104), NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
-                    " WHERE TEND >= CONVERT(smalldatetime,@tend, 104) AND ISDELETED <>1";
+                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
+                    " WHERE TEnd >= CONVERT(smalldatetime,@tend, 104) AND ISDELETED <>1";
 
                 var command = new SqlCommand(
                     queryString,
@@ -325,7 +325,7 @@ namespace DAL
             {
 
                 conn.Open();
-                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104),  CONVERT(smalldatetime,TEND, 104), NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC WHERE ISDELETED <>1";
+                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC WHERE ISDELETED <>1";
 
                 var command = new SqlCommand(
                     queryString,
@@ -349,19 +349,19 @@ namespace DAL
         //Ngân sách nằm trong khoảng [NganSachL, NganSachH], nạp thêm thông tin này nếu cần dùng
         //Với thời gian, nằm trong khoảng [TSTART, TEND] (công việc bắt đầu sau TSTART, kết thúc trước TEND)
         //Với tiến độ, tiến độ lớn hơn TIENDO trong filter
-        public DataTable GetDataByFiler( DTO_CongViec filter, long NganSachL = -1, long NganSachH = -1)
+        public DataTable GetDataByFilter( DTO_CongViec filter, long NganSachL = -1, long NganSachH = -1)
         {
             DataTable dt = new DataTable();
             try
             {
 
                 conn.Open();
-                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104),  CONVERT(smalldatetime,TEND, 104), NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC WHERE ISDELETED <>1";
+                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC WHERE ISDELETED <>1";
 
-                if (filter.MADA != "")
-                {
-                    queryString += " AND MADA LIKE " + filter.MADA;
-                }
+                //if (filter.MADA != "")
+                //{
+                //    queryString += " AND MADA LIKE " + filter.MADA;
+                //}
                 if (filter.MACV != "")
                 {
                     queryString += " AND MACV LIKE " + filter.MACV;
@@ -388,11 +388,11 @@ namespace DAL
                 }
                 if (filter.TSTART != "")
                 {
-                    queryString += " AND TSTART <= CONVERT(smalldatetime," + filter.TSTART + ", 104)";
+                    queryString += " AND TStart <= CONVERT(smalldatetime," + filter.TSTART + ", 104)";
                 }
                 if (filter.TEND != "")
                 {
-                    queryString += " AND TEND >= CONVERT(smalldatetime," + filter.TEND + ", 104)";
+                    queryString += " AND TEnd >= CONVERT(smalldatetime," + filter.TEND + ", 104)";
                 }
 
                 var command = new SqlCommand(
@@ -417,17 +417,13 @@ namespace DAL
             try
             {
                 conn.Open();
-                string idString = "SELECT TOP 1 MACV FROM CONGVIEC ORDER BY MACV DESC";
+                string idString = "Select count(MADA) from CONGVIEC";
                 var command = new SqlCommand(idString, conn);
-                string id = (string)command.ExecuteScalar();
-                int number = 0;
-                if (id != null)
-                {
-                    number = int.Parse(id.Substring(id.Length - 2)) + 1;
-                }
-
+                int id = (int)command.ExecuteScalar();
+                id = id + 1;
                 conn.Close();
-                return number.ToString("00");
+                return id.ToString();
+
             }
             catch (Exception ex)
             {

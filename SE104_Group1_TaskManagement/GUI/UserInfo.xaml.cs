@@ -26,7 +26,7 @@ namespace GUI
         public UserInfo()
         {
             InitializeComponent();
-            crnUser = EmployeesWindow.crnUser;
+            crnUser = EmployeeWindow.crnUser;
             manvText.Text = crnUser.MANV;
             tennvText.Text = crnUser.TENNV;
             cmText.Text = crnUser.MACM;

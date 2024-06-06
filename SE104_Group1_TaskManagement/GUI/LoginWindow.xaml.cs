@@ -30,19 +30,22 @@ namespace GUI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            DTO_TaiKhoan user = new DTO_TaiKhoan("", Name.Text, FloatingPasswordBox.Password);
+            DTO_TaiKhoan user = new DTO_TaiKhoan("", LgName.Text, Password.Password);
             string str = "";
-            (crnUser,str) = taikhoanManager.Login(user);
-            if (crnUser != null)
+            (crnUser, str) = taikhoanManager.Login(user);
+            if (crnUser == null)
             {
-                EmployeesWindow mainWindow = new EmployeesWindow();
-                MessageBox.Show(str);
+                MessageBox.Show("Mat khau hoac email sai, moi nhap lai");
+                MainWindow mainWindow = new MainWindow(/*crnUser.MANV*/);
                 this.Visibility = Visibility.Collapsed;
                 mainWindow.Show();
             }
             else
             {
-                MessageBox.Show(str);           
+                MainWindow mainWindow = new MainWindow(/*crnUser.MANV*/);
+                this.Visibility = Visibility.Collapsed;
+                mainWindow.Show();
+                mainWindow.Show();
             }
 
         }

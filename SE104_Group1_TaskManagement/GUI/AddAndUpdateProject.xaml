@@ -24,9 +24,10 @@
                 Background="#FF5C99D6"
                 Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
                 <TextBlock
+                    x:Name="wTitle"
                     FontSize="20"
                     FontWeight="ExtraBold"
-                    Text="THÊM/SỬA DỰ ÁN"
+                    Text="THÊM DỰ ÁN"
                     TextAlignment="Center"
                     Visibility="Visible"/>
             </materialDesign:Card>
@@ -116,16 +117,19 @@
 
             <Grid Grid.Column="1" Grid.Row="0" Margin="5">
                 <TextBox
+                    x:Name="madaText"
                     Margin="10 0 0 10"
                     VerticalAlignment="Center"
                     materialDesign:HintAssist.Hint="Mã dự án"
                     FontSize="15"
+                    IsEnabled="False"
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
             </Grid>
 
             <Grid Grid.Column="1" Grid.Row="1" Margin="5">
                 <TextBox
+                    x:Name="tendaText"
                     Margin="10 0 0 10"
                     VerticalAlignment="Center"
                     materialDesign:HintAssist.Hint="Tên dự án"
@@ -136,6 +140,7 @@
 
             <Grid Grid.Column="1" Grid.Row="2" Margin="5">
                 <DatePicker
+                    x:Name="TStartPicker"
                     Margin="10 0 0 10"
                     HorizontalAlignment="Left"
                     Width="200"
@@ -147,6 +152,7 @@
 
             <Grid Grid.Column="1" Grid.Row="3" Margin="5">
                 <DatePicker
+                    x:Name="TEndPicker"
                     Margin="10 0 0 10"
                     HorizontalAlignment="Left"
                     Width="200"
@@ -157,7 +163,8 @@
             </Grid>
 
             <Grid Grid.Column="1" Grid.Row="4" Margin="5">
-                <TextBox                    
+                <TextBox       
+                    x:Name="ngansachText"
                     Margin="10 0 0 10"
                     VerticalAlignment="Center"
                     materialDesign:HintAssist.Hint="Ngân sách"
@@ -167,65 +174,50 @@
             </Grid>
 
             <Grid Grid.Column="1" Grid.Row="5" Margin="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-
-                <Grid Grid.Column="0">
-                    <CheckBox IsChecked="False" 
-                             Width="70" 
-                             Content="Finish" 
-                             FontSize="15"
-                             HorizontalContentAlignment="Right"/>
-                </Grid>
-
-                <Grid Grid.Column="1">
-                    <CheckBox IsChecked="False" 
-                             Width="70"                   
-                             Content="Delay" 
-                             FontSize="15"
-                             HorizontalContentAlignment="Right"/>
-                </Grid>
-
-                <Grid Grid.Column="2">
-                    <CheckBox IsChecked="False" 
-                              Width="70"                   
-                              Content="Cancel" 
-                              FontSize="15"
-                              HorizontalContentAlignment="Right"/>
-                </Grid>
+                <ComboBox x:Name="statText">
+                    <ComboBoxItem Content="Completed"/>
+                    <ComboBoxItem Content="Delayed"/>
+                    <ComboBoxItem Content="Canceled"/>
+                    <ComboBoxItem Content="On-going"/>
+                </ComboBox>
+               
             </Grid>
 
             <Grid Grid.Column="1" Grid.Row="6" Margin="5">
-                <TextBox
+                <ComboBox
+                    x:Name="lskText"
                     Margin="10 0 0 10"
                     VerticalAlignment="Center"
                     materialDesign:HintAssist.Hint="Mã loại sự kiện"
                     FontSize="15"
-                    materialDesign:TextFieldAssist.HasClearButton="True"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    materialDesign:TextFieldAssist.HasClearButton="True" />
             </Grid>
 
             <Grid Grid.Column="1" Grid.Row="7" Margin="5">
-                <TextBox
+                <!--<TextBox
+    x:Name="ownerText"
+    Margin="10 0 0 10"
+    VerticalAlignment="Center"
+    materialDesign:HintAssist.Hint="Mã người quản lý"
+    FontSize="15"
+    materialDesign:TextFieldAssist.HasClearButton="True"/>-->
+                <ComboBox
+                    x:Name="ownerText"
                     Margin="10 0 0 10"
                     VerticalAlignment="Center"
                     materialDesign:HintAssist.Hint="Mã người quản lý"
                     FontSize="15"
-                    materialDesign:TextFieldAssist.HasClearButton="True"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    materialDesign:TextFieldAssist.HasClearButton="True"/>
             </Grid>
 
         </Grid>
 
         <Grid Grid.Row="2">
-            <Button x:Name="ButtonAddNew" HorizontalAlignment="Right" Width="100" Margin="10">
+            <Button x:Name="ButtonAddNew" HorizontalAlignment="Right" Width="100" Margin="10" Click="ButtonAddNew_Click">
                 <TextBlock Text="THÊM" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
             </Button>
 
-            <Button x:Name="ButtonUpdate" HorizontalAlignment="Right" Width="100" Margin="10" Visibility="Collapsed">
+            <Button x:Name="ButtonUpdate" HorizontalAlignment="Right" Width="100" Margin="10" Visibility="Collapsed" Click="ButtonUpdate_Click">
                 <TextBlock Text="SỬA" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
             </Button>
         </Grid>

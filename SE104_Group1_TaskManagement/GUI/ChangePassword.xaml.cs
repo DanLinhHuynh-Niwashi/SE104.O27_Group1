@@ -58,11 +58,6 @@ namespace GUI
             }    
         }
 
-        private void out_Btn_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
         private void resend_Btn_Click(object sender, RoutedEventArgs e)
         {
 

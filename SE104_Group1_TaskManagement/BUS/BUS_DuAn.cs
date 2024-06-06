@@ -54,6 +54,12 @@ namespace BUS
             }
         }
 
+        // DELETE
+        public (bool, string) DeleteByID(DTO_DuAn DuAnCanXoa)
+        {
+            return dalDA.DeleteByID(DuAnCanXoa.MADA);
+        }
+
         //EDIT
         public (bool, string) EditProject(DTO_DuAn DuAnCanSua)
         {

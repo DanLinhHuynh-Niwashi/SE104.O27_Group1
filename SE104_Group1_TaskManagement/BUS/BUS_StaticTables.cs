@@ -16,6 +16,8 @@ namespace BUS
         static DAL_QuyenHan dalQH = new DAL_QuyenHan();
         static DAL_ChuyenMon dalCM = new DAL_ChuyenMon();
         static DAL_LoaiSK dalLoaiSK = new DAL_LoaiSK();
+        static DAL_NhanVien dalNhanVien = new DAL_NhanVien();
+        static DAL_PhanCong dalPhanCong = new DAL_PhanCong();
 
         static BUS_StaticTables _instance = new BUS_StaticTables();
         public static BUS_StaticTables Instance {
@@ -27,7 +29,6 @@ namespace BUS
             }
         }
 
-        
         public Dictionary<string,DTO_QuyenHan> GetAllDataQH()
         {
             Dictionary<string, DTO_QuyenHan> result = new Dictionary<string, DTO_QuyenHan>();
@@ -65,9 +66,9 @@ namespace BUS
             return result;
         }
 
-        public ObservableCollection<DTO_LoaiSK> GetAllDataLSK()
+        public Dictionary<string, DTO_LoaiSK> GetAllDataLSK()
         {
-            ObservableCollection<DTO_LoaiSK> result = new ObservableCollection<DTO_LoaiSK>();
+            Dictionary<string, DTO_LoaiSK> result = new Dictionary<string, DTO_LoaiSK>();
             DataTable ds = dalLoaiSK.GetAllData();
 
             for (int i = 0; i < ds.Rows.Count; i++)
@@ -76,9 +77,45 @@ namespace BUS
                 temp.MALSK = ds.Rows[i]["MALSK"].ToString();
                 temp.INSHORT = ds.Rows[i]["INSHORT"].ToString();
                 temp.TENLSK = ds.Rows[i]["TENLSK"].ToString();
-                temp.MAX = (long)ds.Rows[i]["MoneyMax"];
-                temp.MIN = (long)ds.Rows[i]["MoneyMin"];
-                result.Add(temp);
+                temp.MAX = long.Parse(Convert.ToInt64(ds.Rows[i]["MoneyMax"]).ToString());
+                temp.MIN = long.Parse(Convert.ToInt64(ds.Rows[i]["MoneyMin"]).ToString());
+                result.Add(temp.MALSK, temp);
+            }
+            return result;
+        }
+
+        public Dictionary<string, DTO_NhanVien> GetAllDataNV()
+        {
+            Dictionary<string, DTO_NhanVien> result = new Dictionary<string, DTO_NhanVien>();
+            DataTable dsNhanVien = dalNhanVien.GetAllData();
+
+            for (int i = 0; i < dsNhanVien.Rows.Count; i++)
+            {
+                DTO_NhanVien temp = new DTO_NhanVien();
+                temp.MANV = dsNhanVien.Rows[i]["MANV"].ToString();
+                temp.TENNV = dsNhanVien.Rows[i]["HoTen"].ToString();
+                temp.EMAIL = dsNhanVien.Rows[i]["EMAIL"].ToString();
+                temp.PHONE = dsNhanVien.Rows[i]["SoDT"].ToString();
+                temp.LEVEL = int.Parse(dsNhanVien.Rows[i]["LVL"].ToString());
+                temp.NGAYSINH = dsNhanVien.Rows[i]["NGSINH"].ToString();
+                temp.MACM = dsNhanVien.Rows[i]["MACM"].ToString();
+                temp.GHICHU = dsNhanVien.Rows[i]["GHICHU"].ToString();
+                result.Add(temp.MANV, temp);
+            }
+            return result;
+        }
+
+        public Dictionary<string, DTO_PhanCong> GetAllDataPC()
+        {
+            Dictionary<string, DTO_PhanCong> result = new Dictionary<string, DTO_PhanCong>();
+            DataTable dsPhanCong = dalPhanCong.GetAllData();
+
+            for (int i = 0; i < dsPhanCong.Rows.Count; i++)
+            {
+                DTO_PhanCong temp = new DTO_PhanCong();
+                temp.MANV = dsPhanCong.Rows[i]["MANV"].ToString();
+                temp.MACV = dsPhanCong.Rows[i]["MACV"].ToString();
+                result.Add(temp.MANV, temp);
             }
             return result;
         }
