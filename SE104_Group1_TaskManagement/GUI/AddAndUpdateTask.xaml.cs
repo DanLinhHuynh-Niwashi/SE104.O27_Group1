@@ -79,7 +79,7 @@ namespace GUI
                 manvTokenizer.IsEnabled = false;
                 macvText.Text = initializeCV.MACV;
                 madaText.Text = initializeCV.MADA;
-                tencvText.Text = initializeCV.MACV;
+                tencvText.Text = initializeCV.TENCV;
                 macmText.SelectedValue = initializeCV.MACM;
                 TStartPicker.Text = initializeCV.TSTART;
                 TEndPicker.Text = initializeCV.TEND;
