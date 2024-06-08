@@ -66,7 +66,7 @@ namespace BUS
                 temp.TEND = dsCongViec.Rows[i]["TEnd"].ToString();
                 temp.NGANSACH = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["NGANSACH"]).ToString());
                 temp.DADUNG = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["DADUNG"]).ToString());
-                temp.TIENDO = int.Parse(dsCongViec.Rows[i]["TIENDO"].ToString());
+                temp.TIENDO = int.Parse(Convert.ToInt32(dsCongViec.Rows[i]["TIENDO"]).ToString());
                 temp.YCDK = dsCongViec.Rows[i]["YCDINHKEM"].ToString();
                 temp.TEPDK = dsCongViec.Rows[i]["TEPDINHKEM"].ToString();
                 result.Add(temp);
@@ -91,7 +91,7 @@ namespace BUS
                 temp.TEND = dsCongViec.Rows[i]["TEnd"].ToString();
                 temp.NGANSACH = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["NGANSACH"]).ToString());
                 temp.DADUNG = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["DADUNG"]).ToString());
-                temp.TIENDO = int.Parse(dsCongViec.Rows[i]["TIENDO"].ToString());
+                temp.TIENDO = int.Parse(Convert.ToInt32(dsCongViec.Rows[i]["TIENDO"]).ToString());
                 temp.YCDK = dsCongViec.Rows[i]["YCDINHKEM"].ToString();
                 temp.TEPDK = dsCongViec.Rows[i]["TEPDINHKEM"].ToString();
                 result.Add(temp);
@@ -162,9 +162,9 @@ namespace BUS
                 temp.TENCV = dsCongViec.Rows[i]["TENCV"].ToString();
                 temp.TSTART = dsCongViec.Rows[i]["TStart"].ToString();
                 temp.TEND = dsCongViec.Rows[i]["TEnd"].ToString();
-                temp.NGANSACH = long.Parse(dsCongViec.Rows[i]["NGANSACH"].ToString());
-                temp.DADUNG = long.Parse(dsCongViec.Rows[i]["DADUNG"].ToString());
-                temp.TIENDO = int.Parse(dsCongViec.Rows[i]["TIENDO"].ToString());
+                temp.NGANSACH = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["NGANSACH"]).ToString());
+                temp.DADUNG = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["DADUNG"]).ToString());
+                temp.TIENDO = int.Parse(Convert.ToInt32(dsCongViec.Rows[i]["TIENDO"]).ToString());
                 temp.YCDK = dsCongViec.Rows[i]["YCDINHKEM"].ToString();
                 temp.TEPDK = dsCongViec.Rows[i]["TEPDINHKEM"].ToString();
                 result.Add(temp);
