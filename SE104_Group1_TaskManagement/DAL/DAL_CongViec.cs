@@ -143,7 +143,7 @@ namespace DAL
                 DTO_CongViec res = new DTO_CongViec();
                 conn.Open();
                 string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
-                    " WHERE MACV=@macv AND ISDELETED <>1";
+                    " WHERE MACV=@macv AND IsDeleted <>1";
 
                 var command = new SqlCommand(
                     queryString,
@@ -182,7 +182,7 @@ namespace DAL
             {
                 conn.Open();
                 string queryString = "SELECT MACV, MADA, MACM, TENCV, CCONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
-                    " WHERE TENCV LIKE @tencv AND ISDELETED <>1";
+                    " WHERE TENCV LIKE @tencv AND IsDeleted <>1";
 
                 var command = new SqlCommand(
                     queryString,
@@ -211,7 +211,7 @@ namespace DAL
             {
                 conn.Open();
                 string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
-                    " WHERE TIENDO >= @tiendo AND ISDELETED <>1";
+                    " WHERE TIENDO >= @tiendo AND IsDeleted <>1";
 
                 var command = new SqlCommand(
                     queryString,
@@ -239,7 +239,7 @@ namespace DAL
             {
                 conn.Open();
                 string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
-                    " WHERE MADA=@mada AND ISDELETED <>1";
+                    " WHERE MADA=@mada AND IsDeleted <>1";
 
                 var command = new SqlCommand(
                     queryString,
@@ -268,7 +268,7 @@ namespace DAL
             {
                 conn.Open();
                 string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
-                    " WHERE TSTART <= CONVERT(smalldatetime,@tstart, 104) AND ISDELETED <>1";
+                    " WHERE TStart <= CONVERT(smalldatetime,@tstart, 104) AND IsDeleted <>1";
 
                 var command = new SqlCommand(
                     queryString,
@@ -297,7 +297,7 @@ namespace DAL
             {
                 conn.Open();
                 string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC" +
-                    " WHERE TEnd >= CONVERT(smalldatetime,@tend, 104) AND ISDELETED <>1";
+                    " WHERE TEnd >= CONVERT(smalldatetime,@tend, 104) AND IsDeleted <>1";
 
                 var command = new SqlCommand(
                     queryString,
@@ -325,7 +325,7 @@ namespace DAL
             {
 
                 conn.Open();
-                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC WHERE ISDELETED <>1";
+                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC WHERE IsDeleted <>1";
 
                 var command = new SqlCommand(
                     queryString,
@@ -349,19 +349,19 @@ namespace DAL
         //Ngân sách nằm trong khoảng [NganSachL, NganSachH], nạp thêm thông tin này nếu cần dùng
         //Với thời gian, nằm trong khoảng [TSTART, TEND] (công việc bắt đầu sau TSTART, kết thúc trước TEND)
         //Với tiến độ, tiến độ lớn hơn TIENDO trong filter
-        public DataTable GetDataByFilter( DTO_CongViec filter, long NganSachL = -1, long NganSachH = -1)
+        public DataTable GetDataByFilter( DTO_CongViec filter, long NganSachL = 0, long NganSachH = 0)
         {
             DataTable dt = new DataTable();
             try
             {
 
                 conn.Open();
-                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC WHERE ISDELETED <>1";
+                string queryString = "SELECT MACV, MADA, MACM, TENCV, CONVERT(smalldatetime,TSTART, 104) AS TStart,  CONVERT(smalldatetime,TEND, 104) AS TEnd, NGANSACH, DADUNG, TIENDO, YCDINHKEM, TEPDINHKEM FROM CONGVIEC WHERE IsDeleted <>1";
 
-                //if (filter.MADA != "")
-                //{
-                //    queryString += " AND MADA LIKE " + filter.MADA;
-                //}
+                if (filter.MADA != "")
+                {
+                    queryString += " AND MADA LIKE " + filter.MACV;
+                }
                 if (filter.MACV != "")
                 {
                     queryString += " AND MACV LIKE " + filter.MACV;
@@ -374,15 +374,15 @@ namespace DAL
                 {
                     queryString += " AND TENCV LIKE " + filter.TENCV;
                 }
-                if (NganSachL != -1)
+                if (NganSachL != 0)
                 {
                     queryString += " AND NGANSACH >= " + NganSachL;
                 }
-                if (NganSachH != -1)
+                if (NganSachH != 0)
                 {
                     queryString += " AND NGANSACH <= " + NganSachH;
                 }
-                if (filter.TIENDO != -1)
+                if (filter.TIENDO != 0)
                 {
                     queryString += " AND TIENDO >= " + filter.TIENDO;
                 }

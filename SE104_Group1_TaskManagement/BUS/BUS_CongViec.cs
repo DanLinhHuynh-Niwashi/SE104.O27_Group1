@@ -177,26 +177,11 @@ namespace BUS
             return dalDA.GetByNganSachMoreLess(NganSachH, NganSachL);
         }
 
-        public DataTable GetByLoaiSK(string MALSK)
-        {
-            return dalDA.GetByLoaiSK(MALSK);
-        }
-
-        public DataTable GetByOwner(string MAOWNER)
-        {
-            return dalDA.GetByOwner(MAOWNER);
-        }
-
-        public DataTable GetByStat(string STAT)
-        {
-            return dalDA.GetByStat(STAT);
-        }
-
         //check staff info 
         public static (bool, string) IsValidProjectInfo(DTO_CongViec CV)
         {
             if (CV == null)
-                return (false, "Du an khong ton tai");
+                return (false, "Cong viec khong ton tai");
             if (!IsValidNameTask(CV.TENCV))
                 return (false, "Ten cong viec khong hop le");
             if (!IsValidTSTART(CV.TSTART).Item1)

@@ -110,7 +110,7 @@
             </Grid>
 
             <Grid Grid.Column="0" Grid.Row="4" Margin="0 0 5 0">
-                <TextBlock Text="Phan Cong" 
+                <TextBlock Text="Phân công" 
                FontSize="15"
                FontWeight="Bold"
                VerticalAlignment="Center" 
@@ -118,7 +118,7 @@
             </Grid>
 
             <Grid Grid.Column="0" Grid.Row="3" Margin="0 0 5 0">
-                <TextBlock Text="Mã chuyên môn" 
+                <TextBlock Text="Tên chuyên môn" 
                FontSize="15"
                FontWeight="Bold"
                VerticalAlignment="Center" 
@@ -248,7 +248,7 @@
                     HorizontalAlignment="Left"
                     Margin="10 0 0 10"
                     VerticalAlignment="Center"
-                    materialDesign:HintAssist.Hint="Mã chuyên môn"
+                    materialDesign:HintAssist.Hint="Tên chuyên môn"
                     FontSize="12"
                     SelectionChanged="MacmText_SelectionChanged"
                     materialDesign:TextFieldAssist.HasClearButton="True" />
@@ -311,7 +311,7 @@
             <Grid Grid.Column="1" Grid.Row="8" Margin="5">
                 <TextBox x:Name="tiendoText" Margin="10 0 10 10" Width="100" HorizontalAlignment="Left"
                          IsEnabled="False"
-                         materialDesign:HintAssist.Hint="Progress"
+                         materialDesign:HintAssist.Hint="Tiến độ"
                          FontSize="12"
                          materialDesign:TextFieldAssist.HasClearButton="True"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" >

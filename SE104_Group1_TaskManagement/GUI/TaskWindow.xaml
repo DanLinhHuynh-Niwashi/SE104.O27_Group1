@@ -24,7 +24,7 @@
 
                 <TextBlock HorizontalAlignment="Left" 
                            VerticalAlignment="Center" 
-                           Text="MÀN HÌNH CONG VIEC"
+                           Text="MÀN HÌNH CÔNG VIỆC"
                            FontWeight="Bold"
                            FontSize="22" >
                 </TextBlock>
@@ -134,8 +134,8 @@
                             <DataGridTextColumn Header="Tiến độ" Binding="{Binding TIENDO}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Bắt đầu" Binding="{Binding TSTART}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Kết thúc" Binding="{Binding TEND}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Yêu cầu" Binding="{Binding YCDINHKEM}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Tệp đính kèm" Binding="{Binding TEPDINHKEM}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Yêu cầu" Binding="{Binding YCDK}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Tệp đính kèm" Binding="{Binding TEPDK}" IsReadOnly="True" Width="*"/>
                             <DataGridTemplateColumn Header="Operations" IsReadOnly="True" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -165,7 +165,7 @@
 
                             <StackPanel   Orientation="Vertical" Margin="0 10 0 0">
 
-                                <StackPanel   Orientation="Vertical" Margin="10 0 0 10">
+                                <StackPanel   Orientation="Vertical">
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox x:Name="cmCheck" Width="30"/>
                                         <TextBlock Text="Chuyên môn"/>
@@ -184,13 +184,13 @@
 
                                 <StackPanel Orientation="Horizontal">
                                     <CheckBox x:Name="nvCheck" Width="30"/>
-                                    <TextBlock Text="Phan cong"/>
+                                    <TextBlock Text="Phân công"/>
                                 </StackPanel>
                                 <ComboBox
                                  x:Name="nvText"
                                  Margin="10 0 0 10"
                                  VerticalAlignment="Center"
-                                 materialDesign:HintAssist.Hint="Nhan vien"
+                                 materialDesign:HintAssist.Hint="Nhan viên"
                                  FontSize="12"
                                  materialDesign:TextFieldAssist.HasClearButton="True"
                                  Style="{StaticResource MaterialDesignComboBox}"/>
@@ -199,7 +199,7 @@
 
                             <StackPanel Height="20" Orientation="Horizontal">
                                 <CheckBox Width="30" x:Name="TStartCheck"/>
-                                <TextBlock Text="Bat dau" />
+                                <TextBlock Text="Bắt đầu" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
@@ -234,7 +234,7 @@
 
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox Width="20" Margin="0 10 0 0" x:Name="progressCheck"/>
-                                <TextBlock Text="Tien do" Margin="0 10 0 0"/>
+                                <TextBlock Text="Tiến độ" Margin="0 10 0 0"/>
                                 <TextBox x:Name="ProgressTextBox" Margin="5 0 0 0" Width="60"/>
                             </StackPanel>
                         </ListView>

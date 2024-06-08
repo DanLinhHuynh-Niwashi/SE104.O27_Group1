@@ -36,23 +36,23 @@ namespace GUI
         BindingList<DTO_CongViec> members = new BindingList<DTO_CongViec>();
         Dictionary<string, DTO_ChuyenMon> cm = BUS_StaticTables.Instance.GetAllDataCM();
         Dictionary<string, DTO_NhanVien> nv = BUS_StaticTables.Instance.GetAllDataNV();
+        CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
 
         string crnMADA;
 
         public TaskWindow(string mada)
         {
             InitializeComponent();
-            crnMADA = mada;
-            CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
             ci.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
             Thread.CurrentThread.CurrentCulture = ci;
+            crnMADA = mada;
             MaDa.Text = mada;
             membersDataGrid.LoadingRow += MembersDataGrid_LoadingRow;
             cmText.ItemsSource = cm;
             cmText.DisplayMemberPath = "Value.TENCM";
             cmText.SelectedValuePath = "Value.MACM";
             nvText.ItemsSource = nv;
-            nvText.DisplayMemberPath = "Value.MANV";
+            nvText.DisplayMemberPath = "Value.TENNV";
             nvText.SelectedValuePath = "Value.MANV";
             members = taskManager.GetByMaDA(crnMADA);
             showMember();
@@ -61,7 +61,6 @@ namespace GUI
         private void MembersDataGrid_LoadingRow(object? sender, DataGridRowEventArgs e)
         {
             var firstCol = membersDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "C");
-            var cmCol = membersDataGrid.Columns.First(c => c.Header.ToString() == "Mã chuyên môn");
 
             e.Row.Loaded += (s, args) =>
             {
@@ -79,13 +78,6 @@ namespace GUI
                             chBx.Visibility = Visibility.Visible;
                         }
                     }
-                }
-                if (cmCol != null)
-                {
-                    var chBx = cmCol.GetCellContent(row) as TextBlock;
-                    DTO_ChuyenMon temp = new DTO_ChuyenMon();
-                    cm.TryGetValue(cv.MACM, out temp);
-                    chBx.Text = temp.TENCM;
                 }
             };
         }
@@ -161,8 +153,8 @@ namespace GUI
 
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {
-            long ngsl = -1;
-            long ngsh = -1;
+            long ngsl = 0;
+            long ngsh = 0;
             DTO_CongViec filter = new DTO_CongViec();
             filter.MADA = crnMADA;
             filter.MACV = searchText.Text != null ? searchText.Text.ToString() : "";
@@ -172,11 +164,13 @@ namespace GUI
             {
                 filter.MACM = cmText.SelectedValue != null ? cmText.SelectedValue.ToString() : "";
             }
+
             if (ngansachCheck.IsChecked == true)
             {
-                ngsl = long.TryParse(NganSachLTextBox.Text, out long tempLResult) ? tempLResult : -1L;
-                ngsh = long.TryParse(NganSachHTextBox.Text, out long tempHResult) ? tempHResult : -1L;
+                ngsl = long.TryParse(NganSachLTextBox.Text, out long tempLResult) ? tempLResult : 0L;
+                ngsh = long.TryParse(NganSachHTextBox.Text, out long tempHResult) ? tempHResult : 0L;
             }
+
             if (TStartCheck.IsChecked == true)
             {
                 filter.TSTART = TStartPicker.Text != null ? TStartPicker.Text.ToString() : "";
@@ -187,7 +181,7 @@ namespace GUI
             }
             if (progressCheck.IsChecked == true)
             {
-                filter.TIENDO = int.Parse(ProgressTextBox.Text != null ? ProgressTextBox.Text.ToString() : "");
+                filter.TIENDO = int.TryParse(ProgressTextBox.Text, out int tempResult) ? tempResult : 0;
             }
             members = taskManager.FindCV(filter, ngsl, ngsh);
             showMember();
@@ -218,11 +212,6 @@ namespace GUI
                     // Do something with the item...
                 }
             }
-        }
-
-        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void ButtonDelete_Click(object sender, RoutedEventArgs e)
