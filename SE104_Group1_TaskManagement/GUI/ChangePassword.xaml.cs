@@ -22,7 +22,6 @@ namespace GUI
     public partial class ChangePassword : Window
     {
         int mode = -1;
-        BUS_TaiKhoan tkManager = new BUS_TaiKhoan();
         public ChangePassword(int mode)
         {
             InitializeComponent();
@@ -43,7 +42,7 @@ namespace GUI
         {
             if (mode == 1)
             {
-                (string, DTO_TaiKhoan) newTk = tkManager.ChangePassWord(LoginWindow.crnUser.EMAIL, recoverText.Text, newPassText.Password);
+                (string, DTO_TaiKhoan?) newTk = BUS_TaiKhoan.Instance.ChangePassWord(LoginWindow.crnUser.EMAIL, recoverText.Text, newPassText.Password);
                 if (newTk.Item2 != null && newTk.Item2.MANV!="")
                 {
                     LoginWindow.crnUser = newTk.Item2;

@@ -6,7 +6,9 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        Title="AddAndUpdateTask" Height="850" Width="500" WindowStartupLocation="CenterScreen">
+        Title="AddAndUpdateTask"
+        Height="750"
+        Width="550" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <DataTemplate x:Key="NameTokenTemplate">
             <DataTemplate.Resources>
@@ -21,7 +23,7 @@
                 <Border.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#FFFFD0A0" Offset="0"/>
-                        <GradientStop Color="#FFAB5600" Offset="1"/>
+                        <GradientStop Color="MediumPurple" Offset="1"/>
                     </LinearGradientBrush>
                 </Border.Background>
                 <Grid HorizontalAlignment="Left" Width="Auto">
@@ -29,8 +31,23 @@
                         <ColumnDefinition Width="0.21*"/>
                         <ColumnDefinition Width="0.79*"/>
                     </Grid.ColumnDefinitions>
-                    <Image HorizontalAlignment="Right" Source="14-tag.png" Stretch="None" Width="Auto" Grid.Column="0" VerticalAlignment="Center"/>
-                    <TextBlock TextWrapping="NoWrap" Text="{Binding}" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Margin="10,0,0,0" FontWeight="Bold"/>
+                    <Button Width="20"
+                            Height="20"
+                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                            ToolTip="Discard"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left"
+                            Click="Del_PC_Button_Click">
+                        <materialDesign:PackIcon Kind="Cancel" />
+                    </Button>
+                    <TextBlock TextWrapping="NoWrap"
+                               Text="{Binding}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Grid.Column="1"
+                               Margin="10,0,0,0"
+                               FontWeight="Bold" />
                 </Grid>
             </Border>
             <DataTemplate.Triggers>
@@ -79,9 +96,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
@@ -93,15 +108,9 @@
                            HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Column="0" Grid.Row="1" Margin="0 0 5 0">
-                <TextBlock Text="Mã công việc" 
-                           FontSize="15"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center" 
-                           HorizontalAlignment="Right"/>
-            </Grid>
 
-            <Grid Grid.Column="0" Grid.Row="2" Margin="0 0 5 0">
+
+            <Grid Grid.Column="0" Grid.Row="1" Margin="0 0 5 0">
                 <TextBlock Text="Tên công việc" 
                FontSize="15"
                FontWeight="Bold"
@@ -109,7 +118,7 @@
                HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Column="0" Grid.Row="4" Margin="0 0 5 0">
+            <Grid Grid.Column="0" Grid.Row="3" Margin="0 0 5 0">
                 <TextBlock Text="Phân công" 
                FontSize="15"
                FontWeight="Bold"
@@ -117,7 +126,7 @@
                HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Column="0" Grid.Row="3" Margin="0 0 5 0">
+            <Grid Grid.Column="0" Grid.Row="2" Margin="0 0 5 0">
                 <TextBlock Text="Tên chuyên môn" 
                FontSize="15"
                FontWeight="Bold"
@@ -125,23 +134,17 @@
                HorizontalAlignment="Right"/>
             </Grid>
 
+            <Grid Grid.Column="0" Grid.Row="4" Margin="0 0 5 0">
+                <TextBlock Text="Bắt đầu" 
+               FontSize="15"
+               FontWeight="Bold"
+               VerticalAlignment="Center" 
+               HorizontalAlignment="Right"/>
+            </Grid>
+
+
+
             <Grid Grid.Column="0" Grid.Row="5" Margin="0 0 5 0">
-                <TextBlock Text="Thời gian bắt đầu" 
-               FontSize="15"
-               FontWeight="Bold"
-               VerticalAlignment="Center" 
-               HorizontalAlignment="Right"/>
-            </Grid>
-
-            <Grid Grid.Column="0" Grid.Row="6" Margin="0 0 5 0">
-                <TextBlock Text="Thời gian kết thúc" 
-               FontSize="15"
-               FontWeight="Bold"
-               VerticalAlignment="Center" 
-               HorizontalAlignment="Right"/>
-            </Grid>
-
-            <Grid Grid.Column="0" Grid.Row="7" Margin="0 0 5 0">
                 <TextBlock Text="Đã dùng + Ngân sách" 
                            FontSize="15"
                            FontWeight="Bold"
@@ -150,7 +153,7 @@
             </Grid>
 
 
-            <Grid Grid.Column="0" Grid.Row="8" Margin="0 0 5 0">
+            <Grid Grid.Column="0" Grid.Row="6" Margin="0 0 5 0">
                 <TextBlock Text="Tiến độ" 
                            FontSize="15"
                            FontWeight="Bold"
@@ -159,7 +162,7 @@
             </Grid>
 
 
-            <Grid Grid.Column="0" Grid.Row="9" Margin="0 0 5 0">
+            <Grid Grid.Column="0" Grid.Row="7" Margin="0 0 5 0">
                 <TextBlock Text="Yêu cầu đính kèm" 
                            FontSize="15"
                            FontWeight="Bold"
@@ -167,7 +170,7 @@
                            HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Column="0" Grid.Row="10" Margin="0 0 5 0">
+            <Grid Grid.Column="0" Grid.Row="8" Margin="0 0 5 0">
                     <TextBlock Text="Tep đính kèm" 
                            FontSize="15"
                            FontWeight="Bold"
@@ -175,31 +178,41 @@
                            HorizontalAlignment="Right"/>    
              </Grid>
 
-            <Grid Grid.Column="1" Grid.Row="0" Margin="5">
-                <TextBox
-                    x:Name="madaText"
-                    IsEnabled="False"
-                    Margin="10 0 0 10"
-                    VerticalAlignment="Center"
-                    materialDesign:HintAssist.Hint="Mã dự án"
-                    FontSize="12"
-                    materialDesign:TextFieldAssist.HasClearButton="True"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <Grid Grid.Column="1"
+                  Grid.Row="0"
+                  Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="madaText"
+                         IsEnabled="False"
+                         Margin="10 0 0 10"
+                         VerticalAlignment="Center"
+                         materialDesign:HintAssist.Hint="Mã dự án"
+                         FontSize="12"
+                         materialDesign:TextFieldAssist.HasClearButton="True"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                <TextBlock Text="Mã công việc"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Margin="10"
+                           Grid.Column="1" />
+                <TextBox x:Name="macvText"
+                         IsEnabled="False"
+                         Margin="10 0 0 10"
+                         VerticalAlignment="Center"
+                         materialDesign:HintAssist.Hint="Mã công việc"
+                         FontSize="12"
+                         materialDesign:TextFieldAssist.HasClearButton="True"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         Grid.Column="2" />
             </Grid>
 
             <Grid Grid.Column="1" Grid.Row="1" Margin="5">
-                <TextBox
-                    x:Name="macvText"
-                    IsEnabled="False"
-                    Margin="10 0 0 10"
-                    VerticalAlignment="Center"
-                    materialDesign:HintAssist.Hint="Mã công việc"
-                    FontSize="12"
-                    materialDesign:TextFieldAssist.HasClearButton="True"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-            </Grid>
-
-            <Grid Grid.Column="1" Grid.Row="2" Margin="5">
                     <TextBox
                         x:Name="tencvText"
                     Margin="10 0 0 10"
@@ -210,7 +223,7 @@
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
                 </Grid>
 
-            <Grid Grid.Column="1" Grid.Row="4" Margin="5">
+            <Grid Grid.Column="1" Grid.Row="3" Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -234,14 +247,11 @@
                     MinHeight="40" 
                     VerticalScrollBarVisibility="Auto">
                     <FlowDocument>
-                        <Paragraph>
-                            <Run />
-                        </Paragraph>
                     </FlowDocument>
                 </local:TokenizingControl>
             </Grid>
             
-            <Grid Grid.Column="1" Grid.Row="3" Margin="5">
+            <Grid Grid.Column="1" Grid.Row="2" Margin="5">
                 <ComboBox            
                     x:Name="macmText"
                     Width="200"
@@ -254,32 +264,43 @@
                     materialDesign:TextFieldAssist.HasClearButton="True" />
             </Grid>
 
-            <Grid Grid.Column="1" Grid.Row="5" Margin="5">
+            <Grid Grid.Column="1" Grid.Row="4" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
                 <DatePicker
                     x:Name="TStartPicker"
-                    Margin="10 0 0 10"
+                    Margin="10 10 10 10"
                     HorizontalAlignment="Left"
-                    Width="200"
+                    Width="110"
                     FontSize="12"
                     materialDesign:HintAssist.Hint="Pick Date"
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     />
+
+                <TextBlock Text="Kết thúc"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Margin="10"
+                           Grid.Column="1" />
+
+                <DatePicker x:Name="TEndPicker"
+                            Margin="10 0 0 10"
+                            HorizontalAlignment="Left"
+                            Width="110"
+                            FontSize="12"
+                            materialDesign:HintAssist.Hint="Pick Date"
+                            materialDesign:TextFieldAssist.HasClearButton="True" 
+                            Grid.Column="2"/>
             </Grid>
 
-            <Grid Grid.Column="1" Grid.Row="6" Margin="5">
-                <DatePicker
-                    x:Name="TEndPicker"
-                    Margin="10 0 0 10"
-                    HorizontalAlignment="Left"
-                    Width="200"
-                    FontSize="12"
-                    materialDesign:HintAssist.Hint="Pick Date"
-                    materialDesign:TextFieldAssist.HasClearButton="True"
+       
 
-                    />
-            </Grid>
-
-            <Grid Grid.Column="1" Grid.Row="7" Margin="5">
+            <Grid Grid.Column="1" Grid.Row="5" Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -308,17 +329,33 @@
                 </Grid>
             </Grid>
 
-            <Grid Grid.Column="1" Grid.Row="8" Margin="5">
-                <TextBox x:Name="tiendoText" Margin="10 0 10 10" Width="100" HorizontalAlignment="Left"
-                         IsEnabled="False"
-                         materialDesign:HintAssist.Hint="Tiến độ"
-                         FontSize="12"
-                         materialDesign:TextFieldAssist.HasClearButton="True"
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" >
-                </TextBox>
+            <Grid Grid.Column="1" Grid.Row="6" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Slider x:Name="tiendoText"
+                        IsEnabled="False"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Width="150"
+                        Minimum="0"
+                        Maximum="100"
+                        Value="0"
+                        IsSnapToTickEnabled="True"
+                        TickFrequency="1"
+                        Margin="20 0 10 0"
+                        Style="{StaticResource MaterialDesignDiscreteHorizontalSlider}" />
+                <Label Content="{Binding ElementName=tiendoText, Path=Value}"
+                       HorizontalAlignment="Left"
+                       Height="26"
+                       VerticalAlignment="Center"
+                       FontWeight="Bold"
+                       FontSize="14" 
+                       Grid.Column="2"/>
             </Grid>
 
-            <Grid Grid.Column="1" Grid.Row="9" Margin="5">
+            <Grid Grid.Column="1" Grid.Row="7" Margin="5">
                 <TextBox
                     x:Name="ycdkText"
                     Margin="10 0 0 10"
@@ -329,15 +366,41 @@
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
             </Grid>
 
-            <Grid Grid.Column="1" Grid.Row="10" Margin="5 0 0 0">
-                <TextBox
-    x:Name="dkText"
-    Margin="10 0 0 10"
-    VerticalAlignment="Center"
-    materialDesign:HintAssist.Hint="Tep dính kèm"
-    FontSize="12"
-    materialDesign:TextFieldAssist.HasClearButton="True"
-    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <Grid Grid.Column="1" Grid.Row="8" Margin="5 0 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="70"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="dkText"
+                         Margin="10 0 0 10"
+                         VerticalAlignment="Center"
+                         materialDesign:HintAssist.Hint="Tep dính kèm"
+                         FontSize="12"
+                         materialDesign:TextFieldAssist.HasClearButton="True"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         PreviewKeyDown="dkText_PreviewKeyDown" />
+                <local:TokenizingControl Grid.Column="1"
+                                         x:Name="dkTokenizer"
+                                         VerticalAlignment="Center"
+                                         TokenTemplate="{DynamicResource NameTokenTemplate}"
+                                         FontSize="12"
+                                         MinHeight="40"
+                                         VerticalScrollBarVisibility="Auto">
+                    <FlowDocument>
+                    </FlowDocument>
+                </local:TokenizingControl>
+                <Button x:Name="RollBack"
+                        Width="30"
+                        Height="30"
+                        Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                        ToolTip="Reset"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Grid.Column="2"
+                        Click="RollBack_Click">
+                    <materialDesign:PackIcon Kind="Backburger" />
+                </Button>
             </Grid>
         </Grid>
 

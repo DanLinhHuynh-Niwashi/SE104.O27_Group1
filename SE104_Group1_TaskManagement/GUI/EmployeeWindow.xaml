@@ -112,9 +112,14 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTextColumn Header="Chuyên môn" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Giới tính"
+                                                Binding="{Binding GENDER}"
+                                                IsReadOnly="True"
+                                                Width="*" />
                             <DataGridTextColumn Header="Level" Binding="{Binding LEVEL}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Email" Binding="{Binding EMAIL}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Ngày sinh" Binding="{Binding NGAYSINH}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Ngày sinh"
+                                                Binding="{Binding NGAYSINH, StringFormat=\{0:dd.MM.yyyy\}}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="SĐT" Binding="{Binding PHONE}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Ghi chú" Binding="{Binding GHICHU}" IsReadOnly="True" Width="*"/>
                             <DataGridTemplateColumn Header="Operations" IsReadOnly="True" Width="auto">

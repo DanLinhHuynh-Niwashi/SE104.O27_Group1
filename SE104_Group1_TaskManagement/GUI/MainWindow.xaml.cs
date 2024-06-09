@@ -34,6 +34,11 @@ namespace GUI
             {
                 ReportBtn.Visibility = Visibility.Collapsed;
             }
+
+            if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "SuaQD") == false)
+            {
+                RuleBtn.Visibility = Visibility.Collapsed;
+            }
         }
 
         void setUser()

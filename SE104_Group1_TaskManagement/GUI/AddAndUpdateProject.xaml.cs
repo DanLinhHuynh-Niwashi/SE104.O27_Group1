@@ -23,9 +23,8 @@ namespace GUI
     /// </summary>
     public partial class AddAndUpdateProject : Window
     {
-        BUS_DuAn projectManager = new BUS_DuAn();
         DTO_DuAn initializeDA = new DTO_DuAn();
-        public AddAndUpdateProject(DTO_DuAn inputDA = null)
+        public AddAndUpdateProject(DTO_DuAn? inputDA = null)
         {
             InitializeComponent();
             BindingDropDown();
@@ -57,8 +56,8 @@ namespace GUI
                 madaText.Text = initializeDA.MADA;
                 tendaText.Text = initializeDA.TENDA;
                 statText.Text = initializeDA.STAT;
-                TStartPicker.Text = initializeDA.TSTART;
-                TEndPicker.Text = initializeDA.TEND;
+                TStartPicker.SelectedDate = initializeDA.TSTART;
+                TEndPicker.SelectedDate = initializeDA.TEND;
                 ngansachText.Text = initializeDA.NGANSACH.ToString();
                 lskText.SelectedValue = initializeDA.MALSK;
                 ownerText.SelectedValue = initializeDA.MAOWNER;
@@ -86,13 +85,13 @@ namespace GUI
             newDA.TENDA = tendaText.Text;
             newDA.STAT = statText.Text != null ? statText.Text.ToString() : "";
             newDA.MADA = madaText.Text;
-            newDA.TSTART = TStartPicker.Text;
-            newDA.TEND = TEndPicker.Text;
+            newDA.TSTART = TStartPicker.SelectedDate;
+            newDA.TEND = TEndPicker.SelectedDate;
             newDA.NGANSACH = long.TryParse(ngansachText.Text, out long tempResult) ? tempResult : -1;
             newDA.MALSK = lskText.SelectedValue != null ? lskText.SelectedValue.ToString() : "";
             newDA.MAOWNER = ownerText.Text;
             newDA.MAOWNER = ownerText.SelectedValue != null ? ownerText.SelectedValue.ToString() : "";
-            (bool, string) res = projectManager.AddData(newDA);
+            (bool, string) res = BUS_DuAn.Instance.AddData(newDA);
 
             
 
@@ -112,7 +111,7 @@ namespace GUI
         {
             if (initializeDA.STAT != "On-going")
             {
-                (bool, string) res1 = projectManager.SetStatus(initializeDA.MADA, statText.Text.ToString());
+                (bool, string) res1 = BUS_DuAn.Instance.SetStatus(initializeDA.MADA, statText.Text.ToString());
                 if (res1.Item1 == true)
                 {
                     MessageBox.Show("Sửa du an thành công!");
@@ -134,9 +133,9 @@ namespace GUI
             initializeDA.TENDA = tendaText.Text;
             initializeDA.STAT = statText.Text.ToString();
             initializeDA.NGANSACH = long.TryParse(ngansachText.Text, out long tempResult) ? tempResult : -1;
-            initializeDA.TSTART = TStartPicker.Text;
-            initializeDA.TEND = TEndPicker.Text;
-            (bool, string) res = projectManager.EditProject(initializeDA);
+            initializeDA.TSTART = TStartPicker.SelectedDate;
+            initializeDA.TEND = TEndPicker.SelectedDate;
+            (bool, string) res = BUS_DuAn.Instance.EditProject(initializeDA);
 
             if (res.Item1 == true)
             {

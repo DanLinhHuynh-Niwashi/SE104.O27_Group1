@@ -6,7 +6,7 @@ using System.Windows.Documents;
 
 namespace GUI
 {
-    public class TokenizingControl : RichTextBox
+    public class TokenizingControl : FlowDocumentScrollViewer
     {
         public static readonly DependencyProperty TokenTemplateProperty =
             DependencyProperty.Register("TokenTemplate", typeof(DataTemplate), typeof(TokenizingControl));
@@ -17,20 +17,41 @@ namespace GUI
             set { SetValue(TokenTemplateProperty, value); }
         }
 
-        public Func<string, object> TokenMatcher { get; set; }
 
         public List<string> getAllDataPresented()
         {
             List<string> data = new List<string>();
-            var para = CaretPosition.Paragraph;
-
+            var para = Document.Blocks.FirstBlock as Paragraph;
+            if (para == null)
+            {
+                para = new Paragraph();
+                Document.Blocks.Add(para);
+            }
             foreach (InlineUIContainer inline in para.Inlines)
             {
-                data.Add(((ContentPresenter)inline.Child).Content.ToString());
+                ContentPresenter child = inline.Child as ContentPresenter;
+                if (child == null) continue;
+                if (child.Content == null) continue;
+                data.Add(child.Content.ToString());
             }
             return data;
         }
 
+        public bool deleteToken(InlineUIContainer inline)
+        {
+            var para = Document.Blocks.FirstBlock as Paragraph;
+            if (para == null)
+            {
+                para = new Paragraph();
+                Document.Blocks.Add(para);
+            }
+            if (para.Inlines.Contains(inline))
+            {
+                para.Inlines.Remove(inline);
+                return true;
+            }
+            return false;
+        }
         public TokenizingControl()
         {
 
@@ -38,54 +59,29 @@ namespace GUI
 
         public void AddToken(string text)
         {
-            if (TokenMatcher != null)
-            {
-                var token = TokenMatcher(text);
-                if (token != null)
-                {
-                    ReplaceTextWithToken(text, token);
-                }
-            }
+            ReplaceTextWithToken(text);
+
         }
 
-        private void ReplaceTextWithToken(string inputText, object token)
+        private void ReplaceTextWithToken(string inputText)
         {
-            // Remove the handler temporarily as we will be modifying tokens below, causing more TextChanged events
-
-            var para = CaretPosition.Paragraph;
-
-            var matchedRun = para.Inlines.FirstOrDefault(inline =>
+            var para = Document.Blocks.FirstBlock as Paragraph;
+            if (para == null)
             {
-                var run = inline as Run;
-                return (run != null && run.Text.EndsWith(inputText));
-            }) as Run;
-            if (matchedRun != null) // Found a Run that matched the inputText
-            {
-                var tokenContainer = CreateTokenContainer(inputText, token);
-                para.Inlines.InsertBefore(matchedRun, tokenContainer);
-
-                // Remove only if the Text in the Run is the same as inputText, else split up
-                if (matchedRun.Text == inputText)
-                {
-                    para.Inlines.Remove(matchedRun);
-                }
-                else // Split up
-                {
-                    var index = matchedRun.Text.IndexOf(inputText) + inputText.Length;
-                    var tailEnd = new Run(matchedRun.Text.Substring(index));
-                    para.Inlines.InsertAfter(matchedRun, tailEnd);
-                    para.Inlines.Remove(matchedRun);
-                }
-            }
+                para = new Paragraph();
+                Document.Blocks.Add(para);
+            }    
+            var tokenContainer = CreateTokenContainer(inputText);
+            para.Inlines.Add(tokenContainer);
         }
 
-        private InlineUIContainer CreateTokenContainer(string inputText, object token)
+        private InlineUIContainer CreateTokenContainer(string inputText)
         {
             // Note: we are not using the inputText here, but could be used in future
 
             var presenter = new ContentPresenter()
             {
-                Content = token,
+                Content = inputText,
                 ContentTemplate = TokenTemplate,
             };
 

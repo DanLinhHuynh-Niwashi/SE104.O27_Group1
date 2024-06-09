@@ -14,7 +14,7 @@ namespace DAL
     public class DAL_TaiKhoan : BaseClass
     {
 
-        public (DTO_TaiKhoan, string) CheckLogicDTO(DTO_TaiKhoan taikhoan)
+        public (DTO_TaiKhoan?, string) CheckLogicDTO(DTO_TaiKhoan taikhoan)
         {
             DTO_TaiKhoan user = new DTO_TaiKhoan();
             // Hàm connect tới CSDL 
@@ -113,7 +113,7 @@ namespace DAL
             }
         }
 
-        public (string, DTO_TaiKhoan) ChangePassword(string email, string oldPassword, string newPassword)
+        public (string, DTO_TaiKhoan?) ChangePassword(string email, string oldPassword, string newPassword)
         {
             DTO_TaiKhoan res = new DTO_TaiKhoan();
             try

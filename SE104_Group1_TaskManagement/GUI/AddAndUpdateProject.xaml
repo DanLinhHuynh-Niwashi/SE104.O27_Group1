@@ -6,7 +6,9 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        Title="AddAndUpdateProject" Height="750" Width="500" WindowStartupLocation="CenterScreen">
+        Title="AddAndUpdateProject"
+        Height="750"
+        Width="550" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -48,7 +50,6 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
-                <RowDefinition/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Column="0" Grid.Row="0" Margin="0 0 5 0">
@@ -68,20 +69,13 @@
             </Grid>
 
             <Grid Grid.Column="0" Grid.Row="2" Margin="0 0 5 0">
-                <TextBlock Text="Thời gian bắt đầu" 
+                <TextBlock Text="Bắt đầu" 
                FontSize="15"
                FontWeight="Bold"
                VerticalAlignment="Center" 
                HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Column="0" Grid.Row="3" Margin="0 0 5 0">
-                <TextBlock Text="Thời gian kết thúc" 
-               FontSize="15"
-               FontWeight="Bold"
-               VerticalAlignment="Center" 
-               HorizontalAlignment="Right"/>
-            </Grid>
 
             <Grid Grid.Column="0" Grid.Row="4" Margin="0 0 5 0">
                 <TextBlock Text="Ngân sách" 
@@ -91,7 +85,7 @@
                HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Column="0" Grid.Row="5" Margin="0 0 5 0">
+            <Grid Grid.Column="0" Grid.Row="3" Margin="0 0 5 0">
                 <TextBlock Text="Tình trạng" 
                FontSize="15"
                FontWeight="Bold"
@@ -99,7 +93,7 @@
                HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Column="0" Grid.Row="6" Margin="0 0 5 0">
+            <Grid Grid.Column="0" Grid.Row="5" Margin="0 0 5 0">
                 <TextBlock Text="Mã loại sự kiện" 
                FontSize="15"
                FontWeight="Bold"
@@ -107,7 +101,7 @@
                HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Column="0" Grid.Row="7" Margin="0 0 5 0">
+            <Grid Grid.Column="0" Grid.Row="6" Margin="0 0 5 0">
                 <TextBlock Text="Mã người quản lý" 
                            FontSize="15"
                            FontWeight="Bold"
@@ -138,28 +132,38 @@
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
             </Grid>
 
-            <Grid Grid.Column="1" Grid.Row="2" Margin="5">
-                <DatePicker
-                    x:Name="TStartPicker"
-                    Margin="10 0 0 10"
-                    HorizontalAlignment="Left"
-                    Width="200"
-                    FontSize="15"
-                    materialDesign:HintAssist.Hint="Pick Date"
-                    materialDesign:TextFieldAssist.HasClearButton="True"
-                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
-            </Grid>
+            <Grid Grid.Column="1"
+                  Grid.Row="2"
+                  Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <DatePicker x:Name="TStartPicker"
+                            Margin="10 10 10 10"
+                            HorizontalAlignment="Left"
+                            Width="110"
+                            FontSize="12"
+                            materialDesign:HintAssist.Hint="Pick Date"
+                            materialDesign:TextFieldAssist.HasClearButton="True" />
 
-            <Grid Grid.Column="1" Grid.Row="3" Margin="5">
-                <DatePicker
-                    x:Name="TEndPicker"
-                    Margin="10 0 0 10"
-                    HorizontalAlignment="Left"
-                    Width="200"
-                    FontSize="15"
-                    materialDesign:HintAssist.Hint="Pick Date"
-                    materialDesign:TextFieldAssist.HasClearButton="True"
-                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                <TextBlock Text="Kết thúc"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Margin="10"
+                           Grid.Column="1" />
+
+                <DatePicker x:Name="TEndPicker"
+                            Margin="10 0 0 10"
+                            HorizontalAlignment="Left"
+                            Width="110"
+                            FontSize="12"
+                            materialDesign:HintAssist.Hint="Pick Date"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            Grid.Column="2" />
             </Grid>
 
             <Grid Grid.Column="1" Grid.Row="4" Margin="5">
@@ -173,8 +177,12 @@
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
             </Grid>
 
-            <Grid Grid.Column="1" Grid.Row="5" Margin="5">
-                <ComboBox x:Name="statText">
+            <Grid Grid.Column="1" Grid.Row="3" Margin="5">
+                <ComboBox x:Name="statText"
+                          Margin="10 0 0 10"
+                          VerticalAlignment="Center"
+                          FontSize="15"
+                          materialDesign:TextFieldAssist.HasClearButton="True">
                     <ComboBoxItem Content="Completed"/>
                     <ComboBoxItem Content="Delayed"/>
                     <ComboBoxItem Content="Canceled"/>
@@ -183,7 +191,7 @@
                
             </Grid>
 
-            <Grid Grid.Column="1" Grid.Row="6" Margin="5">
+            <Grid Grid.Column="1" Grid.Row="5" Margin="5">
                 <ComboBox
                     x:Name="lskText"
                     Margin="10 0 0 10"
@@ -193,7 +201,7 @@
                     materialDesign:TextFieldAssist.HasClearButton="True" />
             </Grid>
 
-            <Grid Grid.Column="1" Grid.Row="7" Margin="5">
+            <Grid Grid.Column="1" Grid.Row="6" Margin="5">
                 <!--<TextBox
     x:Name="ownerText"
     Margin="10 0 0 10"

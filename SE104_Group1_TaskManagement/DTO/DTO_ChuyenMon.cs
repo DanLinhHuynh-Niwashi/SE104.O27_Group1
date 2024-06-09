@@ -14,8 +14,8 @@ namespace DTO
         bool _isDeleted;
         public DTO_ChuyenMon(string macm="", string cm = "", string inshort = "", bool isDeleted = false)
         {
-            MACM = macm;
-            TENCM = cm;
+            _macm = macm;
+            _cm = cm;
             _inshort = inshort;
             _isDeleted = isDeleted;
         }    

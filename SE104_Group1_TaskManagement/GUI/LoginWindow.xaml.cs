@@ -21,7 +21,6 @@ namespace GUI
     /// </summary>
     public partial class LoginWindow : Window
     {
-        public static BUS_TaiKhoan taikhoanManager = new BUS_TaiKhoan();
         public static DTO_TaiKhoan crnUser = new DTO_TaiKhoan();
         public LoginWindow()
         {
@@ -32,7 +31,7 @@ namespace GUI
         {
             DTO_TaiKhoan user = new DTO_TaiKhoan("", LgName.Text, Password.Password);
             string str = "";
-            (crnUser, str) = taikhoanManager.Login(user);
+            (crnUser, str) = BUS_TaiKhoan.Instance.Login(user);
             if (crnUser == null)
             {
                 MessageBox.Show("Mat khau hoac email sai, moi nhap lai");

@@ -41,6 +41,7 @@ namespace GUI
             CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
             ci.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
             Thread.CurrentThread.CurrentCulture = ci;
+
             membersDataGrid.LoadingRow += MembersDataGrid_LoadingRow;
             ownerText.ItemsSource = nv;
             ownerText.DisplayMemberPath = "Value.TENNV";
@@ -63,6 +64,8 @@ namespace GUI
         private void MembersDataGrid_LoadingRow(object? sender, DataGridRowEventArgs e)
         {
             var firstCol = membersDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "C");
+            var lskCol = membersDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "Loại sự kiện");
+            var ownerCol = membersDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "Quản lý");
 
             e.Row.Loaded += (s, args) =>
             {
@@ -199,7 +202,7 @@ namespace GUI
         {
             if (membersDataGrid.SelectedItem is DTO_DuAn selectedDA)
             {
-                UserControl view = new TaskWindow(selectedDA.MADA);
+                UserControl view = new TaskWindow(selectedDA);
 
                 if (view != null)
                 {
@@ -239,11 +242,11 @@ namespace GUI
             }
             if (TStartCheck.IsChecked == true)
             {
-                filter.TSTART = TStartPicker.Text != null ? TStartPicker.Text.ToString() : "";
+                filter.TSTART = TStartPicker.SelectedDate != null ? TStartPicker.SelectedDate : null;
             }
             if (TEndCheck.IsChecked == true)
             {
-                filter.TEND = TEndPicker.Text != null ? TEndPicker.Text.ToString() : "";
+                filter.TEND = TEndPicker.SelectedDate != null ? TEndPicker.SelectedDate : null;
             }
             members = BUS_DuAn.Instance.FindDA(filter, ngsl, ngsh);
             showMember();

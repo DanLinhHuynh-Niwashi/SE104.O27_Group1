@@ -1,8 +1,5 @@
 ﻿
-using Aspose.Pdf.Drawing;
-using Aspose.Pdf.Operators;
-using Aspose.Words;
-using Aspose.Words.Tables;
+
 using BUS;
 using DAL;
 using DTO;
@@ -31,7 +28,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-using Page = Aspose.Pdf.Page;
 
 namespace GUI
 {
@@ -43,8 +39,10 @@ namespace GUI
     public partial class ReportWindow : UserControl
     {
         public static DTO_NhanVien crnUser = new DTO_NhanVien();
-        BUS_DuAn daManager = new BUS_DuAn();
         BindingList<DTO_DuAn> projects = new BindingList<DTO_DuAn>();
+
+        Dictionary<string, DTO_NhanVien> nv = BUS_StaticTables.Instance.GetAllRawDataNV();
+        Dictionary<string, DTO_LoaiSK> lsk = BUS_StaticTables.Instance.GetAllRawDataLSK();
 
         public ReportWindow()
         {
@@ -53,41 +51,17 @@ namespace GUI
             ci.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
             Thread.CurrentThread.CurrentCulture = ci;
             projectsDataGrid.LoadingRow += ProjectsDataGrid_LoadingRow;
-            projects = daManager.GetAllData();
+            projects = BUS_DuAn.Instance.GetAllData();
 
             showProjects();
         }
 
-
-        private void ProjectsDataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
-        {
-            var firstCol = projectsDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "C");
-
-            e.Row.Loaded += (s, args) =>
-            {
-                var row = (DataGridRow)s;
-                var item = row.Item;
-
-                DTO_DuAn? da = item as DTO_DuAn;
-                if (da != null && da.MADA == LoginWindow.crnUser.MANV)
-                {
-                    if (firstCol != null)
-                    {
-                        var chBx = firstCol.GetCellContent(row) as CheckBox;
-                        if (chBx != null)
-                        {
-                            chBx.Visibility = Visibility.Collapsed;
-                        }
-                    }
-                }
-            };
-        }
         void showProjects()
         {
             projectsDataGrid.ItemsSource = projects;
             TotalEvents.Text = projects.Count.ToString();
-            TotalMoney.Text = daManager.CalTongNganSach(projects).ToString() + " VND";
-            LeftMoney.Text = (daManager.CalTongNganSach(projects) - daManager.CalTongDaDung(projects)).ToString() + " VND";
+            TotalMoney.Text = BUS_DuAn.Instance.CalTongNganSach(projects).ToString() + " VND";
+            LeftMoney.Text = (BUS_DuAn.Instance.CalTongNganSach(projects) - BUS_DuAn.Instance.CalTongDaDung(projects)).ToString() + " VND";
         }
 
         private T FindVisualParent<T>(DependencyObject child) where T : DependencyObject
@@ -121,27 +95,45 @@ namespace GUI
             }
         }
 
-        private void projectsDataGrid_Loaded(object sender, RoutedEventArgs e)
+        private void ProjectsDataGrid_LoadingRow(object? sender, DataGridRowEventArgs e)
         {
-            // Implement logic if needed
+            var firstCol = projectsDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "C");
+            var lskCol = projectsDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "Loại sự kiện");
+            e.Row.Loaded += (s, args) =>
+            {
+                var row = (DataGridRow)s;
+                var item = row.Item;
+
+                DTO_DuAn? da = item as DTO_DuAn;
+                if (da != null)
+                {
+                    if (firstCol != null)
+                    {
+                        var chBx = firstCol.GetCellContent(row) as CheckBox;
+                        if (chBx != null)
+                        {
+                            chBx.Visibility = Visibility.Visible;
+                        }
+                    }
+                }
+                if (lskCol != null)
+                {
+                    var chBx = lskCol.GetCellContent(row) as TextBlock;
+                    DTO_LoaiSK temp = new DTO_LoaiSK();
+                    if (temp != null)
+                    {
+                        lsk.TryGetValue(da.MALSK, out temp);
+                        chBx.Text = temp.TENLSK;
+                    }
+                }
+            };
         }
-
-        private void ButtonOpenMenu_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void projectsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             DTO_DuAn filter = new DTO_DuAn();
-            filter.TSTART = StartDayPicker.Text;
-            filter.TEND = EndDayPicker.Text;
-            projects = daManager.FindDA(filter, -1, -1);
+            filter.TSTART = StartDayPicker.SelectedDate;
+            filter.TEND = EndDayPicker.SelectedDate;
+            projects = BUS_DuAn.Instance.FindDA(filter, -1, -1);
             showProjects();
         }
 
@@ -165,7 +157,7 @@ namespace GUI
             // run function to draw each row
             DrawSign(e.Graphics, sender as PrintDocument, ref rowPosition);
         }
-        float[] width = { 0.07f, 0.26f, 0.09f, 0.1f, 0.1f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f };
+        float[] width = { 0.07f, 0.20f, 0.09f, 0.09f, 0.09f, 0.08f, 0.08f, 0.08f, 0.08f, 0.08f, 0.08f, 0.08f, 0.08f };
 
         private void DrawSign(Graphics g, PrintDocument p, ref int rowPosition)
         {
@@ -362,7 +354,7 @@ namespace GUI
 
         }
 
-        public Aspose.Words.Tables.Table ImportTableFromDataTable(DocumentBuilder builder, DataTable dataTable,bool importColumnHeadings)
+        /*public Aspose.Words.Tables.Table ImportTableFromDataTable(DocumentBuilder builder, DataTable dataTable,bool importColumnHeadings)
         {
             Aspose.Words.Tables.Table table = builder.StartTable();
 
@@ -420,7 +412,7 @@ namespace GUI
             builder.EndTable();
 
             return table;
-        }
+        }*/
 
         private DataTable ToDataTable(DataGrid dataGridView)
         {
@@ -433,26 +425,18 @@ namespace GUI
             int i = 0;
             foreach (DTO_DuAn temp in dataGridView.ItemsSource)
             {
-                cell[0] = temp.MADA.ToString();
-                cell[1] = temp.TENDA.ToString();
-                cell[2] = temp.MALSK.ToString();
-                cell[3] = temp.TSTART.ToString();
-                cell[4] = temp.TEND.ToString();
-                cell[5] = temp.NGANSACH.ToString();
-                cell[6] = temp.DADUNG.ToString();
-                cell[7] = temp.STAT.ToString();
-                cell[8] = temp.MAOWNER.ToString();
-
                 DataRow row = dt.NewRow();
-                row[dt.Columns[0].ColumnName] = cell[0];
-                row[dt.Columns[1].ColumnName] = cell[1];
-                row[dt.Columns[2].ColumnName] = cell[2];
-                row[dt.Columns[3].ColumnName] = cell[3];
-                row[dt.Columns[4].ColumnName] = cell[4];
-                row[dt.Columns[5].ColumnName] = cell[5];
-                row[dt.Columns[6].ColumnName] = cell[6];
-                row[dt.Columns[7].ColumnName] = cell[7];
-                row[dt.Columns[8].ColumnName] = cell[8];
+                DTO_LoaiSK templsk;
+                row[dt.Columns[0].ColumnName] = temp.MADA.ToString();
+                row[dt.Columns[1].ColumnName] = temp.TENDA.ToString();
+                row[dt.Columns[2].ColumnName] = lsk.TryGetValue(temp.MALSK, out templsk) != false ? templsk.TENLSK : temp.MALSK;
+                row[dt.Columns[3].ColumnName] = temp.TSTART.ToString();
+                row[dt.Columns[4].ColumnName] = temp.TEND.ToString();
+                row[dt.Columns[5].ColumnName] = temp.NGANSACH.ToString();
+                row[dt.Columns[6].ColumnName] = temp.DADUNG.ToString();
+                row[dt.Columns[7].ColumnName] = temp.STAT.ToString();
+                row[dt.Columns[8].ColumnName] = temp.TIENDO.ToString();
+                row[dt.Columns[9].ColumnName] = temp.MAOWNER.ToString();
                 dt.Rows.Add(row);
                 i++;
             }

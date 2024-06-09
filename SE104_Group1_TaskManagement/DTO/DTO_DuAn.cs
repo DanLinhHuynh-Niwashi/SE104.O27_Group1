@@ -13,22 +13,24 @@ namespace DTO
         string _maowner;
         string _tenda;
         long _ngansach;
-        string _tstart;
-        string _tend;
+        DateTime? _tstart;
+        DateTime? _tend;
         string _stat;
         long _dadung;
+        int _tiendo;
 
-        public DTO_DuAn(string mada = "", string malsk = "", string maowner = "", string tenda = "", long ngansach = -1, string tstart = "", string tend = "", string stat = "", long dadung = 0)
+        public DTO_DuAn(string mada = "", string malsk = "", string maowner = "", string tenda = "", long ngansach = -1, string tstart = "", string tend = "", string stat = "", long dadung = 0, int tiendo = 0)
         {
             _mada = mada;
             _malsk = malsk;
             _maowner = maowner;
             _tenda = tenda;
             _ngansach = ngansach;
-            _tstart = tstart;
-            _tend = tend;
+            _tstart = null; 
+            _tend = null;
             _stat = stat;
             _dadung = dadung;
+            _tiendo = tiendo;
         }
 
         public string MADA
@@ -46,12 +48,12 @@ namespace DTO
         public long NGANSACH
         { get { return _ngansach; } set { _ngansach = value; } }
 
-        public string TSTART
+        public DateTime? TSTART
         {
             get { return _tstart; }
             set { _tstart = value; }
         }
-        public string TEND
+        public DateTime? TEND
         { get { return _tend; } set { _tend = value; } }
 
         public string STAT
@@ -59,5 +61,8 @@ namespace DTO
 
         public long DADUNG
         { get { return _dadung; } set { _dadung = value; } }
+
+        public int TIENDO
+        { get { return _tiendo; } set { _tiendo = value; } }
     }
 }

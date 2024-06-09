@@ -55,25 +55,28 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0" Margin="5">
-                    <Button
-         Click="ButtonAdd_Click"
-         Width="50" Height="50"
-         IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-         Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
-         ToolTip="Add New" VerticalAlignment="Top">
-                        <materialDesign:PackIcon
+                        <Button Click="ButtonAdd_Click"
+                                Width="50"
+                                Name ="Add_Btn"
+                                Height="50"
+                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                                ToolTip="Add New"
+                                VerticalAlignment="Top">
+                            <materialDesign:PackIcon
              Kind="Add" />
                     </Button>
                 </Grid>
 
                 <Grid Grid.Column="1" Margin="5">
-                    <Button
-         Click="ButtonDelete_All_Click"
-         Width="50" Height="50"
-         IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-         Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
-         ToolTip="Delete">
-                        <materialDesign:PackIcon
+                        <Button Click="ButtonDelete_All_Click"
+                                Width="50"
+                                x:Name="Del_Btn"
+                                Height="50"
+                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                                ToolTip="Delete">
+                            <materialDesign:PackIcon
              Kind="Delete" />
                     </Button>
                 </Grid>
@@ -109,8 +112,13 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
                     <!--Members Data Grid-->
-                    <DataGrid Margin="10 0 20 0" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" x:Name="membersDataGrid" Style="{DynamicResource DataGridStyle1}">
+                        <DataGrid Grid.Row="0"
+                                  Margin="10 0 20 0" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" x:Name="membersDataGrid" Style="{DynamicResource DataGridStyle1}">
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Header="C" CanUserResize="False" Width="auto" ElementStyle="{StaticResource CheckBoxStyle1}">
                                 <DataGridCheckBoxColumn.HeaderTemplate>
@@ -128,19 +136,21 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Mã chuyên môn" Binding="{Binding MACM}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Chuyên môn" Binding="{Binding MACM}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Ngân sách" Binding="{Binding NGANSACH}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Đã dùng" Binding="{Binding DADUNG}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Tiến độ" Binding="{Binding TIENDO}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Bắt đầu" Binding="{Binding TSTART}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Kết thúc" Binding="{Binding TEND}" IsReadOnly="True" Width="*"/>
+                                <DataGridTextColumn Header="Bắt đầu"
+                                                    Binding="{Binding TSTART, StringFormat=\{0:dd.MM.yyyy\}}" IsReadOnly="True" Width="*"/>
+                                <DataGridTextColumn Header="Kết thúc"
+                                                    Binding="{Binding TEND, StringFormat=\{0:dd.MM.yyyy\}}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Yêu cầu" Binding="{Binding YCDK}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Tệp đính kèm" Binding="{Binding TEPDK}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Phân công" IsReadOnly="True" Width="*"/>
                             <DataGridTemplateColumn Header="Operations" IsReadOnly="True" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Style="{StaticResource gridEditButton}" Click="ButtonEdit_Click">
+                                            <Button Style="{StaticResource gridEditButton}" Click="ButtonEdit_Click" Loaded="ButtonEdit_Loaded">
                                                 <materialDesign:PackIcon Kind="PencilOutline" Style="{StaticResource gridButtonIcon}"/>
                                             </Button>
                                             <Button Margin="5 0 0 0" Style="{StaticResource gridRemoveButton}" Click="ButtonDelete_Click" Loaded="ButtonDelete_Loaded">
@@ -152,7 +162,8 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                </Grid>
+   
+                    </Grid>
 
                 <Grid Grid.Column="1">
                     <StackPanel Orientation="Vertical">

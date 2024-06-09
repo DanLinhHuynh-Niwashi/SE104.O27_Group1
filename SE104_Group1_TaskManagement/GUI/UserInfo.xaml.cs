@@ -31,10 +31,11 @@ namespace GUI
             tennvText.Text = crnUser.TENNV;
             cmText.Text = crnUser.MACM;
             levelText.Text = crnUser.LEVEL.ToString();
-            dobText.Text = crnUser.NGAYSINH;
+            dobText.Text = crnUser.NGAYSINH != null ? crnUser.NGAYSINH.Value.Date.ToString() : "";
             emailText.Text = crnUser.EMAIL;
             phoneText.Text = crnUser.PHONE;
             noteText.Text = crnUser.GHICHU;
+            genderText.Text = crnUser.GENDER;
             qhText.Text = BUS_NhanVien.Instance.GetQuyenHan(crnUser).TENQH;
         }
 

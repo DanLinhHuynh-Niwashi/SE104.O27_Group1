@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:GUI"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              StartupUri="LoginWindow.xaml"
+             
             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf">
 
     <Application.Resources>

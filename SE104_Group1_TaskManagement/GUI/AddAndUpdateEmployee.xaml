@@ -6,7 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        Title="AddAndUpdateEmployee" Height="750" Width="500" WindowStartupLocation="CenterScreen">
+        Title="AddAndUpdateEmployee" Height="750" Width="550" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -148,29 +148,35 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0">
-                    <CheckBox IsChecked="False" 
+                    <CheckBox x:Name="NamCheck"
+                              IsChecked="False" 
                               Width="55" 
                               Content="Nam" 
                               FontSize="15"
-                              HorizontalContentAlignment="Right"/>
+                              HorizontalContentAlignment="Right"
+                              HorizontalAlignment="Right"
+                              Margin="0,0,2,0"
+                              Checked="NamCheck_Checked" />
                 </Grid>
 
                 <Grid Grid.Column="1">
-                    <CheckBox IsChecked="False" 
+                    <CheckBox x:Name="NuCheck"
+                                IsChecked="False" 
                               Width="50"                   
                               Content="Nữ" 
                               FontSize="15"
-                              HorizontalContentAlignment="Right"/>
+                              HorizontalContentAlignment="Right"
+                              Checked="NuCheck_Checked" />
                 </Grid>
 
-                <TextBox
-                    x:Name="dobText" Grid.Column="3"
-                    Margin="10 0 0 10"
-                    VerticalAlignment="Center"
-                    materialDesign:HintAssist.Hint="Ngày sinh"
-                    FontSize="15"
-                    materialDesign:TextFieldAssist.HasClearButton="True"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                <DatePicker x:Name="dobText"
+                            Margin="10 10 10 10"
+                            HorizontalAlignment="Left"
+                            Width="100"
+                            FontSize="12"
+                            materialDesign:HintAssist.Hint="Pick Date"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            Grid.Column="3" />
                 <Grid Grid.Column="2" Margin="0 0 5 0">
                     <TextBlock Text="Ngày sinh" 
                            FontSize="15"

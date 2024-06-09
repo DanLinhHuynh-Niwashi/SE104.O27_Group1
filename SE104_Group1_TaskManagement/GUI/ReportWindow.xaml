@@ -143,26 +143,57 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <!--Members Data Grid-->
-                    <DataGrid RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" x:Name="projectsDataGrid" Style="{DynamicResource DataGridStyle1}" SelectionChanged="projectsDataGrid_SelectionChanged" Grid.ColumnSpan="2" VerticalAlignment="Center">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Mã dự án" Binding="{Binding MADA}" IsReadOnly="True" Width="*"/>
-                            <DataGridTemplateColumn Header="Tên dự án" IsReadOnly="True" Width="*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding TENDA}" VerticalAlignment="Center"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Loại sự kiện" Binding="{Binding MALSK}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Ngày bắt đầu" Binding="{Binding TSTART}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Ngày kết thúc" Binding="{Binding TEND}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Ngân sách" Binding="{Binding NGANSACH}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Đã dùng" Binding="{Binding DADUNG}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Tình trạng" Binding="{Binding STAT}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Owner" Binding="{Binding MAOWNER}" IsReadOnly="True" Width="*"/>
-                            
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <DataGrid RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" x:Name="projectsDataGrid" Style="{DynamicResource DataGridStyle1}" Grid.ColumnSpan="2" VerticalAlignment="Center">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Mã dự án"
+                                                    Binding="{Binding MADA}"
+                                                    IsReadOnly="True"
+                                                    Width="*" />
+                                <DataGridTemplateColumn Header="Tên dự án"
+                                                        IsReadOnly="True"
+                                                        Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding TENDA}"
+                                                       VerticalAlignment="Center" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Loại sự kiện"
+                                                    Binding="{Binding MALSK}"
+                                                    IsReadOnly="True"
+                                                    Width="*" />
+                                <DataGridTextColumn Header="Bắt đầu"
+                                                    Binding="{Binding TSTART, StringFormat=\{0:dd.MM.yyyy\}}"
+                                                    IsReadOnly="True"
+                                                    Width="*" />
+                                <DataGridTextColumn Header="Kết thúc"
+                                                    Binding="{Binding TEND, StringFormat=\{0:dd.MM.yyyy\}}"
+                                                    IsReadOnly="True"
+                                                    Width="*" />
+                                <DataGridTextColumn Header="Ngân sách"
+                                                    Binding="{Binding NGANSACH}"
+                                                    IsReadOnly="True"
+                                                    Width="*" />
+                                <DataGridTextColumn Header="Đã dùng"
+                                                    Binding="{Binding DADUNG}"
+                                                    IsReadOnly="True"
+                                                    Width="*" />
+                                <DataGridTextColumn Header="Tình trạng"
+                                                    Binding="{Binding STAT}"
+                                                    IsReadOnly="True"
+                                                    Width="*" />
+                                <DataGridTextColumn Header="Tiến độ"
+                                                    Binding="{Binding TIENDO}"
+                                                    IsReadOnly="True"
+                                                    Width="*" />
+                                <DataGridTextColumn Header="Owner"
+                                                    Binding="{Binding MAOWNER}"
+                                                    IsReadOnly="True"
+                                                    Width="*" />
+
+                            </DataGrid.Columns>
+                        </DataGrid>
 
                 </Grid>
 

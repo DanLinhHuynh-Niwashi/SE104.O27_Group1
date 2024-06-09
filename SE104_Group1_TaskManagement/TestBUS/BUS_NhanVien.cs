@@ -38,7 +38,7 @@ namespace TestBUS
                 nhanVien.TENNV = row[dt.Columns[1]].ToString();
                 nhanVien.EMAIL = row[dt.Columns[2]].ToString();
                 nhanVien.PHONE = row[dt.Columns[3]].ToString();
-                nhanVien.NGAYSINH = row[dt.Columns[4]].ToString();
+                nhanVien.NGAYSINH = DateTime.Parse(row[dt.Columns[4]].ToString());
                 int level = -1;
                 int.TryParse(row[dt.Columns[5]].ToString(), out level);
                 nhanVien.LEVEL = level;

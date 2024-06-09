@@ -23,10 +23,8 @@ namespace GUI
     /// </summary>
     public partial class AddAndUpdateEmployee : Window
     {
-        BUS_NhanVien nvManager = new BUS_NhanVien();
-        BUS_TaiKhoan tkManager = new BUS_TaiKhoan();
         
-        public AddAndUpdateEmployee(DTO_NhanVien initializeNV = null)
+        public AddAndUpdateEmployee(DTO_NhanVien? initializeNV = null)
         {
             
             InitializeComponent();
@@ -41,11 +39,13 @@ namespace GUI
                 tennvText.Text = initializeNV.TENNV;
                 cmText.SelectedValue = initializeNV.MACM;
                 levelText.Text = initializeNV.LEVEL.ToString();
-                dobText.Text = initializeNV.NGAYSINH;
+                dobText.SelectedDate = initializeNV.NGAYSINH;
                 emailText.Text = initializeNV.EMAIL;
+                NuCheck.IsChecked = (initializeNV.GENDER == "Nữ");
+                NamCheck.IsChecked = !(NuCheck.IsChecked);
                 phoneText.Text = initializeNV.PHONE;
                 noteText.Text = initializeNV.GHICHU;
-                qhText.SelectedValue = nvManager.GetQuyenHan(initializeNV).MAQH;
+                qhText.SelectedValue = BUS_NhanVien.Instance.GetQuyenHan(initializeNV).MAQH;
 
                 if (initializeNV.MANV == LoginWindow.crnUser.MANV)
                     qhText.IsEnabled = false;
@@ -68,22 +68,24 @@ namespace GUI
         }    
         private void ButtonAddNew_Click(object sender, RoutedEventArgs e)
         {
+
             DTO_NhanVien newNV = new DTO_NhanVien();
             newNV.TENNV = tennvText.Text;
             newNV.MACM = cmText.SelectedValue != null ? cmText.SelectedValue.ToString() : "";
             int level = -1;
             int.TryParse(levelText.Text, out level);
             newNV.LEVEL=level;
-            newNV.NGAYSINH = dobText.Text;
+            newNV.NGAYSINH = dobText.SelectedDate;
             newNV.EMAIL = emailText.Text;
+            newNV.GENDER = (NamCheck.IsChecked == true && NuCheck.IsChecked == true) ? "" : (NamCheck.IsChecked == false && NuCheck.IsChecked == false) ? "" : (NamCheck.IsChecked == true) ? "Nam" : "Nữ";
             newNV.PHONE = phoneText.Text;
             newNV.GHICHU = noteText.Text;
-            (bool, string) res = nvManager.AddData(newNV);
+            (bool, string) res = BUS_NhanVien.Instance.AddData(newNV);
             
             if (res.Item1 == true)
             {
                 DTO_TaiKhoan tk = new DTO_TaiKhoan(qhText.SelectedValue.ToString(), newNV.EMAIL, newNV.PHONE, res.Item2);
-                tkManager.TaoMoiTaiKhoan(tk);
+                BUS_TaiKhoan.Instance.TaoMoiTaiKhoan(tk);
                 MessageBox.Show("Thêm nhân viên thành công!");
                 this.DialogResult = true;
                 this.Close();
@@ -104,12 +106,13 @@ namespace GUI
             int level = -1;
             int.TryParse(levelText.Text, out level);
             nv.LEVEL = level;
-            nv.NGAYSINH = dobText.Text;
+            nv.NGAYSINH = dobText.SelectedDate;
+            nv.GENDER = (NamCheck.IsChecked == true && NuCheck.IsChecked == true) ? "" : (NamCheck.IsChecked == false && NuCheck.IsChecked == false) ? "" : (NamCheck.IsChecked == true) ? "Nam" : "Nữ";
             nv.EMAIL = emailText.Text;
             nv.PHONE = phoneText.Text;
             nv.GHICHU = noteText.Text;
-            (bool, string) res = nvManager.SuaNhanVien(nv);
-            string result = nvManager.DoiQuyenHan(LoginWindow.crnUser, nv, qhText.SelectedValue.ToString());
+            (bool, string) res = BUS_NhanVien.Instance.SuaNhanVien(nv);
+            string result = BUS_NhanVien.Instance.DoiQuyenHan(LoginWindow.crnUser, nv, qhText.SelectedValue.ToString());
             if (res.Item1 == true && result == "")
             {
                 MessageBox.Show("Sửa nhân viên thành công!");
@@ -120,6 +123,16 @@ namespace GUI
             {
                 MessageBox.Show(res.Item2 + "\n" + result);
             }
+        }
+
+        private void NuCheck_Checked(object sender, RoutedEventArgs e)
+        {
+            NamCheck.IsChecked = false;
+        }
+
+        private void NamCheck_Checked(object sender, RoutedEventArgs e)
+        {
+            NuCheck.IsChecked = false;
         }
     }
 }

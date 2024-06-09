@@ -25,6 +25,7 @@ namespace DAL
                 command.Parameters.AddWithValue("@khongdau", ConvertToUnsign(nv_new.TENNV));
                 command.Parameters.AddWithValue("@email", nv_new.EMAIL);
                 command.Parameters.AddWithValue("@sodt", nv_new.PHONE);
+                command.Parameters.AddWithValue("@phai", nv_new.GENDER);
                 command.Parameters.AddWithValue("@ngsinh", nv_new.NGAYSINH);
                 command.Parameters.AddWithValue("@lvl", nv_new.LEVEL);
                 command.Parameters.AddWithValue("@macm", nv_new.MACM);
@@ -95,6 +96,7 @@ namespace DAL
                 command.Parameters.AddWithValue("@email", nhanVien.EMAIL);
                 command.Parameters.AddWithValue("@sodt", nhanVien.PHONE);
                 command.Parameters.AddWithValue("@ngsinh", nhanVien.NGAYSINH);
+                command.Parameters.AddWithValue("@phai", nhanVien.GENDER);
                 command.Parameters.AddWithValue("@lvl", nhanVien.LEVEL);
                 command.Parameters.AddWithValue("@macm", nhanVien.MACM);
                 command.Parameters.AddWithValue("@ghichu", nhanVien.GHICHU);
@@ -124,7 +126,7 @@ namespace DAL
             {
 
                 conn.Open();
-                string queryString = "SELECT MANV, HOTEN, EMAIL, SODT, CONVERT(VARCHAR(10), NGSINH, 104) as NGSINH, LVL, MACM, GHICHU FROM NHANVIEN WHERE MANV=@manv AND IsDeleted <> 1";
+                string queryString = "SELECT MANV, HOTEN, EMAIL, SODT, CONVERT(DATETIME, NGSINH, 104) as NGSINH, LVL, MACM, GHICHU, PHAI FROM NHANVIEN WHERE MANV=@manv AND IsDeleted <> 1";
 
                 var command = new SqlCommand(
                     queryString,
@@ -137,10 +139,11 @@ namespace DAL
                 res.TENNV = reader.GetString(1);
                 res.EMAIL = reader.GetString(2);
                 res.PHONE = reader.GetString(3);
-                res.NGAYSINH = reader.GetString(4);
+                res.NGAYSINH = reader.GetDateTime(4);
                 res.LEVEL = reader.GetInt16(5);
                 res.MACM = reader.GetInt32(6).ToString();
                 res.GHICHU = reader.GetString(7);
+                res.GENDER = reader.GetString(8);
                 reader.Close();
                 conn.Close();
                 return res;
@@ -158,7 +161,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "SELECT MANV, HOTEN, EMAIL, SODT, CONVERT(VARCHAR(10), NGSINH, 104) as NGSINH, LVL, MACM, GHICHU FROM NHANVIEN WHERE IsDeleted <> 1";
+                string queryString = "SELECT MANV, HOTEN, EMAIL, SODT, CONVERT(DATETIME, NGSINH, 104) as NGSINH, LVL, MACM, GHICHU, PHAI FROM NHANVIEN WHERE IsDeleted <> 1";
 
                 var command = new SqlCommand(
                     queryString,
@@ -184,7 +187,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "SELECT MANV, HOTEN, EMAIL, SODT, CONVERT(VARCHAR(10), NGSINH, 104) as NGSINH, LVL, MACM, GHICHU FROM NHANVIEN";
+                string queryString = "SELECT MANV, HOTEN, EMAIL, SODT, CONVERT(DATETIME, NGSINH, 104) as NGSINH, LVL, MACM, GHICHU, PHAI FROM NHANVIEN";
 
                 var command = new SqlCommand(
                     queryString,
@@ -211,7 +214,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "SELECT MANV, HOTEN, EMAIL, SODT, CONVERT(VARCHAR(10), NGSINH, 104) as NGSINH, LVL, MACM, GHICHU FROM NHANVIEN WHERE IsDeleted <> 1";
+                string queryString = "SELECT MANV, HOTEN, EMAIL, SODT, CONVERT(DATETIME, NGSINH, 104) as NGSINH, LVL, MACM, GHICHU, PHAI FROM NHANVIEN WHERE IsDeleted <> 1";
 
                 if (filter.MANV != "" || filter.TENNV != "")
                 {

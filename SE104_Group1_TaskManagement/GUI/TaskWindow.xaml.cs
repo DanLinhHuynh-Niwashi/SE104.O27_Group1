@@ -30,7 +30,6 @@ namespace GUI
     public partial class TaskWindow : UserControl
     {
         public static DTO_CongViec task = new DTO_CongViec();
-        BUS_CongViec taskManager = new BUS_CongViec();
         BindingList<DTO_CongViec> members = new BindingList<DTO_CongViec>();
         Dictionary<string, DTO_ChuyenMon> cm = BUS_StaticTables.Instance.GetAllDataCM();
         Dictionary<string, DTO_NhanVien> nv = BUS_StaticTables.Instance.GetAllDataNV();
@@ -38,13 +37,13 @@ namespace GUI
 
         string crnMADA;
 
-        public TaskWindow(string mada)
+        public TaskWindow(DTO_DuAn da)
         {
             InitializeComponent();
             ci.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
             Thread.CurrentThread.CurrentCulture = ci;
-            crnMADA = mada;
-            MaDa.Text = mada;
+            crnMADA = da.MADA;
+            MaDa.Text = da.TENDA;
             membersDataGrid.LoadingRow += MembersDataGrid_LoadingRow;
             cmText.ItemsSource = cm;
             cmText.DisplayMemberPath = "Value.TENCM";
@@ -52,14 +51,30 @@ namespace GUI
             nvText.ItemsSource = nv;
             nvText.DisplayMemberPath = "Value.TENNV";
             nvText.SelectedValuePath = "Value.MANV";
-            members = taskManager.GetByMaDA(crnMADA);
+            members = BUS_CongViec.Instance.GetByMaDA(crnMADA);
+
+            if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "ThemCV") == false)
+            {
+                Add_Btn.Visibility = Visibility.Collapsed;
+            }
+
+            if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "XoaCV") == false)
+            {
+                Del_Btn.Visibility = Visibility.Collapsed;
+            }
             showMember();
+        }
+
+        void showMember()
+        {
+            membersDataGrid.ItemsSource = members;
         }
 
         private void MembersDataGrid_LoadingRow(object? sender, DataGridRowEventArgs e)
         {
             var firstCol = membersDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "C");
-
+            var cmCol = membersDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "Chuyên môn");
+            var pcCol = membersDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "Phân công");
             e.Row.Loaded += (s, args) =>
             {
                 var row = (DataGridRow)s;
@@ -76,35 +91,34 @@ namespace GUI
                             chBx.Visibility = Visibility.Visible;
                         }
                     }
+
+                    if (cmCol != null)
+                    {
+                        var chBx = cmCol.GetCellContent(row) as TextBlock;
+                        DTO_ChuyenMon temp = new DTO_ChuyenMon();
+                        if (temp != null)
+                        {
+                            cm.TryGetValue(cv.MACM, out temp);
+                            chBx.Text = temp.TENCM;
+                        }
+                    }
+
+                    if (pcCol != null)
+                    {
+                        var chBx = pcCol.GetCellContent(row) as TextBlock;
+                        BindingList<DTO_PhanCong> strings = BUS_CongViec.Instance.GetPhanCong(cv);
+                        string pcString = "";
+                        foreach (var str in strings)
+                        {
+                            pcString += str.MANV + "\n";
+                        }
+                        chBx.Text = pcString;
+                    }
                 }
+
+                
             };
-        }
-
-        void showMember()
-        {
-            membersDataGrid.ItemsSource = members;
-        }
-
-        private void membersDataGrid_Loaded(object sender, RoutedEventArgs e)
-        {
-            var firstCol = membersDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "C");
-            var operationCol = membersDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "Operations");
-            foreach (var item in membersDataGrid.Items)
-            {
-                DTO_CongViec? da = item as DTO_CongViec;
-                if (da != null)
-                {
-                    var chBx = firstCol.GetCellContent(item) as CheckBox;
-                    if (chBx == null)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        chBx.IsEnabled = false;
-                    }
-                }
-            }
+        
         }
 
         private T FindVisualParent<T>(DependencyObject child) where T : DependencyObject
@@ -171,23 +185,23 @@ namespace GUI
 
             if (TStartCheck.IsChecked == true)
             {
-                filter.TSTART = TStartPicker.Text != null ? TStartPicker.Text.ToString() : "";
+                filter.TSTART = TStartPicker.SelectedDate != null ? TStartPicker.SelectedDate : null;
             }
             if (TEndCheck.IsChecked == true)
             {
-                filter.TEND = TEndPicker.Text != null ? TEndPicker.Text.ToString() : "";
+                filter.TEND = TEndPicker.SelectedDate != null ? TEndPicker.SelectedDate : null;
             }
             if (progressCheck.IsChecked == true)
             {
                 filter.TIENDO = int.TryParse(ProgressTextBox.Text, out int tempResult) ? tempResult : 0;
             }
-            members = taskManager.FindCV(filter, ngsl, ngsh);
+            members = BUS_CongViec.Instance.FindCV(filter, ngsl, ngsh);
             showMember();
         }
 
         private void ButtonEdit_Click(Object sender, RoutedEventArgs e)
         {
-            System.Windows.Controls.Button button = sender as System.Windows.Controls.Button;
+            Button button = sender as Button;
             if (button != null)
             {
                 // Find the DataGridRow that contains the clicked button
@@ -202,7 +216,7 @@ namespace GUI
                         bool? res = updateDialog.ShowDialog();
                         if (res != null && res == true)
                         {
-                            members = taskManager.GetByMaDA(crnMADA);
+                            members = BUS_CongViec.Instance.GetByMaDA(crnMADA);
                             showMember();
                         }
                     }
@@ -228,11 +242,11 @@ namespace GUI
                         MessageBoxResult resu = MessageBox.Show("Bạn đang xóa task " + item.MACV + ", thao tác này không thể quay lại.", "Warning", MessageBoxButton.OKCancel);
                         if (resu == MessageBoxResult.OK)
                         {
-                            (bool, string) res = taskManager.DeleteByID(item);
+                            (bool, string) res = BUS_CongViec.Instance.DeleteByID(item);
                             if (res.Item1 == true)
                             {
                                 MessageBox.Show(res.Item2);
-                                members = taskManager.GetByMaDA(crnMADA);
+                                members = BUS_CongViec.Instance.GetByMaDA(crnMADA);
                                 showMember();
                             }
                             else
@@ -254,16 +268,60 @@ namespace GUI
             bool? res = addDialog.ShowDialog();
             if (res != null && res == true)
             {
-                members = taskManager.GetByMaDA(crnMADA);
+                members = BUS_CongViec.Instance.GetByMaDA(crnMADA);
                 membersDataGrid.ItemsSource = members;
             }
         }
 
         private void ButtonDelete_Loaded(object sender, RoutedEventArgs e)
         {
+            Button btn = sender as Button;
+            if (btn != null)
+            {
+                if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "XoaCV") == false)
+                {
+                    btn.Visibility = Visibility.Collapsed;
+                }
+            }    
+            
+        }
+        private void ButtonEdit_Loaded(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+
+            if (button != null)
+            {
+                if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "SuaCV") == false)
+                {
+                    if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "CapNhatCV"))
+                    {
+                        // Find the DataGridRow that contains the clicked button
+                        DataGridRow row = FindVisualParent<DataGridRow>(button);
+                        if (row != null)
+                        {
+                            // Access the data item behind the row
+                            DTO_CongViec? item = row.Item as DTO_CongViec;
+                            if (item != null)
+                            {
+                                foreach (DTO_PhanCong pc in BUS_CongViec.Instance.GetPhanCong(item))
+                                    if (LoginWindow.crnUser.MANV == pc.MANV) return;
+                            }      
+                            
+                        }
+
+                    }
+                    button.Visibility = Visibility.Collapsed;
+
+                }
+
+            }
+
+
+
+            // Do something with the item...
+
 
         }
-
         private void ButtonDelete_All_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult res = MessageBox.Show("Bạn đang xóa tất cả task đã chọn, thao tác này không thể quay lại.", "Warning", MessageBoxButton.OKCancel);
@@ -286,8 +344,8 @@ namespace GUI
                         DTO_CongViec? da = item as DTO_CongViec;
                         if (da != null)
                         {
-                            taskManager.DeleteByID(da);
-                            members = taskManager.GetByMaDA(crnMADA);
+                            BUS_CongViec.Instance.DeleteByID(da);
+                            members = BUS_CongViec.Instance.GetByMaDA(crnMADA);
                             showMember();
                         }
                     }
@@ -304,6 +362,12 @@ namespace GUI
                 var filteredNV = nv.Where(kv => kv.Value.MACM == selectedMacm).ToDictionary(kv => kv.Key, kv => kv.Value);
                 nvText.ItemsSource = filteredNV;
             }
+        }
+
+        private void Gantt_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            GanttWindow window = new GanttWindow(members);
+            window.ShowDialog();
         }
     }
 }
