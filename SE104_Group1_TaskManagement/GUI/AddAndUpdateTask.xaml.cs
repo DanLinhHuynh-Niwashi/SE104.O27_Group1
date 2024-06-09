@@ -33,6 +33,20 @@ namespace GUI
         {
             InitializeComponent();
 
+            nv = BUS_StaticTables.Instance.GetAllDataNV();
+
+            manvText.ItemsSource = nv;
+            manvText.DisplayMemberPath = "Value.TENNV";
+            manvText.SelectedValuePath = "Value.MANV";
+
+            cm = BUS_StaticTables.Instance.GetAllDataCM();
+
+            macmText.ItemsSource = cm;
+            macmText.DisplayMemberPath = "Value.TENCM";
+            macmText.SelectedValuePath = "Value.MACM";
+
+            macmText.SelectionChanged += MacmText_SelectionChanged;
+
             manvTokenizer.TokenMatcher = text =>
             {
                 if (text.EndsWith(";"))
@@ -45,18 +59,28 @@ namespace GUI
             };
 
             phanCongList = new List<DTO_PhanCong>();
-            BindingDropDown();
+            //BindingDropDown();
             if (initializeCV != null)
             {
-                wTitle.Text = "SỬA CONG VIEC";
+                wTitle.Text = "SỬA CÔNG VIỆC";
                 ButtonAddNew.Visibility = Visibility.Hidden;
                 ButtonUpdate.Visibility = Visibility.Visible;
                 tiendoText.IsEnabled = true;
                 dadungText.IsEnabled = true;
+                tencvText.IsEnabled = false;
+                tencvText.IsEnabled = false;
+                macmText.IsEnabled = false;
+                TStartPicker.IsEnabled = false;
+                TEndPicker.IsEnabled = false;
+                ngansachText.IsEnabled = false;
+                ycdkText.IsEnabled = false;
+                dkText.IsEnabled = false;
+                manvText.IsEnabled = false;
+                manvTokenizer.IsEnabled = false;
                 macvText.Text = initializeCV.MACV;
                 madaText.Text = initializeCV.MADA;
                 tencvText.Text = initializeCV.TENCV;
-                macmText.Text = initializeCV.MACM;
+                macmText.SelectedValue = initializeCV.MACM;
                 TStartPicker.Text = initializeCV.TSTART;
                 TEndPicker.Text = initializeCV.TEND;
                 ngansachText.Text = initializeCV.NGANSACH.ToString();
@@ -78,44 +102,33 @@ namespace GUI
 
         }
 
-        void BindingDropDown()
-        {
-            nv = BUS_StaticTables.Instance.GetAllDataNV();
-
-            manvText.ItemsSource = nv;
-            manvText.DisplayMemberPath = "Value.MANV";
-            manvText.SelectedValuePath = "Value.MANV";
-
-            cm = BUS_StaticTables.Instance.GetAllDataCM();
-
-            macmText.ItemsSource = cm;
-            macmText.DisplayMemberPath = "Value.TENCM";
-            macmText.SelectedValuePath = "Value.MACM";
-
-            macmText.SelectionChanged += MacmText_SelectionChanged;
+        //void BindingDropDown()
+        //{
 
 
-        }
+
+        //}
 
         private void MacmText_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            manvTokenizer.Document.Blocks.Clear();
             var selectedMacm = macmText.SelectedValue as string;
             if (selectedMacm != null)
             {
                 var filteredNV = nv.Where(kv => kv.Value.MACM == selectedMacm).ToDictionary(kv => kv.Key, kv => kv.Value);
                 manvText.ItemsSource = filteredNV;
             }
+            manvText.SelectedIndex = -1;
+
         }
 
         private void ButtonAddNew_Click(object sender, RoutedEventArgs e)
         {
             DTO_CongViec newCV = new DTO_CongViec();
             newCV.MADA = madaText.Text;
-            //newCV.MANV = manvText.Text != null ? manvText.Text.ToString() : "";
             newCV.MACV = macvText.Text;
             newCV.TENCV = tencvText.Text;
             newCV.MACM = macmText.SelectedValue != null ? macmText.SelectedValue.ToString() : "";
-            //List<string> maNVList = Tokenizer.getAllDataPresented();
             newCV.TSTART = TStartPicker.Text;
             newCV.TEND = TEndPicker.Text;
             newCV.NGANSACH = long.TryParse(ngansachText.Text, out long tempResultNS) ? tempResultNS : 0;
@@ -124,7 +137,6 @@ namespace GUI
             newCV.YCDK = ycdkText.Text;
             newCV.TEPDK = dkText.Text;
             (bool, string) res = taskManager.AddData(newCV);
-
 
             if (res.Item1 == true)
             {
@@ -141,31 +153,8 @@ namespace GUI
             {
                 MessageBox.Show(res.Item2);
             }
-            //if (macvText.Text != null && manvTokenizer.SelectedItems.Count > 0)
-            //{
-            //    AddNewPC();
-            //    phanCongList.Clear();
-            //    manvTokenizer.SelectedItems.Clear();
-            //}
+            
         }
-
-
-
-        //private void AddNewPC()
-        //{
-        //    var selectedMACV = macvText.Text;
-        //    foreach (var selectedItem in manvTokenizer.SelectedItems)
-        //    {
-        //        var selectedMANV = ((KeyValuePair<string, string>)selectedItem).Key;
-        //        var phanCong = new DTO_PhanCong
-        //        {
-        //            MACV = selectedMACV,
-        //            MANV = selectedMANV
-        //        };
-
-        //        phanCongList.Add(phanCong);
-        //    }
-        //}
 
         private void ButtonUpdate_Click(object sender, RoutedEventArgs e)
         {
@@ -176,11 +165,11 @@ namespace GUI
             cv.MACM = macmText.Text;
             cv.TSTART = TStartPicker.Text;
             cv.TEND = TEndPicker.Text;
-            cv.NGANSACH = long.TryParse(ngansachText.Text, out long tempResultNS) ? tempResultNS : -1;
+            cv.NGANSACH = long.TryParse(ngansachText.Text, out long tempResultNS) ? tempResultNS : 0;
             dadungText.IsEnabled = true;
             tiendoText.IsEnabled = true;
-            cv.DADUNG = long.TryParse(dadungText.Text, out long tempResultDD) ? tempResultDD : -1;
-            cv.TIENDO = int.Parse(tiendoText.Text.ToString());
+            cv.DADUNG = long.TryParse(dadungText.Text, out long tempResultDD) ? tempResultDD : 0;
+            cv.TIENDO = int.TryParse(tiendoText.Text, out int tempResult) ? tempResult : 0;
             cv.YCDK = ycdkText.Text;
             cv.TEPDK = dkText.Text;
             (bool, string) res = taskManager.EditTask(cv);
@@ -203,37 +192,16 @@ namespace GUI
             {
                 MessageBox.Show(res.Item2);
             }
-            //if (macvText.Text != null && manvTokenizer.SelectedItems.Count > 0)
-            //{
-            //    EditPC();
-            //}
         }
-
-        //private void EditPC()
-        //{
-        //    var selectedMACV = macvText.Text;
-
-        //    // Xóa các mục phanCong cũ với MACV đã chọn
-        //    phanCongList.RemoveAll(pc => pc.MACV == selectedMACV);
-
-        //    // Thêm các mục phanCong mới
-        //    foreach (var selectedItem in manvTokenizer.SelectedItems)
-        //    {
-        //        var selectedMANV = ((KeyValuePair<string, string>)selectedItem).Key;
-        //        var phanCong = new DTO_PhanCong
-        //        {
-        //            MACV = selectedMACV,
-        //            MANV = selectedMANV
-        //        };
-
-        //        phanCongList.Add(phanCong);
-        //    }
-        //}
 
         private void manvText_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            addNewToken(manvText.SelectedValue.ToString());
+            if (manvText.SelectedIndex >= 0)
+            {
+                addNewToken(manvText.SelectedValue.ToString());
+            }
         }
+
         void addNewToken(string content)
         {
             manvTokenizer.AppendText(content);

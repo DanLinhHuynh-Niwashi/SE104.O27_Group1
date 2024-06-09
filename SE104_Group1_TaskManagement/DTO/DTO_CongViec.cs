@@ -22,7 +22,7 @@ namespace DTO
         string _tepdinhkem;
         int _isdeleted;
 
-        public DTO_CongViec(string macv = "", string mada = "", string macm = "", string tencv = "", string tstart = "", string tend = "", long ngansach = -1, long dadung = -1, int tiendo = 0, string ycdk = "", string dk = "", int isdel = 0)
+        public DTO_CongViec(string macv = "", string mada = "", string macm = "", string tencv = "", string tstart = "", string tend = "", long ngansach = 0, long dadung = 0, int tiendo = 0, string ycdk = "", string dk = "", int isdel = 0)
         {
             _macv = macv;
             _mada = mada;

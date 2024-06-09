@@ -16,11 +16,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
-using MailKit.Search;
 using System.Xml;
 using System.Windows.Controls.Primitives;
 using System.Globalization;
-using MimeKit;
 
 namespace GUI
 {
@@ -45,7 +43,7 @@ namespace GUI
             Thread.CurrentThread.CurrentCulture = ci;
             membersDataGrid.LoadingRow += MembersDataGrid_LoadingRow;
             ownerText.ItemsSource = nv;
-            ownerText.DisplayMemberPath = "Value.MANV";
+            ownerText.DisplayMemberPath = "Value.TENNV";
             ownerText.SelectedValuePath = "Value.MANV";
             lskText.ItemsSource = lsk;
             lskText.DisplayMemberPath = "Value.TENLSK";
@@ -65,9 +63,6 @@ namespace GUI
         private void MembersDataGrid_LoadingRow(object? sender, DataGridRowEventArgs e)
         {
             var firstCol = membersDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "C");
-            var lskCol = membersDataGrid.Columns.First(c => c.Header.ToString() == "Mã LSK");
-            var ownerCol = membersDataGrid.Columns.First(c => c.Header.ToString() == "Mã NQL");
-
 
             e.Row.Loaded += (s, args) =>
             {

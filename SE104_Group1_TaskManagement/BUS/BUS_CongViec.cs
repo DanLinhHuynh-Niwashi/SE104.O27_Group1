@@ -82,7 +82,7 @@ namespace BUS
                 temp.TEND = dsCongViec.Rows[i]["TEnd"].ToString();
                 temp.NGANSACH = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["NGANSACH"]).ToString());
                 temp.DADUNG = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["DADUNG"]).ToString());
-                temp.TIENDO = int.Parse(dsCongViec.Rows[i]["TIENDO"].ToString());
+                temp.TIENDO = int.Parse(Convert.ToInt32(dsCongViec.Rows[i]["TIENDO"]).ToString());
                 temp.YCDK = dsCongViec.Rows[i]["YCDINHKEM"].ToString();
                 temp.TEPDK = dsCongViec.Rows[i]["TEPDINHKEM"].ToString();
                 result.Add(temp);
@@ -107,7 +107,7 @@ namespace BUS
                 temp.TEND = dsCongViec.Rows[i]["TEnd"].ToString();
                 temp.NGANSACH = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["NGANSACH"]).ToString());
                 temp.DADUNG = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["DADUNG"]).ToString());
-                temp.TIENDO = int.Parse(dsCongViec.Rows[i]["TIENDO"].ToString());
+                temp.TIENDO = int.Parse(Convert.ToInt32(dsCongViec.Rows[i]["TIENDO"]).ToString());
                 temp.YCDK = dsCongViec.Rows[i]["YCDINHKEM"].ToString();
                 temp.TEPDK = dsCongViec.Rows[i]["TEPDINHKEM"].ToString();
                 result.Add(temp);
@@ -178,9 +178,9 @@ namespace BUS
                 temp.TENCV = dsCongViec.Rows[i]["TENCV"].ToString();
                 temp.TSTART = dsCongViec.Rows[i]["TStart"].ToString();
                 temp.TEND = dsCongViec.Rows[i]["TEnd"].ToString();
-                temp.NGANSACH = long.Parse(dsCongViec.Rows[i]["NGANSACH"].ToString());
-                temp.DADUNG = long.Parse(dsCongViec.Rows[i]["DADUNG"].ToString());
-                temp.TIENDO = int.Parse(dsCongViec.Rows[i]["TIENDO"].ToString());
+                temp.NGANSACH = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["NGANSACH"]).ToString());
+                temp.DADUNG = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["DADUNG"]).ToString());
+                temp.TIENDO = int.Parse(Convert.ToInt32(dsCongViec.Rows[i]["TIENDO"]).ToString());
                 temp.YCDK = dsCongViec.Rows[i]["YCDINHKEM"].ToString();
                 temp.TEPDK = dsCongViec.Rows[i]["TEPDINHKEM"].ToString();
                 result.Add(temp);
@@ -193,26 +193,11 @@ namespace BUS
             return dalDA.GetByNganSachMoreLess(NganSachH, NganSachL);
         }
 
-        public DataTable GetByLoaiSK(string MALSK)
-        {
-            return dalDA.GetByLoaiSK(MALSK);
-        }
-
-        public DataTable GetByOwner(string MAOWNER)
-        {
-            return dalDA.GetByOwner(MAOWNER);
-        }
-
-        public DataTable GetByStat(string STAT)
-        {
-            return dalDA.GetByStat(STAT);
-        }
-
         //check staff info 
         public static (bool, string) IsValidProjectInfo(DTO_CongViec CV)
         {
             if (CV == null)
-                return (false, "Du an khong ton tai");
+                return (false, "Cong viec khong ton tai");
             if (!IsValidNameTask(CV.TENCV))
                 return (false, "Ten cong viec khong hop le");
             if (!IsValidTSTART(CV.TSTART).Item1)
