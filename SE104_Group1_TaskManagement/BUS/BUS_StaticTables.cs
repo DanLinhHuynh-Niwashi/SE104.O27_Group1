@@ -100,7 +100,7 @@ namespace BUS
                 temp.EMAIL = dsNhanVien.Rows[i]["EMAIL"].ToString();
                 temp.PHONE = dsNhanVien.Rows[i]["SoDT"].ToString();
                 temp.LEVEL = int.Parse(dsNhanVien.Rows[i]["LVL"].ToString());
-                temp.NGAYSINH = dsNhanVien.Rows[i]["NGSINH"].ToString();
+                temp.NGAYSINH = DateTime.Parse(dsNhanVien.Rows[i]["NGSINH"].ToString());
                 temp.MACM = dsNhanVien.Rows[i]["MACM"].ToString();
                 temp.GHICHU = dsNhanVien.Rows[i]["GHICHU"].ToString();
                 result.Add(temp.MANV, temp);
@@ -175,7 +175,7 @@ namespace BUS
                 temp.EMAIL = dsNhanVien.Rows[i]["EMAIL"].ToString();
                 temp.PHONE = dsNhanVien.Rows[i]["SoDT"].ToString();
                 temp.LEVEL = int.Parse(dsNhanVien.Rows[i]["LVL"].ToString());
-                temp.NGAYSINH = dsNhanVien.Rows[i]["NGSINH"].ToString();
+                temp.NGAYSINH = DateTime.Parse(dsNhanVien.Rows[i]["NGSINH"].ToString());
                 temp.MACM = dsNhanVien.Rows[i]["MACM"].ToString();
                 temp.GHICHU = dsNhanVien.Rows[i]["GHICHU"].ToString();
                 result.Add(temp.MANV, temp);

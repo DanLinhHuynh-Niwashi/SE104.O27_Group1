@@ -33,7 +33,9 @@ namespace BUS
         DAL_CongViec dalCV = new DAL_CongViec();
         DAL_DuAn dalDA = new DAL_DuAn();
         DAL_PhanCong dalPC = new DAL_PhanCong();
+        DAL_DinhKem dalDK = new DAL_DinhKem();
 
+        //PHANCONG
         public (bool, string) PhanCong(string MACV, string MANV)
         {
             DTO_PhanCong dTO_PhanCong = new DTO_PhanCong(MANV, MACV);
@@ -49,6 +51,12 @@ namespace BUS
             if (nv == null) return;
             (bool, string) res1 = dalPC.DeleteByMANV(nv.MANV);
         }
+        public void DeletePC(DTO_PhanCong pc)
+        {
+            if (pc == null) return;
+            (bool, string) res1 = dalPC.DeleteByPHANCONG(pc);
+        }
+
         public BindingList<DTO_PhanCong> GetPhanCong(DTO_CongViec cv)
         {
             BindingList<DTO_PhanCong> result = new BindingList<DTO_PhanCong>();
@@ -64,7 +72,57 @@ namespace BUS
             return result;
         }
 
+        //DINHKEM
+        public (bool, string) DinhKem(DTO_DinhKem dk)
+        {
+            if (dk.TEP != "")
+            {
+                return (dalDK.AddData(dk));
+            }    
+            return (false, "Thêm tệp đính kèm!");
+            
+        }
+        public void DeleteDK(DTO_DinhKem cv)
+        {
+            if (cv == null) return;
+            (bool, string) res1 = dalDK.Delete(cv);
+        }
 
+        public BindingList<DTO_DinhKem> GetDKAll(DTO_CongViec cv)
+        {
+            BindingList<DTO_DinhKem> result = new BindingList<DTO_DinhKem>();
+            DataTable dsKinhKem = dalDK.GetByMACV(cv.MACV);
+            for (int i = 0; i < dsKinhKem.Rows.Count; i++)
+            {
+                //string _macv;
+                DTO_DinhKem temp = new DTO_DinhKem();
+                temp.MADK = dsKinhKem.Rows[i]["MADK"].ToString();
+                temp.MACV = dsKinhKem.Rows[i]["MACV"].ToString();
+                temp.MANV = dsKinhKem.Rows[i]["MANV"].ToString();
+                temp.TEP = dsKinhKem.Rows[i]["TEP"].ToString();
+                result.Add(temp);
+            }
+            return result;
+        }
+
+        public BindingList<DTO_DinhKem> GetDKIndividual(DTO_CongViec cv, DTO_NhanVien nv)
+        {
+            BindingList<DTO_DinhKem> result = new BindingList<DTO_DinhKem>();
+            DataTable dsKinhKem = dalDK.GetByMANVandMACV(nv.MANV, cv.MACV);
+            for (int i = 0; i < dsKinhKem.Rows.Count; i++)
+            {
+                //string _macv;
+                DTO_DinhKem temp = new DTO_DinhKem();
+                temp.MADK = dsKinhKem.Rows[i]["MADK"].ToString();
+                temp.MACV = dsKinhKem.Rows[i]["MACV"].ToString();
+                temp.MANV = dsKinhKem.Rows[i]["MANV"].ToString();
+                temp.TEP = dsKinhKem.Rows[i]["TEP"].ToString();
+                result.Add(temp);
+            }
+            return result;
+        }
+
+        //CONGVIEC
         public BindingList<DTO_CongViec> GetAllData()
         {
             BindingList<DTO_CongViec> result = new BindingList<DTO_CongViec>();
@@ -78,8 +136,8 @@ namespace BUS
                 temp.MACV = dsCongViec.Rows[i]["MACV"].ToString();
                 temp.MACM = dsCongViec.Rows[i]["MACM"].ToString();
                 temp.TENCV = dsCongViec.Rows[i]["TENCV"].ToString();
-                temp.TSTART = dsCongViec.Rows[i]["TStart"].ToString();
-                temp.TEND = dsCongViec.Rows[i]["TEnd"].ToString();
+                temp.TSTART = dsCongViec.Rows[i]["TStart"] as DateTime?;
+                temp.TEND = dsCongViec.Rows[i]["TEnd"] as DateTime?;
                 temp.NGANSACH = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["NGANSACH"]).ToString());
                 temp.DADUNG = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["DADUNG"]).ToString());
                 temp.TIENDO = int.Parse(Convert.ToInt32(dsCongViec.Rows[i]["TIENDO"]).ToString());
@@ -103,8 +161,8 @@ namespace BUS
                 temp.MACV = dsCongViec.Rows[i]["MACV"].ToString();
                 temp.MACM = dsCongViec.Rows[i]["MACM"].ToString();
                 temp.TENCV = dsCongViec.Rows[i]["TENCV"].ToString();
-                temp.TSTART = dsCongViec.Rows[i]["TStart"].ToString();
-                temp.TEND = dsCongViec.Rows[i]["TEnd"].ToString();
+                temp.TSTART = dsCongViec.Rows[i]["TStart"] as DateTime?;
+                temp.TEND = dsCongViec.Rows[i]["TEnd"] as DateTime?;
                 temp.NGANSACH = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["NGANSACH"]).ToString());
                 temp.DADUNG = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["DADUNG"]).ToString());
                 temp.TIENDO = int.Parse(Convert.ToInt32(dsCongViec.Rows[i]["TIENDO"]).ToString());
@@ -132,7 +190,7 @@ namespace BUS
         //EDIT
         public (bool, string) EditTask(DTO_CongViec CongViecCanSua)
         {
-            (bool result, string message) = IsValidProjectInfo(CongViecCanSua);
+            (bool result, string message) = IsValidProjectInfo(CongViecCanSua, true);
             if (result == false)
             {
                 return IsValidProjectInfo(CongViecCanSua);
@@ -152,7 +210,7 @@ namespace BUS
         {
             return dalCV.GetByID(MACV);
         }
-        public (string, DataTable) GetByName(string name)
+        public (string?, DataTable?) GetByName(string name)
         {
             bool result = (IsValidNameTask(name));
             if (result == false)
@@ -176,8 +234,8 @@ namespace BUS
                 temp.MACM = dsCongViec.Rows[i]["MACM"].ToString();
                 temp.MACV = dsCongViec.Rows[i]["MACV"].ToString();
                 temp.TENCV = dsCongViec.Rows[i]["TENCV"].ToString();
-                temp.TSTART = dsCongViec.Rows[i]["TStart"].ToString();
-                temp.TEND = dsCongViec.Rows[i]["TEnd"].ToString();
+                temp.TSTART = dsCongViec.Rows[i]["TStart"] as DateTime?;
+                temp.TEND = dsCongViec.Rows[i]["TEnd"] as DateTime?;
                 temp.NGANSACH = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["NGANSACH"]).ToString());
                 temp.DADUNG = long.Parse(Convert.ToInt64(dsCongViec.Rows[i]["DADUNG"]).ToString());
                 temp.TIENDO = int.Parse(Convert.ToInt32(dsCongViec.Rows[i]["TIENDO"]).ToString());
@@ -192,66 +250,59 @@ namespace BUS
         {
             return dalDA.GetByNganSachMoreLess(NganSachH, NganSachL);
         }
-
         //check staff info 
-        public static (bool, string) IsValidProjectInfo(DTO_CongViec CV)
+        public static (bool, string) IsValidProjectInfo(DTO_CongViec CV, bool isEditing = false)
         {
             if (CV == null)
                 return (false, "Cong viec khong ton tai");
             if (!IsValidNameTask(CV.TENCV))
                 return (false, "Ten cong viec khong hop le");
-            if (!IsValidTSTART(CV.TSTART).Item1)
-                return (IsValidTSTART(CV.TSTART));
+            if (!isEditing)
+                if (!IsValidTSTART(CV.TSTART).Item1)
+                    return (IsValidTSTART(CV.TSTART));
             if (!IsValidTEND(CV.TEND, CV.TSTART).Item1)
                 return (IsValidTEND(CV.TEND, CV.TSTART));
             return (true, "Thong tin hop le");
         }
 
-        //check Project's ID
-        private static bool IsValidNameTask(string tencv)
+        //check Project's name
+        private static bool IsValidNameTask(string name)
         {
-            if (tencv == null)
+            if (name == null || name == "")
                 return false;
             else
             {
-                foreach (char c in tencv)
-                {
-                    if (!char.IsLetter(c) && !char.IsWhiteSpace(c))
-                    {
-                        return false;
-                    }
-                }
                 return true;
             }
         }
 
 
-        //check start date
-        public static (bool, string) IsValidTSTART(string NgayBatDau)
+        public static (bool, string) IsValidTSTART(DateTime? NgayBatDau)
         {
-            if (NgayBatDau == "")
+            if (NgayBatDau == null)
                 return (false, "Start date must not null");
-            DateTime timeBD;
-            bool A = DateTime.TryParseExact(NgayBatDau, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out timeBD);
-            if (A == false) return (false, "Sai dinh dang ngay bat dau");
-            if (timeBD.Date < DateTime.Now.Date) return (false, "Ngay bat dau phai bang/ sau hom nay");
+           // DateTime timeBD;
+          //  bool A = DateTime.TryParseExact(NgayBatDau, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out timeBD);
+           // if (A == false) return (false, "Sai dinh dang ngay bat dau");
+            if (NgayBatDau.Value.Date < DateTime.Now.Date) return (false, "Ngay bat dau phai bang/ sau hom nay");
             return (true, "");
         }
 
         //check end date 
-        public static (bool, string) IsValidTEND(string NgayKetThuc, string NgayBatDau)
+        public static (bool, string) IsValidTEND(DateTime? NgayKetThuc, DateTime? NgayBatDau)
         {
-            if (NgayBatDau == "" || NgayKetThuc == "")
+            if (NgayBatDau == null || NgayKetThuc == null)
                 return (false, "Start date and End date must not null");
-            DateTime time;
+           /* DateTime time;
             bool A = DateTime.TryParseExact(NgayKetThuc, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out time);
             if (A == false) return (false, "Sai dinh dang ngay ket thuc");
             DateTime timeBD;
             A = DateTime.TryParseExact(NgayBatDau, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out timeBD);
-            if (A == false) return (false, "Sai dinh dang ngay bat dau");
-            if (time < timeBD) return (false, "Ngay ket thuc phai bang/ sau ngay bat dau");
+            if (A == false) return (false, "Sai dinh dang ngay bat dau");*/
+            if (NgayKetThuc < NgayBatDau) return (false, "Ngay ket thuc phai bang/ sau ngay bat dau");
             return (true, "");
         }
+
         //xoa
         public (bool, string) DeleteByID(DTO_CongViec CongViecCanXoa)
         {

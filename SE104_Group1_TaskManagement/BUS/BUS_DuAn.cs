@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics.Eventing.Reader;
 using System.Drawing.Drawing2D;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -42,10 +43,11 @@ namespace BUS
                 temp.MAOWNER = dsDuAn.Rows[i]["MaOwner"] != null ? dsDuAn.Rows[i]["MaOwner"].ToString():"";
                 temp.TENDA = dsDuAn.Rows[i]["TenDA"].ToString();
                 temp.NGANSACH = long.Parse(Convert.ToInt64(dsDuAn.Rows[i]["NGANSACH"]).ToString());
-                temp.TSTART = dsDuAn.Rows[i]["TStart"].ToString();
-                temp.TEND = dsDuAn.Rows[i]["TEnd"].ToString();
+                temp.TSTART = (dsDuAn.Rows[i]["TStart"] as DateTime?);
+                temp.TEND = (dsDuAn.Rows[i]["TEnd"] as DateTime?);
                 temp.STAT = dsDuAn.Rows[i]["TINHTRANG"].ToString();
                 temp.DADUNG = long.Parse(Convert.ToInt64(dsDuAn.Rows[i]["DADUNG"]).ToString());
+                temp.TIENDO = Convert.ToInt16(dsDuAn.Rows[i]["TIENDO"]);
                 result.Add(temp);
             }
             return result;
@@ -100,7 +102,7 @@ namespace BUS
         {
             return dalDA.GetByID(ID);
         }
-        public (string, DataTable) GetByName(string name)
+        public (string?, DataTable?) GetByName(string name)
         {
             bool result = (IsValidNameProject(name));
             if (result == false)
@@ -124,11 +126,12 @@ namespace BUS
                 temp.MALSK = dsDuAn.Rows[i]["MaLSK"].ToString();
                 temp.MAOWNER = dsDuAn.Rows[i]["MaOwner"] != null ? dsDuAn.Rows[i]["MaOwner"].ToString() : "";
                 temp.TENDA = dsDuAn.Rows[i]["TenDA"].ToString();
-                temp.TSTART = dsDuAn.Rows[i]["TStart"].ToString();
-                temp.TEND = dsDuAn.Rows[i]["TEnd"].ToString();
+                temp.TSTART = dsDuAn.Rows[i]["TStart"] as DateTime?;
+                temp.TEND = dsDuAn.Rows[i]["TEnd"] as DateTime?;
                 temp.NGANSACH = long.Parse(Convert.ToInt64(dsDuAn.Rows[i]["NGANSACH"]).ToString());
                 temp.STAT = dsDuAn.Rows[i]["TINHTRANG"].ToString();
                 temp.DADUNG = long.Parse(Convert.ToInt64(dsDuAn.Rows[i]["DADUNG"]).ToString());
+                temp.TIENDO = Convert.ToInt16(dsDuAn.Rows[i]["TIENDO"]);
                 result.Add(temp);
             }
             return result;
@@ -169,31 +172,32 @@ namespace BUS
         }
 
 
-        public static (bool, string) IsValidTSTART(string NgayBatDau)
+        public static (bool, string) IsValidTSTART(DateTime? NgayBatDau)
         {
-            if (NgayBatDau == "")
+            if (NgayBatDau == null)
                 return (false, "Start date must not null");
-            DateTime timeBD;
-            bool A = DateTime.TryParseExact(NgayBatDau, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out timeBD);
-            if (A == false) return (false, "Sai dinh dang ngay bat dau");
-            if (timeBD.Date < DateTime.Now.Date) return (false, "Ngay bat dau phai bang/ sau hom nay");
+            // DateTime timeBD;
+            //  bool A = DateTime.TryParseExact(NgayBatDau, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out timeBD);
+            // if (A == false) return (false, "Sai dinh dang ngay bat dau");
+            if (NgayBatDau.Value.Date < DateTime.Now.Date) return (false, "Ngay bat dau phai bang/ sau hom nay");
             return (true, "");
         }
 
         //check end date 
-        public static (bool, string) IsValidTEND(string NgayKetThuc, string NgayBatDau)
+        public static (bool, string) IsValidTEND(DateTime? NgayKetThuc, DateTime? NgayBatDau)
         {
-            if (NgayBatDau == "" || NgayKetThuc == "")
+            if (NgayBatDau == null || NgayKetThuc == null)
                 return (false, "Start date and End date must not null");
-            DateTime time;
-            bool A = DateTime.TryParseExact(NgayKetThuc, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out time);
-            if (A == false) return (false, "Sai dinh dang ngay ket thuc");
-            DateTime timeBD;
-            A = DateTime.TryParseExact(NgayBatDau, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out timeBD);
-            if (A == false) return (false, "Sai dinh dang ngay bat dau");
-            if (time < timeBD) return (false, "Ngay ket thuc phai bang/ sau ngay bat dau");
+            /* DateTime time;
+             bool A = DateTime.TryParseExact(NgayKetThuc, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out time);
+             if (A == false) return (false, "Sai dinh dang ngay ket thuc");
+             DateTime timeBD;
+             A = DateTime.TryParseExact(NgayBatDau, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out timeBD);
+             if (A == false) return (false, "Sai dinh dang ngay bat dau");*/
+            if (NgayKetThuc < NgayBatDau) return (false, "Ngay ket thuc phai bang/ sau ngay bat dau");
             return (true, "");
         }
+
 
         //TONG NGAN SACH
         public long CalTongNganSach(BindingList<DTO_DuAn> table)

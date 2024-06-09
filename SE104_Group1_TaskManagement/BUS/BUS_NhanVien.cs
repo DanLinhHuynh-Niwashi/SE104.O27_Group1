@@ -42,8 +42,9 @@ namespace BUS
                 temp.EMAIL = dsNhanVien.Rows[i]["EMAIL"].ToString();
                 temp.PHONE = dsNhanVien.Rows[i]["SoDT"].ToString();
                 temp.LEVEL = int.Parse(dsNhanVien.Rows[i]["LVL"].ToString());
-                temp.NGAYSINH = dsNhanVien.Rows[i]["NGSINH"].ToString();
+                temp.NGAYSINH = dsNhanVien.Rows[i]["NGSINH"] as DateTime?;
                 temp.MACM = dsNhanVien.Rows[i]["MACM"].ToString();
+                temp.GENDER = dsNhanVien.Rows[i]["PHAI"].ToString();
                 temp.GHICHU = dsNhanVien.Rows[i]["GHICHU"].ToString();
                 result.Add(temp);
             }
@@ -63,8 +64,9 @@ namespace BUS
                 temp.EMAIL = dsNhanVien.Rows[i]["EMAIL"].ToString();
                 temp.PHONE = dsNhanVien.Rows[i]["SoDT"].ToString();
                 temp.LEVEL = int.Parse(dsNhanVien.Rows[i]["LVL"].ToString());
-                temp.NGAYSINH = dsNhanVien.Rows[i]["NGSINH"].ToString();
+                temp.NGAYSINH = dsNhanVien.Rows[i]["NGSINH"] as DateTime?;
                 temp.MACM = dsNhanVien.Rows[i]["MACM"].ToString();
+                temp.GENDER = dsNhanVien.Rows[i]["PHAI"].ToString();
                 temp.GHICHU = dsNhanVien.Rows[i]["GHICHU"].ToString();
                 result.Add(temp);
             }
@@ -128,7 +130,7 @@ namespace BUS
                 return (false, "Email khong hop le!");
             if (!IsValidPhoneNumber(nv.PHONE))
                 return (false, "So dien thoai khong hop le!");
-            if (!IsValidBirthDay(DateTime.Now))
+            if (!IsValidBirthDay(nv.NGAYSINH))
                 return (false, "Ngay sinh khong hop le");
             return (true, "Thong tin hop le");
 
@@ -187,12 +189,15 @@ namespace BUS
             }
         }
         //Check birthday
-        public static bool IsValidBirthDay(DateTime ngaySinh)
+        public static bool IsValidBirthDay(DateTime? ngaySinh)
         {
-            if (ngaySinh == null || ngaySinh >= DateTime.Now)
-                return false;
-            else
-                return true;
+            if (ngaySinh == null)
+                return (false);
+           /* DateTime timeBD;
+            bool A = DateTime.TryParseExact(ngaySinh, "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out timeBD);
+            if (A == false) return (false);*/
+            if (ngaySinh.Value.Date > DateTime.Now.Date || ngaySinh.Value.Year < DateTime.Now.Year - 65) return (false);
+            return (true);
         }
 
         //Lấy và đổi quyền hạn
