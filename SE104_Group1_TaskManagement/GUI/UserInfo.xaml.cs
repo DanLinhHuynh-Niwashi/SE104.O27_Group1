@@ -31,7 +31,7 @@ namespace GUI
             tennvText.Text = crnUser.TENNV;
             cmText.Text = crnUser.MACM;
             levelText.Text = crnUser.LEVEL.ToString();
-            dobText.Text = crnUser.NGAYSINH != null ? crnUser.NGAYSINH.Value.Date.ToString() : "";
+            dobText.Text = crnUser.NGAYSINH != null ? crnUser.NGAYSINH.Value.Date.ToString("dd.MM.yyyy") : "";
             emailText.Text = crnUser.EMAIL;
             phoneText.Text = crnUser.PHONE;
             noteText.Text = crnUser.GHICHU;

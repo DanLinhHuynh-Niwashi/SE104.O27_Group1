@@ -426,12 +426,12 @@ namespace GUI
             foreach (DTO_DuAn temp in dataGridView.ItemsSource)
             {
                 DataRow row = dt.NewRow();
-                DTO_LoaiSK templsk;
+                DTO_LoaiSK templsk = new DTO_LoaiSK();
                 row[dt.Columns[0].ColumnName] = temp.MADA.ToString();
                 row[dt.Columns[1].ColumnName] = temp.TENDA.ToString();
                 row[dt.Columns[2].ColumnName] = lsk.TryGetValue(temp.MALSK, out templsk) != false ? templsk.TENLSK : temp.MALSK;
-                row[dt.Columns[3].ColumnName] = temp.TSTART.ToString();
-                row[dt.Columns[4].ColumnName] = temp.TEND.ToString();
+                row[dt.Columns[3].ColumnName] = temp.TSTART != null ? temp.TSTART.Value.Date.ToString("dd.MM.yyyy") : "";
+                row[dt.Columns[4].ColumnName] = temp.TEND != null? temp.TEND.Value.Date.ToString("dd.MM.yyyy") : "";
                 row[dt.Columns[5].ColumnName] = temp.NGANSACH.ToString();
                 row[dt.Columns[6].ColumnName] = temp.DADUNG.ToString();
                 row[dt.Columns[7].ColumnName] = temp.STAT.ToString();
