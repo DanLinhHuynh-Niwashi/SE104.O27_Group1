@@ -42,7 +42,7 @@
 
             <Grid Grid.Row="0" Margin="5">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Name="MaDaTextBlock" Margin="10 0 0 0" Text="Du An" FontSize="22" FontWeight="ExtraBold" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="MaDaTextBlock" Margin="10 0 0 0" Text="Dự án" FontSize="22" FontWeight="ExtraBold" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                     <TextBlock x:Name="MaDa" Margin="10 0 0 0" Text="No. 01" FontSize="22" FontWeight="ExtraBold" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                 </StackPanel>
             </Grid>
