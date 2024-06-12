@@ -42,7 +42,7 @@ namespace GUI
         {
             InitializeComponent();
 
-            this.initializeCV = BUS_CongViec.Instance.GetByID(initialized.MACV);
+            
             nv = BUS_StaticTables.Instance.GetAllDataNV();
 
             manvText.ItemsSource = nv;
@@ -58,8 +58,9 @@ namespace GUI
             macmText.SelectionChanged += MacmText_SelectionChanged;
 
             //BindingDropDown();
-            if (initializeCV != null)
+            if (initialized != null)
             {
+                this.initializeCV = BUS_CongViec.Instance.GetByID(initialized.MACV);
                 wTitle.Text = "SỬA CÔNG VIỆC";
                 ButtonAddNew.Visibility = Visibility.Hidden;
                 ButtonUpdate.Visibility = Visibility.Visible;

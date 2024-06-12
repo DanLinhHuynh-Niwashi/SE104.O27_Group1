@@ -212,7 +212,7 @@ namespace GUI
                     DTO_CongViec? item = row.Item as DTO_CongViec;
                     if (item != null)
                     {
-                        AddAndUpdateTask updateDialog = new AddAndUpdateTask(MaDa.Text.ToString(), item);
+                        AddAndUpdateTask updateDialog = new AddAndUpdateTask(crnMADA, item);
                         bool? res = updateDialog.ShowDialog();
                         if (res != null && res == true)
                         {
@@ -263,8 +263,7 @@ namespace GUI
 
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            string mada = MaDa.Text;
-            AddAndUpdateTask addDialog = new AddAndUpdateTask(mada, null);
+            AddAndUpdateTask addDialog = new AddAndUpdateTask(crnMADA, null);
             bool? res = addDialog.ShowDialog();
             if (res != null && res == true)
             {

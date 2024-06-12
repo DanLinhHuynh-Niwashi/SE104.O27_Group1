@@ -61,7 +61,7 @@
                             x:Name="searchText"
                             Margin="8,0,8,0"
                             VerticalAlignment="Center"
-                            materialDesign:HintAssist.Hint="Ma / Ten du an"
+                            materialDesign:HintAssist.Hint="Mã / Tên dự án"
                             materialDesign:TextFieldAssist.DecorationVisibility="Visible"
                             materialDesign:TextFieldAssist.HasClearButton="True">
                             </TextBox>
@@ -135,14 +135,14 @@
                                 <WrapPanel   Orientation="Vertical" Margin="0 10 0 0">
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox x:Name="malskCheck" IsChecked="False" Width="30"/>
-                                        <TextBlock Text="Ma LSK"/>
+                                        <TextBlock Text="Mã LSK"/>
                                     </StackPanel>
                                     <ComboBox
                                     x:Name="lskText"
                                     Margin="0 0 0 10"
                                     Width="100"
                                     VerticalAlignment="Center"
-                                    materialDesign:HintAssist.Hint="Ma LSK"
+                                    materialDesign:HintAssist.Hint="Mã LSK"
                                     FontSize="12">
                                     </ComboBox>
                                 </WrapPanel>
@@ -150,21 +150,21 @@
                                 <WrapPanel   Orientation="Vertical" Margin="0 10 0 0">
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox x:Name="maownerCheck" IsChecked="False" Width="30"/>
-                                        <TextBlock Text="Ma Owner"/>
+                                        <TextBlock Text="Mã Owner"/>
                                     </StackPanel>
                                     <ComboBox
                                      x:Name="ownerText"
                                      Margin="0 0 0 10"
                                      Width="100"
                                      VerticalAlignment="Center"
-                                     materialDesign:HintAssist.Hint="Ma Nhan vien"
+                                     materialDesign:HintAssist.Hint="Mã nhân viên"
                                      FontSize="12">
                                     </ComboBox>
                                 </WrapPanel>
 
                                 <StackPanel Height="20" Orientation="Horizontal">
                                     <CheckBox x:Name="TStartCheck" Width="30"/>
-                                    <TextBlock Text="Bat dau" />
+                                    <TextBlock Text="Bắt đầu" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal">
@@ -201,14 +201,14 @@
                                 <WrapPanel   Orientation="Vertical" Margin="0 10 0 0">
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox x:Name="statCheck" IsChecked="False" Width="30"/>
-                                        <TextBlock Text="Tinh trang"/>
+                                        <TextBlock Text="Tình trạng"/>
                                     </StackPanel>
                                     <ComboBox
                                     x:Name="statText"
                                     Margin="0 0 0 10"
                                     Width="100"
                                     VerticalAlignment="Center"
-                                    materialDesign:HintAssist.Hint="Tinh trang"
+                                    materialDesign:HintAssist.Hint="Tình trạng"
                                     FontSize="12">
                                         <ComboBoxItem Content="Completed"/>
                                         <ComboBoxItem Content="Delayed"/>
