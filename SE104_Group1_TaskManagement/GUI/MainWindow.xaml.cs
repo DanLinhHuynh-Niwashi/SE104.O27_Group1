@@ -28,7 +28,6 @@ namespace GUI
             this.WindowState = WindowState.Maximized;
             setUser();
             if (crnNhanVien.MANV != "") username.Text = crnNhanVien.TENNV;
-            NavigateTo("Home");
 
             if (BUS_TaiKhoan.Instance.checkQH(LoginWindow.crnUser, "XemBC") == false)
             {
@@ -130,30 +129,19 @@ namespace GUI
             Close();
         }
 
-        private void NavigateBtn_Click(object sender, RoutedEventArgs e)
+        private void NavigationBtn_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
             {
                 string ViewName = button.Tag as string;
-                NavigateTo(ViewName);
-            }
-        }
-
-        public void NavigateTo(string ViewName)
-        {
-            UserControl view = ViewName switch
-            {
-                "Home" => new HomeWindow(),
-                "Report" => new ReportWindow(),
-                "Employee" => new EmployeeWindow(),
-                "Project" => new ProjectWindow(),
-                "Rule" => new RulesWindow(),
-                _ => null
-            };
-
-            if (view != null)
-            {
-                MainContent.Content = view;
+                foreach (TabItem tab in ContentTabControl.Items)
+                {
+                    if (tab.Header.ToString() == ViewName)
+                    {
+                        ContentTabControl.SelectedItem = tab;
+                        break;
+                    }
+                }
             }
         }
     }
