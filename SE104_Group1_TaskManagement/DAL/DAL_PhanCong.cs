@@ -17,7 +17,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "INSERT INTO LOAISK VALUES (@macv, @manv)";
+                string queryString = "INSERT INTO PHANCONG VALUES (@macv, @manv)";
                 var command = new SqlCommand(
                     queryString,
                     conn);
@@ -131,7 +131,7 @@ namespace DAL
                     return (true, "Xóa thành công.");
                 }
                 conn.Close();
-                return (false, "Xóa không thành công.");
+                return (false, "");
             }
             catch (SqlException e)
             {

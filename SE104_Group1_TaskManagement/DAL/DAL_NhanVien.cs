@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -11,34 +11,29 @@ using Microsoft.Data.SqlClient;
 
 namespace DAL
 {
-    public class DAL_NhanVien:BaseClass
+    public class DAL_NhanVien : BaseClass
     {
         public (bool, string) SetData(DTO_NhanVien nv_new)
         {
             try
             {
                 conn.Open();
-                string queryString = "UPDATE NHANVIEN SET HOTEN=@hoten, EMAIL=@email, SODT=@sdt, NGSINH= CONVERT(smalldatetime,@ngaysinh, 104), LVL=@lvl, MACM=@macm, GHICHU=@ghichu WHERE MANV=@manv";
-                var command = new SqlCommand(
-                    queryString,
-                    conn);
-                command.Parameters.Clear();
+                SqlCommand command = new SqlCommand("proc_sua_nhan_vien", conn);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@manv", nv_new.MANV);
                 command.Parameters.AddWithValue("@hoten", nv_new.TENNV);
+                command.Parameters.AddWithValue("@khongdau", ConvertToUnsign(nv_new.TENNV));
                 command.Parameters.AddWithValue("@email", nv_new.EMAIL);
-                command.Parameters.AddWithValue("@sdt", nv_new.PHONE);
-                command.Parameters.AddWithValue("@ngaysinh", nv_new.NGAYSINH);
+                command.Parameters.AddWithValue("@sodt", nv_new.PHONE);
+                command.Parameters.AddWithValue("@phai", nv_new.GENDER);
+                command.Parameters.AddWithValue("@ngsinh", nv_new.NGAYSINH);
                 command.Parameters.AddWithValue("@lvl", nv_new.LEVEL);
                 command.Parameters.AddWithValue("@macm", nv_new.MACM);
                 command.Parameters.AddWithValue("@ghichu", nv_new.GHICHU);
-                if (command.ExecuteNonQuery() > 0)
-                {
-                    conn.Close();
-                    return (true, "Sửa thành công.");
-                }
 
+                command.ExecuteNonQuery();
                 conn.Close();
-                return (false, "Sửa không thành công.");
+                return (true, "Sửa thành công.");
             }
             catch (SqlException e)
             {
@@ -53,7 +48,7 @@ namespace DAL
                 return (false, ex.Message);
             }
         }
-        public (bool, string) DeleteByID (string MANV)
+        public (bool, string) DeleteByID(string MANV)
         {
             try
             {
@@ -92,30 +87,24 @@ namespace DAL
                 string manv = getCrnID();
                 //thêm tên cm vào
                 conn.Open();
-                string queryString = "INSERT INTO NHANVIEN VALUES (@manv, @hoten, @email, @sdt, CONVERT(smalldatetime,@ngaysinh, 104), @lvl, @macm, @ghichu, @isdeleted)";
-                var command = new SqlCommand(
-                    queryString,
-                    conn);
 
-                command.Parameters.Clear();
+                SqlCommand command = new SqlCommand("proc_tao_nhan_vien", conn);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@manv", manv);
                 command.Parameters.AddWithValue("@hoten", nhanVien.TENNV);
+                command.Parameters.AddWithValue("@khongdau", ConvertToUnsign(nhanVien.TENNV));
                 command.Parameters.AddWithValue("@email", nhanVien.EMAIL);
-                command.Parameters.AddWithValue("@sdt", nhanVien.PHONE);
-                command.Parameters.AddWithValue("@ngaysinh", nhanVien.NGAYSINH);
+                command.Parameters.AddWithValue("@sodt", nhanVien.PHONE);
+                command.Parameters.AddWithValue("@ngsinh", nhanVien.NGAYSINH);
+                command.Parameters.AddWithValue("@phai", nhanVien.GENDER);
                 command.Parameters.AddWithValue("@lvl", nhanVien.LEVEL);
                 command.Parameters.AddWithValue("@macm", nhanVien.MACM);
                 command.Parameters.AddWithValue("@ghichu", nhanVien.GHICHU);
-                command.Parameters.AddWithValue("@isdeleted", 0);
 
-                if (command.ExecuteNonQuery() > 0)
-                {
-                    conn.Close();
-                    return (true, "Thêm nhân viên thành công!");
-                }
-
+                command.ExecuteNonQuery();
                 conn.Close();
-                return (false, "Thêm không thành công!");
+                return (true, manv);
+
             }
             catch (SqlException e)
             {
@@ -132,12 +121,12 @@ namespace DAL
         }
         public DTO_NhanVien GetByID(string MANV)
         {
-            
+            DTO_NhanVien res = new DTO_NhanVien();
             try
             {
-                DTO_NhanVien res = new DTO_NhanVien();
+
                 conn.Open();
-                string queryString = "SELECT MANV, HOTEN, EMAIL, SODT, CONVERT(VARCHAR(10), NGSINH, 104), LVL, MACM, GHICHU FROM NHANVIEN WHERE MANV=@manv AND IsDeleted <> 1";
+                string queryString = "SELECT MANV, HOTEN, EMAIL, SODT, CONVERT(DATETIME, NGSINH, 104) as NGSINH, LVL, MACM, GHICHU, PHAI FROM NHANVIEN WHERE MANV=@manv AND IsDeleted <> 1";
 
                 var command = new SqlCommand(
                     queryString,
@@ -150,10 +139,11 @@ namespace DAL
                 res.TENNV = reader.GetString(1);
                 res.EMAIL = reader.GetString(2);
                 res.PHONE = reader.GetString(3);
-                res.NGAYSINH = reader.GetString(4);
+                res.NGAYSINH = reader.GetDateTime(4);
                 res.LEVEL = reader.GetInt16(5);
-                res.MACM = reader.GetString(6);
+                res.MACM = reader.GetInt32(6).ToString();
                 res.GHICHU = reader.GetString(7);
+                res.GENDER = reader.GetString(8);
                 reader.Close();
                 conn.Close();
                 return res;
@@ -162,7 +152,7 @@ namespace DAL
             {
                 Debug.WriteLine(ex.ToString());
                 conn.Close();
-                return null;
+                return res;
             }
         }
         public DataTable GetAllData()
@@ -171,7 +161,7 @@ namespace DAL
             try
             {
                 conn.Open();
-                string queryString = "SELECT MANV, HOTEN, EMAIL, SODT, CONVERT(VARCHAR(10), NGSINH, 104), LVL, MACM, GHICHU FROM NHANVIEN WHERE IsDeleted <> 1";
+                string queryString = "SELECT MANV, HOTEN, EMAIL, SODT, CONVERT(DATETIME, NGSINH, 104) as NGSINH, LVL, MACM, GHICHU, PHAI FROM NHANVIEN WHERE IsDeleted <> 1";
 
                 var command = new SqlCommand(
                     queryString,
@@ -188,9 +178,82 @@ namespace DAL
                 conn.Close();
                 return dt;
             }
-            
+
         }
-        
+
+        public DataTable GetAllRawData()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                conn.Open();
+                string queryString = "SELECT MANV, HOTEN, EMAIL, SODT, CONVERT(DATETIME, NGSINH, 104) as NGSINH, LVL, MACM, GHICHU, PHAI FROM NHANVIEN";
+
+                var command = new SqlCommand(
+                    queryString,
+                    conn);
+                SqlDataAdapter da = new SqlDataAdapter(command);
+                da.Fill(dt);
+                conn.Close();
+                da.Dispose();
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                conn.Close();
+                return dt;
+            }
+
+        }
+        //Nếu có filter nào, set giá trị của filter đó vào DTO, nếu không có thì set "" với string và -1 với số
+        public DataTable GetDataByFilter(DTO_NhanVien filter)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                conn.Open();
+                string queryString = "SELECT MANV, HOTEN, EMAIL, SODT, CONVERT(DATETIME, NGSINH, 104) as NGSINH, LVL, MACM, GHICHU, PHAI FROM NHANVIEN WHERE IsDeleted <> 1";
+
+                if (filter.MANV != "" || filter.TENNV != "")
+                {
+                    string cvt = ConvertToUnsign(filter.TENNV);
+                    Debug.WriteLine(cvt);
+                    queryString += " AND MANV LIKE '%" + filter.MANV + "%' OR HOTENKHONGDAU LIKE '%" + cvt + "%'";
+                }
+                if (filter.EMAIL != "")
+                {
+                    queryString += " AND EMAIL LIKE '%" + filter.EMAIL + "%'";
+                }
+                if (filter.PHONE != "")
+                {
+                    queryString += " AND SODT LIKE '%" + filter.PHONE + "%'";
+                }
+                if (filter.LEVEL != -1)
+                {
+                    queryString += " AND LVL=" + filter.LEVEL;
+                }
+                if (filter.MACM != "")
+                {
+                    queryString += " AND MACM=" + filter.MACM;
+                }
+                var command = new SqlCommand(
+                    queryString,
+                    conn);
+                SqlDataAdapter da = new SqlDataAdapter(command);
+                da.Fill(dt);
+                conn.Close();
+                da.Dispose();
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                conn.Close();
+                return dt;
+            }
+        }
         string getCrnID()
         {
             try
@@ -215,5 +278,6 @@ namespace DAL
                 return "";
             }
         }
+
     }
 }

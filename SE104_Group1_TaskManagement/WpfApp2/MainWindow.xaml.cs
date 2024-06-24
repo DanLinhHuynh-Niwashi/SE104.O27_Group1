@@ -19,7 +19,7 @@ using System.Data;
 using TestBUS;
 using System.Diagnostics;
 
-namespace WpfApp2
+namespace TestGUI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -90,6 +90,13 @@ namespace WpfApp2
             DTO_NhanVien nhanvien = new DTO_NhanVien(MANV.Text, TENNV.Text, EMAIL.Text, PHONE.Text, DOB.Text, level, CM.Text, NOTE.Text);
             nvManager.SetData(nhanvien);
             this.datagrid.ItemsSource = nvManager.GetAllData();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            DangNhap dangnhap = new DangNhap();
+            dangnhap.Show();
+            this.Close();
         }
     }
 }

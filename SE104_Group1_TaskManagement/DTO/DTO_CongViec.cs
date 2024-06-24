@@ -13,8 +13,8 @@ namespace DTO
         string _mada;
         string _macm;
         string _tencv;
-        string _tstart;
-        string _tend;
+        DateTime? _tstart;
+        DateTime? _tend;
         long _ngansach;
         long _dadung;
         int _tiendo;
@@ -22,14 +22,14 @@ namespace DTO
         string _tepdinhkem;
         int _isdeleted;
 
-        public DTO_CongViec(string macv = "", string mada = "", string macm = "", string tencv = "", string tstart = "", string tend = "", long ngansach = -1, long dadung = -1, int tiendo = 0, string ycdk = "", string dk = "", int isdel = 0)
+        public DTO_CongViec(string macv = "", string mada = "", string macm = "", string tencv = "", string tstart = "", string tend = "", long ngansach = 0, long dadung = 0, int tiendo = 0, string ycdk = "", string dk = "", int isdel = 0)
         {
             _macv = macv;
             _mada = mada;
             _macm = macm;
             _tencv = tencv;
-            _tstart = tstart;
-            _tend = tend;
+            _tstart = null;
+            _tend = null; ;
             _ngansach = ngansach;
             _dadung = dadung;
             _tiendo = tiendo;
@@ -58,12 +58,12 @@ namespace DTO
             get { return _tencv; }
             set { _tencv = value; }
         }
-        public string TSTART
+        public DateTime? TSTART
         {
             get { return _tstart; }
             set { _tstart = value; }
         }
-        public string TEND
+        public DateTime? TEND
         {
             get { return _tend; }
             set { _tend = value; }

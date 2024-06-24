@@ -1,0 +1,228 @@
+﻿<UserControl x:Class="GUI.ProjectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:GUI"
+        mc:Ignorable="d"
+        d:DesignHeight="720" d:DesignWidth="1080">
+    <Grid>
+
+        <Grid x:Name="ProjectContent">
+            <Grid Height="60" VerticalAlignment="Top">
+                <TextBlock HorizontalAlignment="Left" 
+   VerticalAlignment="Center" 
+   Text="MÀN HÌNH DỰ ÁN"
+   FontWeight="Bold"
+   FontSize="22" 
+   Margin="84,0,0,0">
+                </TextBlock>
+            </Grid>
+            <Grid x:Name="WorkSpace" Margin="75,65,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MaxWidth="60"/>
+                        <ColumnDefinition MaxWidth="60"/>
+                        <ColumnDefinition MaxWidth="60"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" Margin="5">
+                        <Button Click="ButtonAdd_Click"
+                     Width="50" Height="50"
+                     IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                     Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                     ToolTip="Thêm mới"
+                                x:Name="Add_Btn">
+                            <materialDesign:PackIcon
+                         Kind="Add" />
+                        </Button>
+                    </Grid>
+
+                    <Grid Grid.Column="3">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button
+                         Width="50" Height="50"
+                         IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                         Click="ButtonSearch_Click"
+                         ToolTip="Tìm kiếm">
+                                <materialDesign:PackIcon
+                             Kind="Search" />
+                            </Button>
+                            <TextBox
+                            Width="300"
+                            x:Name="searchText"
+                            Margin="8,0,8,0"
+                            VerticalAlignment="Center"
+                            materialDesign:HintAssist.Hint="Mã / Tên dự án"
+                            materialDesign:TextFieldAssist.DecorationVisibility="Visible"
+                            materialDesign:TextFieldAssist.HasClearButton="True">
+                            </TextBox>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Row="1" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition MaxWidth="150"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <!--Members Data Grid-->
+                        <DataGrid Margin="10 0 20 0" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" x:Name="membersDataGrid" Style="{DynamicResource DataGridStyle1}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Mã dự án" Binding="{Binding MADA}" IsReadOnly="True" Width="*"/>
+                                <DataGridTemplateColumn Header="Tên dự án" IsReadOnly="True" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding TENDA}"
+                                                       VerticalAlignment="Center" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Bắt đầu"
+                                                    Binding="{Binding TSTART, StringFormat=\{0:dd.MM.yyyy\}}" IsReadOnly="True" Width="*"/>
+                                <DataGridTextColumn Header="Kết thúc"
+                                                    Binding="{Binding TEND, StringFormat=\{0:dd.MM.yyyy\}}" IsReadOnly="True" Width="*"/>
+                                <DataGridTextColumn Header="Tình trạng" Binding="{Binding STAT}" IsReadOnly="True" Width="*"/>
+                                <DataGridTextColumn Header="Loại sự kiện" Binding="{Binding MALSK}" IsReadOnly="True" Width="*"/>
+                                <DataGridTextColumn Header="Quản lý" Binding="{Binding MAOWNER}" IsReadOnly="True" Width="*"/>
+                                <DataGridTextColumn Header="Ngân sách" Binding="{Binding NGANSACH}" IsReadOnly="True" Width="*"/>
+                                <DataGridTextColumn Header="Đã dùng"
+                                                    Binding="{Binding DADUNG}"
+                                                    IsReadOnly="True"
+                                                    Width="*" />
+                                <DataGridTextColumn Header="Tiến độ"
+                                                    Binding="{Binding TIENDO}"
+                                                    IsReadOnly="True"
+                                                    Width="*" />
+                                <DataGridTemplateColumn Header="Operations" IsReadOnly="True" Width="auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Style="{StaticResource gridEditButton}" Click="ButtonView_Click">
+                                                    <materialDesign:PackIcon Kind="Eye" Style="{StaticResource gridButtonIcon}"/>
+                                                </Button>
+                                                <Button Margin="5 0 0 0" Style="{StaticResource gridEditButton}" Click="ButtonEdit_Click" Loaded="EditButton_Loaded">
+                                                    <materialDesign:PackIcon Kind="PencilOutline" Style="{StaticResource gridButtonIcon}"/>
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                    </Grid>
+
+                    <Grid Grid.Column="1">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" Height="60">
+                                <materialDesign:PackIcon Kind="Filter" Width="30" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBlock Text="Lọc theo ..." FontSize="15" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <ListView ScrollViewer.VerticalScrollBarVisibility="Visible">
+
+                                <WrapPanel   Orientation="Vertical" Margin="0 10 0 0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox x:Name="malskCheck" IsChecked="False" Width="30"/>
+                                        <TextBlock Text="Mã LSK"/>
+                                    </StackPanel>
+                                    <ComboBox
+                                    x:Name="lskText"
+                                    Margin="0 0 0 10"
+                                    Width="100"
+                                    VerticalAlignment="Center"
+                                    materialDesign:HintAssist.Hint="Mã LSK"
+                                    FontSize="12">
+                                    </ComboBox>
+                                </WrapPanel>
+
+                                <WrapPanel   Orientation="Vertical" Margin="0 10 0 0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox x:Name="maownerCheck" IsChecked="False" Width="30"/>
+                                        <TextBlock Text="Mã Owner"/>
+                                    </StackPanel>
+                                    <ComboBox
+                                     x:Name="ownerText"
+                                     Margin="0 0 0 10"
+                                     Width="100"
+                                     VerticalAlignment="Center"
+                                     materialDesign:HintAssist.Hint="Mã nhân viên"
+                                     FontSize="12">
+                                    </ComboBox>
+                                </WrapPanel>
+
+                                <StackPanel Height="20" Orientation="Horizontal">
+                                    <CheckBox x:Name="TStartCheck" Width="30"/>
+                                    <TextBlock Text="Bắt đầu" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <DatePicker x:Name="TStartPicker" Width="100"
+                                         materialDesign:TextFieldAssist.HasClearButton="True"
+                                         materialDesign:HintAssist.Hint="Add Date"/>
+                                </StackPanel>
+
+                                <StackPanel Height="20" Orientation="Horizontal">
+                                    <CheckBox x:Name="TEndCheck" Width="30"/>
+                                    <TextBlock Text="Kết thúc"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <DatePicker
+                                    x:Name="TEndPicker"
+                                    Width="100"
+                                    materialDesign:HintAssist.Hint="Add Date"
+                                    materialDesign:TextFieldAssist.HasClearButton="True"/>
+                                </StackPanel>
+
+                                <StackPanel Height="20" Orientation="Horizontal">
+                                    <CheckBox x:Name="ngansachCheck" Width="30"/>
+                                    <TextBlock Text="Ngân sách"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Vertical">
+                                    <TextBox VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="NganSachLTextBox" Width="100" materialDesign:HintAssist.Hint="Greater than..."                     
+                                         materialDesign:TextFieldAssist.HasClearButton="True"/>
+                                    <TextBox VerticalAlignment="Center" Margin="0 10 0 0" HorizontalAlignment="Left" x:Name="NganSachHTextBox" Width="100" materialDesign:HintAssist.Hint="Smaller than..."
+                                                                 materialDesign:TextFieldAssist.HasClearButton="True"/>
+                                </StackPanel>
+
+                                <WrapPanel   Orientation="Vertical" Margin="0 10 0 0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox x:Name="statCheck" IsChecked="False" Width="30"/>
+                                        <TextBlock Text="Tình trạng"/>
+                                    </StackPanel>
+                                    <ComboBox
+                                    x:Name="statText"
+                                    Margin="0 0 0 10"
+                                    Width="100"
+                                    VerticalAlignment="Center"
+                                    materialDesign:HintAssist.Hint="Tình trạng"
+                                    FontSize="12">
+                                        <ComboBoxItem Content="Completed"/>
+                                        <ComboBoxItem Content="Delayed"/>
+                                        <ComboBoxItem Content="Canceled"/>
+                                        <ComboBoxItem Content="On-going"/>
+                                    </ComboBox>
+                                </WrapPanel>
+                            </ListView>
+                        </StackPanel>
+                    </Grid>
+
+                </Grid>
+            </Grid>
+        </Grid>
+        <ContentControl x:Name="MainContent"/>
+    </Grid>
+</UserControl>

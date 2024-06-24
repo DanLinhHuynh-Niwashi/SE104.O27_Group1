@@ -1,0 +1,35 @@
+﻿<Window x:Class="TestGUI.DangNhap"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestGUI"
+        mc:Ignorable="d"
+        Title="DangNhap" Height="450" Width="800">
+    <Grid>
+
+        <Label Content="Tài khoản:" HorizontalAlignment="Left" Margin="310,137,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <Label Content="Mật khẩu:" HorizontalAlignment="Left" Margin="310,227,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <TextBox x:Name="txtTaiKhoan" HorizontalAlignment="Left" Height="31" Margin="417,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="274"/>
+        <Button Content="Thoát" HorizontalAlignment="Left" Height="30" Margin="600,294,0,0" VerticalAlignment="Top" Width="78" FontSize="16" Click="Thoat_Click"/>
+        <Button x:Name="btnLogin" Content="Đăng nhập" HorizontalAlignment="Left" Height="30" Margin="417,294,0,0" VerticalAlignment="Top" Width="122" Click="Login_Click" FontSize="16"/>
+
+        <Image Margin="74,101,472,126" RenderTransformOrigin="0.5,0.5" Source="/login.png">
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="0.355"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
+        <Label Content="ĐĂNG NHẬP HỆ THỐNG QUẢN LÝ SỰ KIỆN" HorizontalAlignment="Center" Margin="0,58,0,0" VerticalAlignment="Top" Foreground="#FFC98CE4" FontFamily="Segoe UI Black" FontSize="20" HorizontalContentAlignment="Center"/>
+        <TextBlock HorizontalAlignment="Left" Margin="425,357,0,0" TextWrapping="Wrap" Text="Bạn chưa có tài khoản?" VerticalAlignment="Top" FontSize="16"/>
+        <Button Content="Đăng kí" HorizontalAlignment="Left" Height="34" Margin="584,351,0,0" VerticalAlignment="Top" Width="78" FontSize="16" Foreground="Red" BorderBrush="{x:Null}" Background="{x:Null}" FontWeight="Bold" Click="DangKi_Click"/>
+        <Button Content="Đổi mật khẩu" HorizontalAlignment="Left" Margin="483,378,0,0" VerticalAlignment="Top" FontSize="16" Foreground="Red" BorderBrush="{x:Null}" Background="{x:Null}" FontWeight="Bold" Click="DoiMK_Click"/>
+        <PasswordBox x:Name="txtMatKhau" HorizontalAlignment="Left" Height="31" Margin="417,227,0,0" VerticalAlignment="Top" Width="274"/>
+
+
+    </Grid>
+</Window>

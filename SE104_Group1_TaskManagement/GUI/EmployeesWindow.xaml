@@ -1,0 +1,346 @@
+﻿<Window x:Class="GUI.EmployeesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:GUI"
+        mc:Ignorable="d"
+        Title="EmployeesWindow" Height="500" Width="800">
+    <Window.Resources>
+        <Storyboard x:Key="OpenMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="70"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="200"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="70"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Style TargetType="ToolTip" x:Key="tt_style">
+
+            <Setter Property="Placement" Value="Right"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="20,0,0,0"/>
+            <Setter Property="Background" Value="#4A5668"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Fonts/Roboto-Light.ttf #Roboto"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="PlacementRectangle" Value="60,0,0,0"/>
+            <Setter Property="HorizontalOffset" Value="15"/>
+            <Setter Property="VerticalOffset" Value="6"/>
+            <Setter Property="HasDropShadow" Value="True"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpenMenu">
+            <BeginStoryboard Storyboard="{StaticResource OpenMenu}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonCloseMenu">
+            <BeginStoryboard Storyboard="{StaticResource CloseMenu}"/>
+        </EventTrigger>
+    </Window.Triggers>
+    <Grid Background="#FFDEDEDE">
+        <Grid x:Name="GridMain" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+
+        <Grid Height="60" VerticalAlignment="Top" Background="#FF5C99D6">
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="1" ShadowDepth="1" Color="#FFACACAC"/>
+            </Grid.Effect>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <!--<Image Source="app_img.jpg"/>-->
+                <TextBlock x:Name="username" Text="User Name" VerticalAlignment="Center" FontSize="16"/>
+                <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" StaysOpen="False" Margin="10">
+                    <StackPanel Width="100">
+                        <Button x:Name="tk_Btn" Content="Tài khoản"/>
+                        <Separator/>
+                        <Button x:Name="logout_Btn" Content="Đăng xuất" />
+                    </StackPanel>
+                </materialDesign:PopupBox>
+            </StackPanel>
+            <TextBlock HorizontalAlignment="Left" 
+                       VerticalAlignment="Center" 
+                       Text="Nhân viên"
+                       FontWeight="Bold"
+                       FontSize="22" 
+                       Margin="84,0,0,0">
+            </TextBlock>
+        </Grid>
+        <Grid x:Name="GridMenu" Width="70" HorizontalAlignment="Left" Background="#FF31577E" Panel.ZIndex="1">
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="2" ShadowDepth="1" Color="#FFAEAEAE"/>
+            </Grid.Effect>
+            <StackPanel>
+                <Grid Height="150" Background="White" RenderTransformOrigin="0.5,0.5">
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+                    <Button x:Name="ButtonOpenMenu" Height="60" Width="60" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" >
+                        <materialDesign:PackIcon Kind="Menu" Width="25" Height="25"/>
+                    </Button>
+                    <Button x:Name="ButtonCloseMenu" Visibility="Collapsed" Height="60" Width="60" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" >
+                        <materialDesign:PackIcon Kind="ArrowLeft" Width="25" Height="25"/>
+                    </Button>
+
+                    <Image Height="80" VerticalAlignment="Bottom"/>
+                </Grid>
+
+                <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListViewItem x:Name="ItemHome" Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Home" Height="25" Width="25" Margin="10"/>
+                            <TextBlock Text="Home" VerticalAlignment="Center" Margin="20 10"/>
+                        </StackPanel>
+                        <ListViewItem.ToolTip>
+
+                            <ToolTip x:Name="tt_home"
+                                      Content="Home"
+                                      Style="{StaticResource tt_style}"/>
+
+                        </ListViewItem.ToolTip>
+                    </ListViewItem>
+                    <ListViewItem x:Name="ItemEmployee" Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Worker" Height="25" Width="25" Margin="10"/>
+                            <TextBlock Text="Nhân viên" VerticalAlignment="Center" Margin="20 10"/>
+                        </StackPanel>
+
+                        <ListViewItem.ToolTip>
+
+                            <ToolTip x:Name="tt_employee"
+              Content="Nhân viên"
+              Style="{StaticResource tt_style}"/>
+
+                        </ListViewItem.ToolTip>
+                    </ListViewItem>
+                    <ListViewItem Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="NotebookCheck" Height="25" Width="25" Margin="10"/>
+                            <TextBlock Text="Dự án" VerticalAlignment="Center"  Margin="20 10"/>
+                        </StackPanel>
+
+                        <ListViewItem.ToolTip>
+
+                            <ToolTip x:Name="tt_project"
+              Content="Dự án"
+              Style="{StaticResource tt_style}"/>
+
+                        </ListViewItem.ToolTip>
+                    </ListViewItem>
+                    <ListViewItem Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Briefcase" Height="25" Width="25" Margin="10"/>
+                            <TextBlock Text="Công việc" VerticalAlignment="Center"  Margin="20 10"/>
+                        </StackPanel>
+
+                        <ListViewItem.ToolTip>
+
+                            <ToolTip x:Name="tt_task"
+              Content="Công việc"
+              Style="{StaticResource tt_style}"/>
+
+                        </ListViewItem.ToolTip>
+                    </ListViewItem>
+                </ListView>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="WorkSpace" Margin="75,65,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MaxWidth="60"/>
+                    <ColumnDefinition MaxWidth="60"/>
+                    <ColumnDefinition MaxWidth="60"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0" Margin="5">
+                    <Button
+                     x:Name ="Add_Btn"
+             
+                     Width="50" Height="50"
+                     IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                     Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                     ToolTip="Add New" VerticalAlignment="Top">
+                        <materialDesign:PackIcon
+                         Kind="Add" />
+                    </Button>
+                </Grid>
+
+                <Grid Grid.Column="1" Margin="5">
+                    <Button
+                     x:Name="Del_Btn"
+                
+                     Width="50" Height="50"
+                     IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                     Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                     ToolTip="Delete">
+                        <materialDesign:PackIcon
+                         Kind="Delete" />
+                    </Button>
+                </Grid>
+
+                <Grid Grid.Column="2">
+                    
+                </Grid>
+                <Grid Grid.Column="3">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button
+                         Width="50" Height="50"
+                         IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                       
+                         ToolTip="Search">
+                            <materialDesign:PackIcon
+                             Kind="Search" />
+                        </Button>
+                        <TextBox
+                         Width="300"
+                         x:Name="searchText"
+                         Margin="8,0,8,0"
+                         VerticalAlignment="Center"
+                         materialDesign:HintAssist.Hint="Họ tên/ Mã nhân viên"
+                         materialDesign:TextFieldAssist.DecorationVisibility="Visible"
+                         materialDesign:TextFieldAssist.HasClearButton="True">
+                        </TextBox>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition MaxWidth="150"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <!--Members Data Grid-->
+                    <DataGrid Margin="10 0 20 0" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" x:Name="membersDataGrid" Style="{DynamicResource DataGridStyle1}">
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="C" CanUserResize="False" Width="auto" ElementStyle="{StaticResource CheckBoxStyle1}">
+                                <DataGridCheckBoxColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Style="{StaticResource CheckBoxStyle1}" />
+                                    </DataTemplate>
+                                </DataGridCheckBoxColumn.HeaderTemplate>
+                            </DataGridCheckBoxColumn>
+                            <DataGridTextColumn Header="Mã nhân viên" Binding="{Binding MANV}" IsReadOnly="True" Width="*"/>
+                            <DataGridTemplateColumn Header="Tên nhân viên" IsReadOnly="True" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding TENNV}" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Chuyên môn" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Level" Binding="{Binding LEVEL}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Email" Binding="{Binding EMAIL}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Ngày sinh" Binding="{Binding NGAYSINH}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="SĐT" Binding="{Binding PHONE}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Ghi chú" Binding="{Binding GHICHU}" IsReadOnly="True" Width="*"/>
+                            <DataGridTemplateColumn Header="Operations" IsReadOnly="True" Width="auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Style="{StaticResource gridEditButton}" >
+                                                <materialDesign:PackIcon Kind="PencilOutline" Style="{StaticResource gridButtonIcon}"/>
+                                            </Button>
+                                            <Button Margin="5 0 0 0" Style="{StaticResource gridRemoveButton}">
+                                                <materialDesign:PackIcon Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </Grid>
+
+                <Grid Grid.Column="1">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal" Height="60">
+                            <materialDesign:PackIcon Kind="Filter" Width="30" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="Lọc theo ..." FontSize="15" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                        <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <WrapPanel Orientation="Horizontal">
+                                <CheckBox x:Name="lvlCheck" IsChecked="False" Width="30"/>
+                                <TextBlock Text="Level" VerticalAlignment="Center"/>
+                                <TextBox
+                                x:Name="lvlText"
+                                Margin="10 0 0 0"        
+                                VerticalAlignment="Center"
+                                materialDesign:HintAssist.Hint="Level"
+                                FontSize="12"
+                                Style="{StaticResource MaterialDesignTextBox}" />
+                            </WrapPanel>
+
+                            <WrapPanel   Orientation="Horizontal" Margin="0 10 0 0">
+                                <CheckBox x:Name="cmCheck" IsChecked="False" Width="30"/>
+                                <TextBlock Text="Chuyên môn"/>
+                                <ComboBox
+                                x:Name="cmText"
+                                Margin="10 0 0 10"
+                                VerticalAlignment="Center"
+                                materialDesign:HintAssist.Hint="Chuyên môn"
+                                FontSize="12"
+  
+                    
+                                materialDesign:TextFieldAssist.HasClearButton="True"
+                                Style="{StaticResource MaterialDesignComboBox}" />
+                            </WrapPanel>
+
+                            <WrapPanel Orientation="Horizontal" Margin="0 10 0 0">
+                                <CheckBox x:Name="emailCheck" IsChecked="False" Width="30"/>
+                                <TextBlock Text="Email"/>
+                                <TextBox
+                                MinWidth="100"
+                                x:Name="emailText"
+                                Margin="10 0 0 0"        
+                                VerticalAlignment="Center"
+                                materialDesign:HintAssist.Hint="Email"
+                                FontSize="12"
+                                Style="{StaticResource MaterialDesignTextBox}" />
+                            </WrapPanel>
+
+                            <WrapPanel Orientation="Horizontal" Margin="0 10 0 0">
+                                <CheckBox x:Name="phoneCheck" IsChecked="False" Width="30"/>
+                                <TextBlock Text="Số điện thoại"/>
+                                <TextBox
+                                MinWidth="100"
+                                x:Name="phoneText"
+                                Margin="10 0 0 0"        
+                                VerticalAlignment="Center"
+                                materialDesign:HintAssist.Hint="Số điện thoại"
+                                FontSize="12"
+                                Style="{StaticResource MaterialDesignTextBox}" />
+                            </WrapPanel>
+                            
+
+                        </ListView>
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
+
+           
+        </Grid>
+    </Grid>
+</Window>

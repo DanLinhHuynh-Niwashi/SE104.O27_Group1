@@ -118,6 +118,8 @@ ADD TINHTRANG varchar(20);
 
 ALTER TABLE DUAN ADD CONSTRAINT Check_TinhTrang CHECK (TINHTRANG in ('Completed','On-going','Delayed','Canceled'))
 
+ALTER TABLE NHANVIEN ADD CONSTRAINT Check_Gender CHECK (PHAI in ('Nam','Nữ'))
+
 -- NGÂN SÁCH CÔNG VIỆC
 ALTER TABLE CONGVIEC ADD CONSTRAINT Check_NganSachCV CHECK (NGANSACH >=0) 
 
@@ -150,6 +152,48 @@ BEGIN
         RAISERROR (@ErrorMessage, 16, 1);
         ROLLBACK TRANSACTION;
     END;
+END;
+
+-- KIỂM TRA NGÀY BẮT ĐẦU VÀ NGÀY KẾT THÚC CÔNG VIỆC SO VỚI DỰ ÁN
+CREATE OR ALTER TRIGGER Check_CongViec_DuAn_Time
+ON CONGVIEC
+AFTER INSERT, UPDATE
+AS
+BEGIN
+
+    -- Khai báo biến để lưu trữ TSTART của DUAN
+    DECLARE @DuanStart SMALLDATETIME;
+
+    -- Lấy TSTART của DUAN
+    SELECT @DuanStart = TSTART FROM DUAN WHERE MADA IN (SELECT MADA FROM inserted);
+
+    -- Khai báo biến để lưu trữ TEND của DUAN
+    DECLARE @DuanEnd SMALLDATETIME;
+
+    -- Lấy TEND của DUAN
+    SELECT @DuanEnd = TEND FROM DUAN WHERE MADA IN (SELECT MADA FROM inserted);
+    -- Kiểm tra ngân sách đã dùng so với ngân sách được cấp cho công việc
+
+    IF EXISTS (
+        SELECT 1
+        FROM inserted i
+        WHERE i.TSTART < @DuanStart
+    )
+    BEGIN
+        RAISERROR (N'Ngày bắt đầu công việc phải bằng hoặc sau ngày bắt đầu dự án', 16, 1);
+        ROLLBACK TRANSACTION;
+    END;
+
+    IF EXISTS (
+        SELECT 1
+        FROM inserted i
+        WHERE i.TEND > @DuanEnd
+    )
+    BEGIN
+        RAISERROR (N'Ngày kết thúc công việc phải bằng hoặc trước ngày kết thúc dự án', 16, 1);
+        ROLLBACK TRANSACTION;
+    END;
+
 END;
 
 -- KIỂM TRA NGÂN SÁCH ĐÃ DÙNG SO VỚI NGÂN SÁCH CÔNG VIỆC
@@ -194,7 +238,7 @@ END;
 -- KIỂM TRA TINH TRANG DU AN CÓ CANCELED HAY DELAYED HAY KHÔNG
 CREATE OR ALTER TRIGGER Check_TinhTrangDuAn
 ON CONGVIEC
-AFTER UPDATE
+AFTER UPDATE, INSERT, DELETE
 AS
 BEGIN
     -- Kiểm tra tình trạng của dự án
@@ -202,10 +246,10 @@ BEGIN
         SELECT 1
         FROM inserted i
         INNER JOIN DUAN d ON i.MADA = d.MADA
-        WHERE d.TINHTRANG IN ('Canceled', 'Delayed')
+        WHERE d.TINHTRANG IN ('Canceled', 'Delayed', 'Completed')
     )
     BEGIN
-        RAISERROR (N'Không được cập nhật công việc khi dự án đang ở trạng thái Canceled hoặc Delayed', 16, 1);
+        RAISERROR (N'Không được cập nhật công việc khi dự án đang ở trạng thái Canceled, Completed hoặc Delayed', 16, 1);
         ROLLBACK TRANSACTION;
     END;
 END;
@@ -220,10 +264,15 @@ BEGIN
     IF EXISTS (
         SELECT 1
         FROM inserted i
-        WHERE i.TIENDO = 100 AND i.YCDINHKEM IS NOT NULL AND i.TEPDINHKEM IS NULL
+        WHERE i.TIENDO = 100 AND i.YCDINHKEM IS NOT NULL AND 
+		NOT EXISTS (
+			SELECT 1
+        	FROM [dbo].[DINHKEM] b
+			WHERE i.MACV = b.MACV
+		)
     )
     BEGIN
-        RAISERROR (N'Cần có tệp đính kèm khi tiến độ là 100% và có yêu cầu đính kèm', 16, 1);
+        RAISERROR (N'Cần có tệp đính kèm khi tiến độ là 100 và có yêu cầu đính kèm', 16, 1);
         ROLLBACK TRANSACTION;
     END;
 END;
@@ -244,6 +293,19 @@ BEGIN
         RAISERROR (N'Tiến độ cập nhật sau phải lớn hơn tiến độ trước ít nhất 10%', 16, 1);
         ROLLBACK TRANSACTION;
     END;
+END;
+
+-----------UPDATE TIEN DO------------
+	
+CREATE OR ALTER TRIGGER trg_CapNhatTIENDO ON CONGVIEC 
+AFTER INSERT, UPDATE, DELETE AS 
+BEGIN 
+-- Khai báo biến để lưu trữ mã dự án 
+DECLARE @MADA CHAR(4); 
+-- Lấy mã dự án từ các hàng được chèn, cập nhật hoặc xóa 
+SELECT @MADA = MADA FROM inserted 
+-- Cập nhật cột DADUNG trong bảng DUAN 
+UPDATE DUAN SET TIENDO = ( SELECT AVG(TIENDO) FROM CONGVIEC WHERE CONGVIEC.MADA = @MADA ) WHERE DUAN.MADA = @MADA; 
 END;
 -----------TAO TAI KHOAN-------------
 CREATE PROCEDURE proc_tao_tai_khoan
